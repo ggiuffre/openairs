@@ -1,0 +1,23 @@
+{
+    "name": "openairs",
+    "image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "eamodio.gitlens",
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode"
+            ],
+            "settings": {
+                "typescript.tsdk": "app/node_modules/typescript/lib",
+                "editor.defaultFormatter": "esbenp.prettier-vscode"
+            }
+        }
+    },
+    "postCreateCommand": "npm ci",
+    "remoteUser": "node",
+    "features": {
+        "git": "os-provided",
+        "sshd": "latest"
+    }
+}
