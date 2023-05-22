@@ -11,7 +11,7 @@ export const ItemCard: React.FC<Props> = ({ openair }) => (
   <article className={styles.itemCard} style={{ background: openair.gradient }}>
     <h2>{openair.name}</h2>
     <a
-      className={styles.website}
+      className={styles.website + " tag clickable"}
       href={openair.website}
       target="_blank"
       title="event website"
