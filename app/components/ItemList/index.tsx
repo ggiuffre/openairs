@@ -3,12 +3,7 @@
 import React, { useState } from "react";
 import styles from "./styles.module.css";
 import { ItemCard } from "../ItemCard";
-import {
-  type CompareFunction,
-  type Openair,
-  type SortMethod,
-  isSortMethod,
-} from "@/app/data/types";
+import type { CompareFunction, Openair, SortMethod } from "@/app/data/types";
 
 interface Props {
   openairs: Openair[];
