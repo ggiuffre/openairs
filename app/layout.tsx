@@ -1,10 +1,12 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
+import type { Metadata } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
-  title: "Openairs",
+export const metadata: Metadata = {
+  title: "openair.wiki",
+  authors: [{ name: "Giorgio Giuffrè", url: "https://ggiuffre.github.io/" }],
   description: "Festivals, concerts and everything music in Switzerland.",
 };
 
