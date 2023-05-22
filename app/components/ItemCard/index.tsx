@@ -31,5 +31,7 @@ export const ItemCard: React.FC<Props> = ({ openair }) => (
 
 const dateFromRange = (dateRange: DateRange): string =>
   dateRange.start?.getDate() === dateRange.end?.getDate()
-    ? dateRange.start?.toLocaleDateString()
-    : `${dateRange.start?.toLocaleDateString()} - ${dateRange.end?.toLocaleDateString()}`;
+    ? dateRange.start?.toLocaleDateString(["de-ch"])
+    : `${dateRange.start?.toLocaleDateString([
+        "de-ch",
+      ])} - ${dateRange.end?.toLocaleDateString(["de-ch"])}`;
