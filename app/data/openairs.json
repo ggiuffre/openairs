@@ -2,7 +2,7 @@
   {
     "name": "Afro-Pfingsten",
     "website": "https://www.afro-pfingsten.ch",
-    "place": "Winterthur, ZH",
+    "place": "Winterthur",
     "canton": "ZH",
     "dates": [
       {
@@ -14,7 +14,7 @@
   {
     "name": "Argovia Fäscht",
     "website": "https://argoviafaescht.ch",
-    "place": "Wohlen, AG",
+    "place": "Wohlen",
     "canton": "AG",
     "dates": [
       {
@@ -26,7 +26,7 @@
   {
     "name": "Baloise Session",
     "website": "https://www.baloisesession.ch",
-    "place": "Basel, BS",
+    "place": "Basel",
     "canton": "BS",
     "dates": [
       {
@@ -38,7 +38,7 @@
   {
     "name": "Buskers Bern Strassenmusik-Festival",
     "website": "https://buskersbern.ch",
-    "place": "Bern, BE",
+    "place": "Bern",
     "canton": "BE",
     "dates": [
       {
@@ -50,7 +50,7 @@
   {
     "name": "Caliente",
     "website": "https://caliente.ch",
-    "place": "Zürich, ZH",
+    "place": "Zürich",
     "canton": "ZH",
     "dates": [
       {
@@ -62,7 +62,7 @@
   {
     "name": "Caribana",
     "website": "https://caribana.ch",
-    "place": "Crans, VD",
+    "place": "Crans",
     "canton": "VD",
     "dates": [
       {
@@ -74,7 +74,7 @@
   {
     "name": "Clanx Festival",
     "website": "https://www.clanx.ch",
-    "place": "Appenzell, AI",
+    "place": "Appenzell",
     "canton": "AI",
     "dates": [
       {
@@ -86,7 +86,7 @@
   {
     "name": "Country Night",
     "website": "https://www.countrynight-gstaad.ch",
-    "place": "Gstaad, BE",
+    "place": "Gstaad",
     "canton": "BE",
     "dates": [
       {
@@ -98,7 +98,7 @@
   {
     "name": "Em Bebbi sy Jazz",
     "website": "https://www.embebbisyjazz.ch",
-    "place": "Basel, BS",
+    "place": "Basel",
     "canton": "BS",
     "dates": [
       {
@@ -110,7 +110,7 @@
   {
     "name": "Engadin Festival",
     "website": "https://www.engadin.ch/en/events/engadin-festival-2023",
-    "place": "St. Moritz, GR",
+    "place": "St. Moritz",
     "canton": "GR",
     "dates": [
       {
@@ -122,7 +122,7 @@
   {
     "name": "Etziken",
     "website": "https://openair-etziken.ch",
-    "place": "Etziken, SO",
+    "place": "Etziken",
     "canton": "SO",
     "dates": [
       {
@@ -134,7 +134,7 @@
   {
     "name": "Festi'Neuch",
     "website": "https://festineuch.ch",
-    "place": "Neuchâtel, NE",
+    "place": "Neuchâtel",
     "canton": "NE",
     "dates": [
       {
@@ -146,7 +146,7 @@
   {
     "name": "Frauenfeld",
     "website": "https://www.openair-frauenfeld.ch",
-    "place": "Frauenfeld, TG",
+    "place": "Frauenfeld",
     "canton": "TG",
     "dates": [
       {
@@ -158,7 +158,7 @@
   {
     "name": "Open Air Gampel",
     "website": "https://www.openairgampel.ch",
-    "place": "Gampel, VS",
+    "place": "Gampel",
     "canton": "VS",
     "dates": [
       {
@@ -170,7 +170,7 @@
   {
     "name": "Greenfield",
     "website": "https://www.greenfieldfestival.ch",
-    "place": "Interlaken, BE",
+    "place": "Interlaken",
     "canton": "BE",
     "dates": [
       {
@@ -182,7 +182,7 @@
   {
     "name": "Gurtenfestival",
     "website": "https://gurtenfestival.ch",
-    "place": "Bern, BE",
+    "place": "Bern",
     "canton": "BE",
     "dates": [
       {
@@ -194,7 +194,7 @@
   {
     "name": "Heitere Open Air",
     "website": "https://heitere.ch",
-    "place": "Zofingen, AG",
+    "place": "Zofingen",
     "canton": "AG",
     "dates": [
       {
@@ -206,7 +206,7 @@
   {
     "name": "Hive Air",
     "website": "https://www.hiveair.ch/",
-    "place": "Wohlen, AG",
+    "place": "Wohlen",
     "canton": "AG",
     "dates": [
       {
@@ -218,7 +218,7 @@
   {
     "name": "Irish Openair",
     "website": "https://www.irish-openair.ch",
-    "place": "Toggenburg, SG",
+    "place": "Toggenburg",
     "canton": "SG",
     "dates": [
       {
@@ -230,7 +230,7 @@
   {
     "name": "Jazz Night Zug",
     "website": "https://www.jazznight.ch",
-    "place": "Zug, ZG",
+    "place": "Zug",
     "canton": "ZG",
     "dates": [
       {
@@ -242,7 +242,7 @@
   {
     "name": "Jazznojazz",
     "website": "https://jazznojazz.ch",
-    "place": "Zürich, ZH",
+    "place": "Zürich",
     "canton": "ZH",
     "dates": [
       {
@@ -254,7 +254,7 @@
   {
     "name": "Kleinstadt Openair",
     "website": "https://kleinstadt-openair.ch",
-    "place": "Walenstadt, SG",
+    "place": "Walenstadt",
     "canton": "SG",
     "dates": [
       {
@@ -266,7 +266,7 @@
   {
     "name": "Lakelive",
     "website": "https://www.lakelive.ch",
-    "place": "Biel, BE",
+    "place": "Biel",
     "canton": "BE",
     "dates": [
       {
@@ -278,7 +278,7 @@
   {
     "name": "Openair Lumnezia",
     "website": "https://openair-lumnezia.ch",
-    "place": "Degen, GR",
+    "place": "Degen",
     "canton": "GR",
     "dates": [
       {
@@ -290,7 +290,7 @@
   {
     "name": "Lucerne Festival",
     "website": "https://www.lucernefestival.ch",
-    "place": "Luzern, LU",
+    "place": "Luzern",
     "canton": "LU",
     "dates": [
       {
@@ -306,7 +306,7 @@
   {
     "name": "Montreux Jazz Festival",
     "website": "https://www.montreuxjazzfestival.com",
-    "place": "Montreux, VD",
+    "place": "Montreux",
     "canton": "VD",
     "dates": [
       {
@@ -318,7 +318,7 @@
   {
     "name": "Moon & Stars",
     "website": "https://moonandstars.ch",
-    "place": "Locarno, TI",
+    "place": "Locarno",
     "canton": "TI",
     "dates": [
       {
@@ -330,7 +330,7 @@
   {
     "name": "Murten Classics",
     "website": "https://murtenclassics.ch",
-    "place": "Murten, FR",
+    "place": "Murten",
     "canton": "FR",
     "dates": [
       {
@@ -342,7 +342,7 @@
   {
     "name": "Openair Cavaglia",
     "website": "https://openaircavaglia.ch",
-    "place": "Cavaglia, GR",
+    "place": "Cavaglia",
     "canton": "GR",
     "dates": [
       {
@@ -354,7 +354,7 @@
   {
     "name": "Paléo Festival",
     "website": "https://yeah.paleo.ch",
-    "place": "Nyon, VD",
+    "place": "Nyon",
     "canton": "VD",
     "dates": [
       {
@@ -366,7 +366,7 @@
   {
     "name": "Postplatzfestival",
     "website": "https://www.postplatzfestival.ch",
-    "place": "Appenzell, AI",
+    "place": "Appenzell",
     "canton": "AI",
     "dates": [
       {
@@ -378,7 +378,7 @@
   {
     "name": "Rampe Openair",
     "website": "https://www.rampeopenair.ch",
-    "place": "Hausen am Albis, ZH",
+    "place": "Hausen am Albis",
     "canton": "ZH",
     "dates": [
       {
@@ -390,7 +390,7 @@
   {
     "name": "Riverside",
     "website": "https://www.riversideaarburg.com",
-    "place": "Aarburg, AG",
+    "place": "Aarburg",
     "canton": "AG",
     "dates": [
       {
@@ -402,7 +402,7 @@
   {
     "name": "Rockfest",
     "website": "https://www.rockfest.ch/",
-    "place": "Schmerikon, ZH",
+    "place": "Schmerikon",
     "canton": "ZH",
     "dates": [
       {
@@ -414,7 +414,7 @@
   {
     "name": "Schupfart Festival",
     "website": "https://www.schupfartfestival.ch",
-    "place": "Schupfart, AG",
+    "place": "Schupfart",
     "canton": "AG",
     "dates": [
       {
@@ -426,7 +426,7 @@
   {
     "name": "Snowpenair",
     "website": "https://www.snowpenair.ch",
-    "place": "Grindelwald, BE",
+    "place": "Grindelwald",
     "canton": "BE",
     "dates": [
       {
@@ -442,7 +442,7 @@
   {
     "name": "Sound of Glarus",
     "website": "https://soundofglarus.ch",
-    "place": "Glarus, GL",
+    "place": "Glarus",
     "canton": "GL",
     "dates": [
       {
@@ -454,7 +454,7 @@
   {
     "name": "Stanser Musiktage",
     "website": "https://www.stansermusiktage.ch",
-    "place": "Stans, NW",
+    "place": "Stans",
     "canton": "NW",
     "dates": [
       {
@@ -466,7 +466,7 @@
   {
     "name": "Stars in Town",
     "website": "https://starsintown.ch",
-    "place": "Schaffhausen, SH",
+    "place": "Schaffhausen",
     "canton": "SH",
     "dates": [
       {
@@ -478,7 +478,7 @@
   {
     "name": "Stars of Sounds Aarberg",
     "website": "https://starsofsounds.ch",
-    "place": "Aarberg, BE",
+    "place": "Aarberg",
     "canton": "BE",
     "dates": [
       {
@@ -490,7 +490,7 @@
   {
     "name": "Stars of Sounds Murten",
     "website": "https://starsofsounds.ch",
-    "place": "Murten, FR",
+    "place": "Murten",
     "canton": "FR",
     "dates": [
       {
@@ -502,7 +502,7 @@
   {
     "name": "Street Parade",
     "website": "https://www.streetparade.com",
-    "place": "Zürich, ZH",
+    "place": "Zürich",
     "canton": "ZH",
     "dates": [
       {
@@ -514,7 +514,7 @@
   {
     "name": "OpenAir St. Gallen",
     "website": "https://www.openairsg.ch",
-    "place": "St. Gallen, SG",
+    "place": "St. Gallen",
     "canton": "SG",
     "dates": [
       {
@@ -526,7 +526,7 @@
   {
     "name": "Summerblues",
     "website": "https://summerblues.ch",
-    "place": "Basel, BS",
+    "place": "Basel",
     "canton": "BS",
     "dates": [
       {
@@ -538,7 +538,7 @@
   {
     "name": "SummerDays Festival",
     "website": "https://www.summerdays.ch",
-    "place": "Arbon, TG",
+    "place": "Arbon",
     "canton": "TG",
     "dates": [
       {
@@ -550,7 +550,7 @@
   {
     "name": "Summerstage",
     "website": "https://www.summerstage.ch",
-    "place": "Basel, BS",
+    "place": "Basel",
     "canton": "BS",
     "dates": [
       {
@@ -562,7 +562,7 @@
   {
     "name": "Trucker & Country Festival",
     "website": "https://www.truckerfestival.ch",
-    "place": "Interlaken, BE",
+    "place": "Interlaken",
     "canton": "BE",
     "dates": [
       {
@@ -574,7 +574,7 @@
   {
     "name": "VolksSchlager Openair",
     "website": "https://www.galfri.ch/volksschlager/volksschlager-openair",
-    "place": "Zofingen, AG",
+    "place": "Zofingen",
     "canton": "AG",
     "dates": [
       {
@@ -586,7 +586,7 @@
   {
     "name": "Weihern",
     "website": "https://www.weihern.ch",
-    "place": "St.Gallen, SG",
+    "place": "St.Gallen",
     "canton": "SG",
     "dates": [
       {
@@ -598,7 +598,7 @@
   {
     "name": "Wildhaus Openair",
     "website": "https://www.openairwildhaus.ch",
-    "place": "Toggenburg, SG",
+    "place": "Toggenburg",
     "canton": "SG",
     "dates": [
       {
@@ -610,7 +610,7 @@
   {
     "name": "Jazzfestival Willisau",
     "website": "https://www.jazzfestivalwillisau.ch",
-    "place": "Willisau, LU",
+    "place": "Willisau",
     "canton": "LU",
     "dates": [
       {
@@ -622,7 +622,7 @@
   {
     "name": "Winterthurer Musikfestwochen",
     "website": "https://musikfestwochen.ch/",
-    "place": "Winterthur, ZH",
+    "place": "Winterthur",
     "canton": "ZH",
     "dates": [
       {
@@ -634,7 +634,7 @@
   {
     "name": "Zermatt Unplugged",
     "website": "https://zermatt-unplugged.ch",
-    "place": "Zermatt, VS",
+    "place": "Zermatt",
     "canton": "VS",
     "dates": [
       {
@@ -646,7 +646,7 @@
   {
     "name": "Zürich Openair",
     "website": "https://zurichopenair.ch",
-    "place": "Zürich, ZH",
+    "place": "Zürich",
     "canton": "ZH",
     "dates": [
       {

@@ -22,7 +22,9 @@ export const ItemCard: React.FC<Props> = ({ openair }) => (
     >
       <ExternalLink />
     </a>
-    <p>{openair.place}</p>
+    <p>
+      {openair.place}, {openair.canton}
+    </p>
     {openair.dates.map(dateFromRange).map((dateRange) => (
       <p key={openair.website + dateRange}>{dateRange}</p>
     ))}
