@@ -187,6 +187,17 @@
         ]
     },
     {
+        "name": "Hive Air",
+        "website": "https://www.hiveair.ch/",
+        "place": "Wohlen, AG",
+        "dates": [
+            {
+                "start": "2023-06-03",
+                "end": "2023-06-03"
+            }
+        ]
+    },
+    {
         "name": "Irish Openair",
         "website": "https://www.irish-openair.ch",
         "place": "Toggenburg, SG",
