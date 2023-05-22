@@ -30,7 +30,7 @@ export const ItemList: React.FC<Props> = ({ openairs }) => {
     <main className={styles.main}>
       <p>
         <label>
-          sorted by{" "}
+          sort by{" "}
           <select
             value={sortMethod}
             onChange={(e) => {
@@ -47,7 +47,7 @@ export const ItemList: React.FC<Props> = ({ openairs }) => {
         </label>
       </p>
       <p>
-        including{" "}
+        include{" "}
         {musicTypes
           .map<React.ReactNode>((tag) => (
             <span
