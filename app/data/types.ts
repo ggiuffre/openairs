@@ -6,6 +6,7 @@ export interface Openair {
   canton: Canton;
   musicTypes: MusicType[];
   dates: DateRange[];
+  gradient: string;
 }
 
 /// Date range
