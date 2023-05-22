@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./styles.module.css";
 import { randomGradient } from "@/app/data/colors";
-import type { Openair } from "@/app/data/types";
+import type { DateRange, Openair } from "@/app/data/types";
 import { ExternalLink } from "react-feather";
 
 interface Props {
@@ -23,10 +23,13 @@ export const ItemCard: React.FC<Props> = ({ openair }) => (
       <ExternalLink />
     </a>
     <p>{openair.place}</p>
-    {openair.dates
-      .map((dateRange) => `${dateRange.start} - ${dateRange.end}`)
-      .map((dateRange) => (
-        <p key={openair.website + dateRange}>{dateRange}</p>
-      ))}
+    {openair.dates.map(dateFromRange).map((dateRange) => (
+      <p key={openair.website + dateRange}>{dateRange}</p>
+    ))}
   </article>
 );
+
+const dateFromRange = (dateRange: DateRange): string =>
+  dateRange.start?.getDate() === dateRange.end?.getDate()
+    ? dateRange.start?.toLocaleDateString()
+    : `${dateRange.start?.toLocaleDateString()} - ${dateRange.end?.toLocaleDateString()}`;

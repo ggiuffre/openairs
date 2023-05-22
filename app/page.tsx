@@ -1,6 +1,6 @@
-import { ItemCard } from "./components/ItemCard";
-import { getOpenairs } from "./data/getOpenairs";
 import styles from "./styles.module.css";
+import { ItemList } from "./components/ItemList";
+import { getOpenairs } from "./data/getOpenairs";
 
 const Home = async () => {
   const openairs = await getOpenairs();
@@ -9,11 +9,7 @@ const Home = async () => {
       <header className={styles.header}>
         <h1>Openairs, festivals and everything music in Switzerland.</h1>
       </header>
-      <main className={styles.main}>
-        {openairs.map((openair) => (
-          <ItemCard key={openair.website} openair={openair} />
-        ))}
-      </main>
+      <ItemList openairs={openairs} />
     </>
   );
 };
