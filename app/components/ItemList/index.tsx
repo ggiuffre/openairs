@@ -3,22 +3,28 @@
 import React, { useState } from "react";
 import styles from "./styles.module.css";
 import { ItemCard } from "../ItemCard";
-import type { CompareFunction, Openair, SortMethod } from "@/app/data/types";
+import {
+  type CompareFunction,
+  type Openair,
+  type SortMethod,
+  sortMethods,
+} from "@/app/data/types";
 
 interface Props {
   openairs: Openair[];
 }
 
 export const ItemList: React.FC<Props> = ({ openairs }) => {
-  const sortMethods: Record<SortMethod, CompareFunction<Openair>> = {
+  const compareFunctions: Record<SortMethod, CompareFunction<Openair>> = {
     name: (a, b) => a.name.localeCompare(b.name),
     date: (a, b) => a.dates[0].start?.getTime() - b.dates[0].start?.getTime(),
   };
   const [sortMethod, setSortMethod] = useState<SortMethod>("name");
+
   return (
     <main className={styles.main}>
       <label>
-        Sort by:{" "}
+        sorted by{" "}
         <select
           value={sortMethod}
           onChange={(e) => {
@@ -26,14 +32,14 @@ export const ItemList: React.FC<Props> = ({ openairs }) => {
             setSortMethod(targetValue);
           }}
         >
-          {Object.keys(sortMethods).map((key) => (
-            <option key={key} value={key}>
-              {key}
+          {sortMethods.map((sortMethod) => (
+            <option key={sortMethod} value={sortMethod}>
+              {sortMethod}
             </option>
           ))}
         </select>
       </label>
-      {openairs.sort(sortMethods[sortMethod]).map((openair) => (
+      {openairs.sort(compareFunctions[sortMethod]).map((openair) => (
         <ItemCard key={openair.name + openair.website} openair={openair} />
       ))}
     </main>
