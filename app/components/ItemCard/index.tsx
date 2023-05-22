@@ -28,6 +28,13 @@ export const ItemCard: React.FC<Props> = ({ openair }) => (
     {openair.dates.map(dateFromRange).map((dateRange) => (
       <p key={openair.website + dateRange}>{dateRange}</p>
     ))}
+    <p>
+      {openair.musicTypes.map((tag) => (
+        <span className="tag" key={tag}>
+          {tag}
+        </span>
+      ))}
+    </p>
   </article>
 );
 

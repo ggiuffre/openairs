@@ -3,3 +3,8 @@
   max-width: 36rem;
   margin: auto;
 }
+
+.main p {
+  margin-bottom: 1rem;
+  line-height: 2rem;
+}

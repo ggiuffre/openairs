@@ -4,6 +4,7 @@ export interface Openair {
   website: `https://${Lowercase<string>}`;
   place: string;
   canton: Canton;
+  musicTypes: MusicType[];
   dates: DateRange[];
 }
 
@@ -12,6 +13,14 @@ export interface DateRange {
   start: Date;
   end: Date;
 }
+
+export const musicTypes = [
+  "classical music",
+  "bands & performers",
+  "DJs & producers",
+] as const;
+
+export type MusicType = (typeof musicTypes)[number];
 
 export const cantons = [
   "AG",
