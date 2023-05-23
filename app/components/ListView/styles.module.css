@@ -1,0 +1,12 @@
+.sectionTitle {
+  margin-top: 3rem;
+  padding: 0 1rem;
+  background-color: rgba(180, 180, 180, 0.2);
+  border-radius: 2px;
+}
+
+@media (prefers-color-scheme: light) {
+  .sectionTitle {
+    box-shadow: 4px 4px;
+  }
+}

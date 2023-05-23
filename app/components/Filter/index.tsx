@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import styles from "./styles.module.css";
-import { ItemCard } from "../ItemCard";
 import {
   type CompareFunction,
   type Openair,
@@ -11,12 +10,13 @@ import {
   sortMethods,
   musicTypes,
 } from "@/app/data/types";
+import { ListView } from "../ListView";
 
 interface Props {
   openairs: Openair[];
 }
 
-export const ItemList: React.FC<Props> = ({ openairs }) => {
+export const Filter: React.FC<Props> = ({ openairs }) => {
   const compareFunctions: Record<SortMethod, CompareFunction<Openair>> = {
     name: (a, b) => a.name.localeCompare(b.name),
     date: (a, b) => a.dates[0].start?.getTime() - b.dates[0].start?.getTime(),
@@ -72,12 +72,12 @@ export const ItemList: React.FC<Props> = ({ openairs }) => {
           ))
           .reduce((prev, curr) => [prev, " ", curr])}
       </p>
-      {openairs
-        .filter((openair) => selectedMusicTypes.has(openair.musicTypes[0]))
-        .sort(compareFunctions[sortMethod])
-        .map((openair) => (
-          <ItemCard key={openair.name + openair.website} openair={openair} />
-        ))}
+      <ListView
+        sortMethod={sortMethod}
+        openairs={openairs
+          .filter((openair) => selectedMusicTypes.has(openair.musicTypes[0]))
+          .sort(compareFunctions[sortMethod])}
+      />
     </main>
   );
 };
