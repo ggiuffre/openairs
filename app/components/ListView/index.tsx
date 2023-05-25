@@ -43,7 +43,8 @@ export const ListView: React.FC<Props> = ({ openairs, sortMethod }) => {
   );
 };
 
-const getInitialLetter = (openair: Openair): string => openair.name[0];
+const getInitialLetter = (openair: Openair): string =>
+  openair.name[0].toUpperCase();
 
 const getMonth = (openair: Openair): string =>
   monthNames[openair.dates[0].start.getMonth()];
