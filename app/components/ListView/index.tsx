@@ -20,7 +20,7 @@ export const ListView: React.FC<Props> = ({ openairs, sortMethod }) => {
         accumulator.push(openairs[i]);
       } else {
         yield accumulator;
-        accumulator = [];
+        accumulator = [openairs[i]];
         currentBin = getBin(openairs[i]);
       }
       i++;
