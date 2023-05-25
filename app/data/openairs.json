@@ -156,6 +156,19 @@
     ]
   },
   {
+    "name": "Festival Da Jazz",
+    "website": "https://www.festivaldajazz.ch/",
+    "place": "St. Moritz",
+    "canton": "GR",
+    "musicTypes": ["bands & performers"],
+    "dates": [
+      {
+        "start": "2023-07-06",
+        "end": "2023-07-31"
+      }
+    ]
+  },
+  {
     "name": "Festi'Neuch",
     "website": "https://festineuch.ch",
     "place": "Neuchâtel",
@@ -455,6 +468,19 @@
       {
         "start": "2023-07-28",
         "end": "2023-07-30"
+      }
+    ]
+  },
+  {
+    "name": "Royal Arena",
+    "website": "https://www.royalarena.ch",
+    "place": "Biel",
+    "canton": "BE",
+    "musicTypes": ["bands & performers"],
+    "dates": [
+      {
+        "start": "2023-08-18",
+        "end": "2023-08-19"
       }
     ]
   },
