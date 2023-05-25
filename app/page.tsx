@@ -1,5 +1,5 @@
 import styles from "./styles.module.css";
-import { Filter } from "./components/Filter";
+import { FilteredListView } from "./components/FilteredListView";
 import { getOpenairs } from "./data/getOpenairs";
 import type { Openair } from "./data/types";
 
@@ -10,7 +10,7 @@ const Home = async () => {
       <header className={styles.header}>
         <h1>Openairs, festivals and everything music in Switzerland.</h1>
       </header>
-      <Filter openairs={openairs.filter(isNotFinished)} />
+      <FilteredListView openairs={openairs.filter(isNotFinished)} />
     </>
   );
 };
