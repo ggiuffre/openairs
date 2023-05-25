@@ -10,13 +10,13 @@ import {
   musicTypes,
 } from "@/app/data/types";
 import { ListView } from "../ListView";
-import { FilterControls } from "../FilterControls";
+import { Filter } from "../Filter";
 
 interface Props {
   openairs: Openair[];
 }
 
-export const FilteredListView: React.FC<Props> = ({ openairs }) => {
+export const MainView: React.FC<Props> = ({ openairs }) => {
   const compareFunctions: Record<SortMethod, CompareFunction<Openair>> = {
     name: (a, b) => a.name.localeCompare(b.name),
     date: (a, b) => a.dates[0].start?.getTime() - b.dates[0].start?.getTime(),
@@ -28,7 +28,7 @@ export const FilteredListView: React.FC<Props> = ({ openairs }) => {
 
   return (
     <main className={styles.main}>
-      <FilterControls
+      <Filter
         sortMethod={sortMethod}
         setSortMethod={setSortMethod}
         selectedMusicTypes={selectedMusicTypes}

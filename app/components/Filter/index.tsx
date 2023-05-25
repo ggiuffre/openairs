@@ -14,13 +14,13 @@ interface Props {
   setSelectedMusicTypes: React.Dispatch<React.SetStateAction<Set<MusicType>>>;
 }
 
-export const FilterControls: React.FC<Props> = ({
+export const Filter: React.FC<Props> = ({
   sortMethod,
   setSortMethod,
   selectedMusicTypes,
   setSelectedMusicTypes,
 }) => (
-  <div className={styles.filters}>
+  <div className={styles.filter}>
     <p>
       <label>
         sort by{" "}
