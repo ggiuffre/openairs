@@ -10,12 +10,16 @@ const Home = async () => {
       <header className={styles.header}>
         <h1>Openairs, festivals and everything music in Switzerland.</h1>
       </header>
-      <MainView openairs={openairs.filter(isNotFinished)} />
+      <MainView openairs={openairs.filter(isRecentOrUpcoming)} />
     </>
   );
 };
 
-const isNotFinished = (openair: Openair): boolean =>
-  openair.dates.some((dateRange) => dateRange.end >= new Date());
+const isRecentOrUpcoming = (openair: Openair): boolean => {
+  const includePastDays = 7; // n
+  const reference = new Date(); // today
+  reference.setDate(reference.getDate() - includePastDays); // n days ago
+  return openair.dates.some((dateRange) => dateRange.end >= reference);
+};
 
 export default Home;
