@@ -11,6 +11,10 @@
   }
 }
 
+.filter p:first-child {
+  display: inline-block;
+}
+
 .filter p {
   margin-bottom: 0.5rem;
   line-height: 2rem;
@@ -18,4 +22,10 @@
 
 .filter p:last-child {
   margin-bottom: 0;
+}
+
+.moreFilters {
+  border: unset;
+  float: right;
+  cursor: pointer;
 }

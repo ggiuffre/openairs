@@ -3,10 +3,12 @@
 import React, { useState } from "react";
 import styles from "./styles.module.css";
 import {
+  type Canton,
   type CompareFunction,
+  type MusicType,
   type Openair,
   type SortMethod,
-  type MusicType,
+  cantons,
   musicTypes,
 } from "@/app/data/types";
 import { ListView } from "../ListView";
@@ -25,6 +27,9 @@ export const MainView: React.FC<Props> = ({ openairs }) => {
   const [selectedMusicTypes, setSelectedMusicTypes] = useState<Set<MusicType>>(
     new Set(musicTypes)
   );
+  const [selectedCantons, setSelectedCantons] = useState<Set<Canton>>(
+    new Set(cantons)
+  );
 
   return (
     <main className={styles.main}>
@@ -33,11 +38,14 @@ export const MainView: React.FC<Props> = ({ openairs }) => {
         setSortMethod={setSortMethod}
         selectedMusicTypes={selectedMusicTypes}
         setSelectedMusicTypes={setSelectedMusicTypes}
+        selectedCantons={selectedCantons}
+        setSelectedCantons={setSelectedCantons}
       />
       <ListView
         sortMethod={sortMethod}
         openairs={openairs
           .filter((openair) => selectedMusicTypes.has(openair.musicTypes[0]))
+          .filter((openair) => selectedCantons.has(openair.canton))
           .sort(compareFunctions[sortMethod])}
       />
     </main>
