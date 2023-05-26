@@ -13,17 +13,19 @@ export const ListView: React.FC<Props> = ({ openairs, sortMethod }) => {
 
   function* binned(openairs: Openair[]) {
     let i = 0;
-    let currentBin = getBin(openairs[i]);
-    let accumulator: Openair[] = [];
-    while (i < openairs.length) {
-      if (getBin(openairs[i]) === currentBin) {
-        accumulator.push(openairs[i]);
-      } else {
-        yield accumulator;
-        accumulator = [openairs[i]];
-        currentBin = getBin(openairs[i]);
+    if (openairs.length > 0) {
+      let currentBin = getBin(openairs[i]);
+      let accumulator: Openair[] = [];
+      while (i < openairs.length) {
+        if (getBin(openairs[i]) === currentBin) {
+          accumulator.push(openairs[i]);
+        } else {
+          yield accumulator;
+          accumulator = [openairs[i]];
+          currentBin = getBin(openairs[i]);
+        }
+        i++;
       }
-      i++;
     }
   }
 
