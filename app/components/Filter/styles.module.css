@@ -1,10 +1,21 @@
 .filter {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(200, 200, 200, 0.1);
   padding: 1rem;
   border-radius: var(--border-radius);
 }
 
+@media (prefers-color-scheme: light) {
+  .filter {
+    background-color: rgba(180, 180, 180, 0.2);
+    box-shadow: 4px 4px;
+  }
+}
+
 .filter p {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   line-height: 2rem;
+}
+
+.filter p:last-child {
+  margin-bottom: 0;
 }
