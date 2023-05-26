@@ -2,8 +2,7 @@
   padding: 1rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  list-style: none;
-  border-radius: 2px;
+  border-radius: var(--border-radius);
 }
 
 @media (prefers-color-scheme: light) {

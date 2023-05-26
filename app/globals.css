@@ -1,6 +1,6 @@
 :root {
   --max-width: 1100px;
-  --border-radius: 12px;
+  --border-radius: 3px;
   --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
     "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
     "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
@@ -108,7 +108,7 @@ a {
 
 .tag {
   background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
+  border-radius: var(--border-radius);
   padding: 4px 6px;
 }
 
