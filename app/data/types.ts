@@ -15,11 +15,7 @@ export interface DateRange {
   end: Date;
 }
 
-export const musicTypes = [
-  "classical music",
-  "bands & performers",
-  "DJs & producers",
-] as const;
+export const musicTypes = ["classical music", "eclectic", "techno"] as const;
 
 export type MusicType = (typeof musicTypes)[number];
 
