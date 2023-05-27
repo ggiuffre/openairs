@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Image from "next/image";
 import styles from "./styles.module.css";
 import {
   type Canton,
@@ -85,7 +86,8 @@ export const Filter: React.FC<Props> = ({
           </p>
           <p>
             In cantons{" "}
-            {cantons
+            {[...cantons]
+              .sort()
               .map<React.ReactNode>((canton) => (
                 <span
                   key={`canton-${canton}`}
@@ -93,6 +95,8 @@ export const Filter: React.FC<Props> = ({
                   style={{
                     cursor: "pointer",
                     opacity: selectedCantons.has(canton) ? 1 : 0.3,
+                    display: "inline-block",
+                    lineHeight: "1rem",
                   }}
                   onClick={() => {
                     if (selectedCantons.has(canton)) {
@@ -106,6 +110,12 @@ export const Filter: React.FC<Props> = ({
                     }
                   }}
                 >
+                  <Image
+                    src={`/flags/${canton.toLowerCase()}.svg`}
+                    alt={`Flag of canton ${canton}`}
+                    height={10}
+                    width={10}
+                  />{" "}
                   {canton}
                 </span>
               ))
