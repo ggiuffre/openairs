@@ -355,6 +355,19 @@
     ]
   },
   {
+    "name": "Gstaad Menuhin Festival",
+    "website": "https://www.gstaadmenuhinfestival.ch/",
+    "place": "Gstaad",
+    "canton": "BE",
+    "musicTypes": ["classical music"],
+    "dates": [
+      {
+        "start": "2023-07-14",
+        "end": "2023-09-02"
+      }
+    ]
+  },
+  {
     "name": "Montreux Jazz Festival",
     "website": "https://www.montreuxjazzfestival.com",
     "place": "Montreux",
