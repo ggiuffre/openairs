@@ -5,10 +5,7 @@ import styles from "./styles.module.css";
 import { Moon, Sun } from "react-feather";
 
 export const MenuTopBar: React.FC = () => {
-  const osTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
-  const defaultTheme = localStorage.getItem("theme") ?? osTheme;
+  const defaultTheme = localStorage.getItem("theme") ?? "light";
   const [currentTheme, setCurrentTheme] = useState(defaultTheme);
 
   useEffect(() => {
