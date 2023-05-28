@@ -33,6 +33,9 @@ export const MainView: React.FC<Props> = ({ openairs }) => {
 
   return (
     <main className={styles.main}>
+      <header className={styles.header}>
+        <h1>Openairs, festivals and everything music in Switzerland.</h1>
+      </header>
       <Filter
         sortMethod={sortMethod}
         setSortMethod={setSortMethod}

@@ -1,15 +1,13 @@
-import styles from "./styles.module.css";
 import { MainView } from "./components/MainView";
 import { getOpenairs } from "./data/getOpenairs";
 import type { Openair } from "./data/types";
+import { MenuTopBar } from "./components/MenuTopBar";
 
 const Home = async () => {
   const openairs = await getOpenairs();
   return (
     <>
-      <header className={styles.header}>
-        <h1>Openairs, festivals and everything music in Switzerland.</h1>
-      </header>
+      <MenuTopBar />
       <MainView openairs={openairs.filter(isRecentOrUpcoming)} />
     </>
   );

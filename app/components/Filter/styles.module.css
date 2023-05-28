@@ -2,12 +2,7 @@
   background-color: rgba(var(--card-rgba));
   padding: 1rem;
   border-radius: var(--border-radius);
-}
-
-@media (prefers-color-scheme: light) {
-  .filter {
-    box-shadow: 4px 4px;
-  }
+  box-shadow: var(--card-box-shadow);
 }
 
 .filter p:first-child {
@@ -26,5 +21,4 @@
 .moreFilters {
   border: unset;
   float: right;
-  cursor: pointer;
 }

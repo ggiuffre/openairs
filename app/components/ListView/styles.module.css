@@ -3,10 +3,5 @@
   padding: 0 1rem;
   background-color: rgba(var(--card-rgba));
   border-radius: var(--border-radius);
-}
-
-@media (prefers-color-scheme: light) {
-  .sectionTitle {
-    box-shadow: 4px 4px;
-  }
+  box-shadow: var(--card-box-shadow);
 }

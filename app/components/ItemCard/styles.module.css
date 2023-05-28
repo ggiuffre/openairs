@@ -3,12 +3,7 @@
   margin-top: 1rem;
   margin-bottom: 1rem;
   border-radius: var(--border-radius);
-}
-
-@media (prefers-color-scheme: light) {
-  .itemCard {
-    box-shadow: 4px 4px;
-  }
+  box-shadow: var(--card-box-shadow);
 }
 
 .itemCard h2 {
