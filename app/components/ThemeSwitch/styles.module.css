@@ -1,4 +1,5 @@
 .switch {
   float: right;
   border: none;
+  cursor: pointer;
 }

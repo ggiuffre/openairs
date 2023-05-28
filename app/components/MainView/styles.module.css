@@ -5,7 +5,6 @@
 }
 
 .header {
-  padding: 1rem 0;
   max-width: var(--max-width);
   margin: auto;
 }

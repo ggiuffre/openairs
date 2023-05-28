@@ -1,4 +1,12 @@
 .menuTopBar {
   width: 100%;
   padding: 1rem;
+  vertical-align: middle;
+}
+
+.repoLink,
+.versionTag {
+  display: inline-block;
+  height: 2rem;
+  vertical-align: middle;
 }
