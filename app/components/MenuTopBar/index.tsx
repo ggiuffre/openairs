@@ -1,31 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styles from "./styles.module.css";
-import { Moon, Sun } from "react-feather";
+import dynamic from "next/dynamic";
 
-export const MenuTopBar: React.FC = () => {
-  const defaultTheme = localStorage.getItem("theme") ?? "light";
-  const [currentTheme, setCurrentTheme] = useState(defaultTheme);
+const ThemeSwitch = dynamic(
+  () => import("../ThemeSwitch").then((mod) => mod.ThemeSwitch),
+  { ssr: false }
+);
 
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", currentTheme);
-  }, [currentTheme]);
-
-  const toggleTheme = () => {
-    const targetTheme = currentTheme === "dark" ? "light" : "dark";
-    setCurrentTheme(targetTheme);
-    localStorage.setItem("theme", targetTheme);
-  };
-
-  return (
-    <header className={styles.menuTopBar}>
-      <button
-        className={styles.switch + " tag clickable"}
-        onClick={toggleTheme}
-      >
-        {currentTheme === "dark" ? <Moon /> : <Sun />}
-      </button>
-    </header>
-  );
-};
+export const MenuTopBar: React.FC = () => (
+  <header className={styles.menuTopBar}>
+    <ThemeSwitch />
+  </header>
+);
