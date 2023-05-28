@@ -1,13 +1,12 @@
 .sectionTitle {
   margin-top: 3rem;
   padding: 0 1rem;
-  background-color: rgba(200, 200, 200, 0.1);
+  background-color: rgba(var(--card-rgba));
   border-radius: var(--border-radius);
 }
 
 @media (prefers-color-scheme: light) {
   .sectionTitle {
-    background-color: rgba(180, 180, 180, 0.2);
     box-shadow: 4px 4px;
   }
 }
