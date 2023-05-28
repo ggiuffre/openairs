@@ -1,3 +1,5 @@
+import type { Gradient } from "./colors";
+
 /// Data about an openair festival
 export interface Openair {
   name: string;
@@ -6,7 +8,7 @@ export interface Openair {
   canton: Canton;
   musicTypes: MusicType[];
   dates: DateRange[];
-  gradient: string;
+  gradient: Gradient;
 }
 
 /// Date range
