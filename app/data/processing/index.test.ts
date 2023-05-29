@@ -1,4 +1,4 @@
-import { getInitialLetter, getMonth } from ".";
+import { getInitialLetter, getMonth, isValidDateRange } from ".";
 import { Factory } from "../factories";
 
 describe("getInitialLetter", () => {
@@ -47,5 +47,37 @@ describe("getMonth", () => {
       ],
     });
     expect(getMonth(openair)).toBe(`January ${year + 1}`);
+  });
+});
+
+describe("isValidDateRange", () => {
+  test("returns false if end is before start in same year", () => {
+    const start = new Date(2000, 3, 1);
+    const end = new Date(2000, 2, 31);
+    expect(isValidDateRange({ start, end })).toBe(false);
+  });
+
+  test("returns true if start is before end in same year", () => {
+    const start = new Date(2000, 2, 31);
+    const end = new Date(2000, 3, 1);
+    expect(isValidDateRange({ start, end })).toBe(true);
+  });
+
+  test("returns false if end is before start across years", () => {
+    const start = new Date(2001, 0, 10);
+    const end = new Date(2000, 11, 28);
+    expect(isValidDateRange({ start, end })).toBe(false);
+  });
+
+  test("returns true if start is before end across years", () => {
+    const start = new Date(2000, 11, 28);
+    const end = new Date(2001, 0, 10);
+    expect(isValidDateRange({ start, end })).toBe(true);
+  });
+
+  test("returns true if start is end", () => {
+    const start = new Date(2000, 2, 31);
+    const end = start;
+    expect(isValidDateRange({ start, end })).toBe(true);
   });
 });
