@@ -27,7 +27,11 @@ export const getInitialLetter = (openair: Openair): string =>
   openair.name.length > 0 ? openair.name[0].toUpperCase() : "";
 
 export const getMonth = (openair: Openair): string =>
-  monthNames[openair.dates[0].start.getMonth()];
+  monthNames[
+    (
+      openair.dates.find(isRecentOrUpcomingDateRange) ?? openair.dates[0]
+    ).start.getMonth()
+  ];
 
 const monthNames = [
   "January",
@@ -45,7 +49,8 @@ const monthNames = [
 ];
 
 /**
- * Get whether a date range is valid (i.e. non-empty and in the recent past or future).
+ * Get whether a date range is valid (i.e. non-empty and in the recent past or
+ * future).
  * @param dateRange a date range
  */
 export const isValidDateRange = ({ start, end }: DateRange): boolean =>
@@ -56,7 +61,19 @@ export const isValidDateRange = ({ start, end }: DateRange): boolean =>
  * @param dateRange a date range
  */
 export const isPastDateRange = ({ start, end }: DateRange): boolean =>
-  isValidDateRange({ start, end }) && end <= nightOwlToday();
+  isValidDateRange({ start, end }) && end < nightOwlToday();
+
+/**
+ * Get whether a date range is recent (did not happen more than a week ago) or
+ * upcoming (in the present or future).
+ * @param dateRange a date range
+ */
+export const isRecentOrUpcomingDateRange = (dateRange: DateRange): boolean => {
+  const includePastDays = 7; // n
+  const reference = new Date(); // today
+  reference.setDate(reference.getDate() - includePastDays); // n days ago
+  return dateRange.end >= reference;
+};
 
 /**
  * Get today's date at the start (midnight).

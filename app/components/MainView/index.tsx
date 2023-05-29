@@ -13,6 +13,7 @@ import {
 } from "@/app/data/types";
 import { ListView } from "../ListView";
 import { Filter } from "../Filter";
+import { isRecentOrUpcomingDateRange } from "@/app/data/processing";
 
 interface Props {
   openairs: Openair[];
@@ -21,9 +22,15 @@ interface Props {
 export const MainView: React.FC<Props> = ({ openairs }) => {
   const compareFunctions: Record<SortMethod, CompareFunction<Openair>> = {
     name: (a, b) => a.name.localeCompare(b.name),
-    date: (a, b) => a.dates[0].start?.getTime() - b.dates[0].start?.getTime(),
+    date: (a, b) =>
+      (
+        a.dates.find(isRecentOrUpcomingDateRange) ?? a.dates[0]
+      ).start?.getTime() -
+      (
+        b.dates.find(isRecentOrUpcomingDateRange) ?? b.dates[0]
+      ).start?.getTime(),
   };
-  const [sortMethod, setSortMethod] = useState<SortMethod>("name");
+  const [sortMethod, setSortMethod] = useState<SortMethod>("date");
   const [selectedMusicTypes, setSelectedMusicTypes] = useState<Set<MusicType>>(
     new Set(musicTypes)
   );

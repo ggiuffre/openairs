@@ -2,22 +2,19 @@ import { MainView } from "./components/MainView";
 import { getOpenairs } from "./data/getOpenairs";
 import type { Openair } from "./data/types";
 import { MenuTopBar } from "./components/MenuTopBar";
+import { isRecentOrUpcomingDateRange } from "./data/processing";
 
 const Home = async () => {
   const openairs = await getOpenairs();
   return (
     <>
       <MenuTopBar />
-      <MainView openairs={openairs.filter(isRecentOrUpcoming)} />
+      <MainView openairs={openairs.filter(isRecentOrUpcomingOpenair)} />
     </>
   );
 };
 
-const isRecentOrUpcoming = (openair: Openair): boolean => {
-  const includePastDays = 7; // n
-  const reference = new Date(); // today
-  reference.setDate(reference.getDate() - includePastDays); // n days ago
-  return openair.dates.some((dateRange) => dateRange.end >= reference);
-};
+const isRecentOrUpcomingOpenair = (openair: Openair): boolean =>
+  openair.dates.some(isRecentOrUpcomingDateRange);
 
 export default Home;
