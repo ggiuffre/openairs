@@ -20,6 +20,7 @@ export function* binned(
       }
       i++;
     }
+    yield accumulator;
   }
 }
 
