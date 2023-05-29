@@ -61,6 +61,7 @@ export const Filter: React.FC<Props> = ({
           <p style={{ maxWidth: "85%" }}>
             include{" "}
             {musicTypes
+              .filter((tag) => tag !== "all")
               .map<React.ReactNode>((tag) => (
                 <span
                   key={tag}
@@ -69,20 +70,24 @@ export const Filter: React.FC<Props> = ({
                     cursor: "pointer",
                     opacity: selectedMusicTypes.has(tag) ? 1 : 0.3,
                   }}
-                  onClick={() => {
-                    if (selectedMusicTypes.has(tag)) {
-                      const newSet = selectedMusicTypes;
-                      selectedMusicTypes.delete(tag);
-                      setSelectedMusicTypes(new Set(newSet));
-                    } else {
-                      setSelectedMusicTypes((tags) => new Set(tags.add(tag)));
-                    }
-                  }}
+                  onClick={() => setSelectedMusicTypes(new Set([tag]))}
                 >
                   {tag}
                 </span>
               ))
-              .reduce((prev, curr) => [prev, " ", curr])}
+              .reduce((prev, curr) => [prev, " ", curr])}{" "}
+            <span
+              key="all-music-types"
+              className="tag"
+              style={{
+                cursor: "pointer",
+                opacity:
+                  selectedMusicTypes.size === musicTypes.length ? 1 : 0.35,
+              }}
+              onClick={() => setSelectedMusicTypes(new Set(musicTypes))}
+            >
+              all
+            </span>
           </p>
           <p>
             In cantons{" "}
@@ -100,12 +105,18 @@ export const Filter: React.FC<Props> = ({
                   }}
                   onClick={() => {
                     if (selectedCantons.has(canton)) {
-                      const newSet = selectedCantons;
-                      selectedCantons.delete(canton);
-                      setSelectedCantons(new Set(newSet));
+                      if (selectedCantons.size === 1) {
+                        setSelectedCantons(new Set(cantons));
+                      } else if (selectedCantons.size === cantons.length) {
+                        setSelectedCantons(new Set([canton]));
+                      } else {
+                        const newSet = selectedCantons;
+                        newSet.delete(canton);
+                        setSelectedCantons(new Set(newSet));
+                      }
                     } else {
                       setSelectedCantons(
-                        (cantons) => new Set(cantons.add(canton))
+                        (values) => new Set(values.add(canton))
                       );
                     }
                   }}
@@ -119,7 +130,25 @@ export const Filter: React.FC<Props> = ({
                   {canton}
                 </span>
               ))
-              .reduce((prev, curr) => [prev, " ", curr])}
+              .reduce((prev, curr) => [prev, " ", curr])}{" "}
+            <span
+              key={"all-cantons"}
+              className="tag"
+              style={{
+                cursor: "pointer",
+                display: "inline-block",
+                lineHeight: "1rem",
+              }}
+              onClick={() => setSelectedCantons(new Set(cantons))}
+            >
+              <Image
+                src={"/flags/ch.svg"}
+                alt={"Flag of Switzerland"}
+                height={10}
+                width={10}
+              />{" "}
+              all cantons
+            </span>
           </p>
         </>
       )}
