@@ -6,9 +6,10 @@ import { isPastDateRange } from "@/app/data/processing";
 
 interface Props {
   openair: Openair;
+  expanded?: boolean;
 }
 
-export const ItemCard: React.FC<Props> = ({ openair }) => (
+export const ItemCard: React.FC<Props> = ({ openair, expanded = false }) => (
   <article className={styles.itemCard} style={{ background: openair.gradient }}>
     <h2>{openair.name}</h2>
     <a
@@ -23,13 +24,15 @@ export const ItemCard: React.FC<Props> = ({ openair }) => (
       {openair.place}, {openair.canton}
     </p>
     {openair.dates.map(dateNodeFromRange)}
-    <p>
-      {openair.musicTypes.map((tag) => (
-        <span className="tag" key={tag}>
-          {tag}
-        </span>
-      ))}
-    </p>
+    {expanded && (
+      <p>
+        {openair.musicTypes.map((tag) => (
+          <span className="tag" key={tag}>
+            {tag}
+          </span>
+        ))}
+      </p>
+    )}
   </article>
 );
 

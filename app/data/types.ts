@@ -19,7 +19,7 @@ export interface DateRange {
   end: Date;
 }
 
-export const musicTypes = ["classical music", "eclectic", "techno"] as const;
+export const musicTypes = ["classical music", "all", "techno"] as const;
 
 export type MusicType = (typeof musicTypes)[number];
 
