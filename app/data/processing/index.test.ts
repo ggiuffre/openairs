@@ -1,4 +1,9 @@
-import { getInitialLetter, getMonth, isValidDateRange } from ".";
+import {
+  getInitialLetter,
+  getMonth,
+  isPastDateRange,
+  isValidDateRange,
+} from ".";
 import { Factory } from "../factories";
 
 describe("getInitialLetter", () => {
@@ -79,5 +84,34 @@ describe("isValidDateRange", () => {
     const start = new Date(2000, 2, 31);
     const end = start;
     expect(isValidDateRange({ start, end })).toBe(true);
+  });
+});
+
+describe("isPastDateRange", () => {
+  test("returns true if end is before today", () => {
+    const now = new Date();
+    const month = now.getMonth();
+    const year = now.getFullYear();
+    const start = new Date(year, month - 2, 1);
+    const end = new Date(year, month - 1, 1);
+    expect(isPastDateRange({ start, end })).toBe(true);
+  });
+
+  test("returns false if end is today", () => {
+    const now = new Date();
+    const month = now.getMonth();
+    const year = now.getFullYear();
+    const start = new Date(year, month - 1, 1);
+    const end = now;
+    expect(isPastDateRange({ start, end })).toBe(false);
+  });
+
+  test("returns false if end is after today", () => {
+    const now = new Date();
+    const month = now.getMonth();
+    const year = now.getFullYear();
+    const start = new Date(year, month, 1);
+    const end = new Date(year, month + 1, 1);
+    expect(isPastDateRange({ start, end })).toBe(false);
   });
 });
