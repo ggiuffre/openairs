@@ -5,3 +5,13 @@
   border-radius: var(--border-radius);
   box-shadow: var(--card-box-shadow);
 }
+
+.noResults {
+  padding: 1rem;
+  text-align: center;
+  margin: 5rem 0;
+}
+
+.noResults a {
+  text-decoration: underline;
+}

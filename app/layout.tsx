@@ -21,7 +21,7 @@ const RootLayout: React.FC<Props> = ({ children }) => (
       {children}
       <footer
         style={{
-          marginTop: "4rem",
+          marginTop: "10rem",
           padding: "2rem",
           width: "100%",
           backgroundColor: "rgba(var(--card-rgba))",
