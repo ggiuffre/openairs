@@ -1,6 +1,6 @@
 .sectionTitle {
   margin-top: 3rem;
-  padding: 0 1rem;
+  padding: 0.4rem 1rem;
   background-color: rgba(var(--card-rgba));
   border-radius: var(--border-radius);
   box-shadow: var(--card-box-shadow);
