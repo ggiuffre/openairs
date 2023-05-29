@@ -7,9 +7,11 @@ export interface Openair {
   place: string;
   canton: Canton;
   musicTypes: MusicType[];
-  dates: DateRange[];
+  dates: NonEmptyArray<DateRange>;
   gradient: Gradient;
 }
+
+type NonEmptyArray<T> = [T, ...T[]];
 
 /// Date range
 export interface DateRange {

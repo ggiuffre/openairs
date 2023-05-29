@@ -24,7 +24,7 @@ export function* binned(
 }
 
 export const getInitialLetter = (openair: Openair): string =>
-  openair.name[0].toUpperCase();
+  openair.name.length > 0 ? openair.name[0].toUpperCase() : "";
 
 export const getMonth = (openair: Openair): string =>
   monthNames[openair.dates[0].start.getMonth()];
