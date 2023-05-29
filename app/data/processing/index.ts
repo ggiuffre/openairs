@@ -1,4 +1,4 @@
-import type { Openair } from "../types";
+import type { DateRange, Openair } from "../types";
 
 export function* binned(
   openairs: Openair[],
@@ -43,3 +43,40 @@ const monthNames = [
   "November",
   "December",
 ];
+
+/**
+ * Get whether a date range is valid (i.e. non-empty and in the recent past or future).
+ * @param dateRange a date range
+ */
+export const isValidDateRange = ({ start, end }: DateRange): boolean =>
+  start.getFullYear() > 1900 && start <= end && end.getFullYear() < 2200;
+
+/**
+ * Get whether a date range is in the past and valid
+ * @param dateRange a date range
+ */
+export const isPastDateRange = ({ start, end }: DateRange): boolean =>
+  isValidDateRange({ start, end }) && end <= nightOwlToday();
+
+/**
+ * Get today's date at the start (midnight).
+ */
+export const today = () => {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  return now;
+};
+
+/**
+ * Get today's date at the start (midnight), where today is yesterday if now
+ * is before 8 AM. This makes sense to night owls: any time before going to
+ * sleep is in the same day as when the party started.
+ */
+export const nightOwlToday = () => {
+  const now = new Date();
+  if (now.getHours() < 8) {
+    now.setDate(now.getDate() - 1);
+  }
+  now.setHours(0, 0, 0, 0);
+  return now;
+};
