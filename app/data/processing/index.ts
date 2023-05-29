@@ -27,12 +27,17 @@ export function* binned(
 export const getInitialLetter = (openair: Openair): string =>
   openair.name.length > 0 ? openair.name[0].toUpperCase() : "";
 
-export const getMonth = (openair: Openair): string =>
-  monthNames[
-    (
-      openair.dates.find(isRecentOrUpcomingDateRange) ?? openair.dates[0]
-    ).start.getMonth()
-  ];
+export const getMonth = (openair: Openair): string => {
+  const nextRecentOrUpcomingDaterange =
+    openair.dates.find(isRecentOrUpcomingDateRange) ?? openair.dates[0];
+  const month = monthNames[nextRecentOrUpcomingDaterange.start.getMonth()];
+  const year = nextRecentOrUpcomingDaterange.start.getFullYear();
+  if (year === today().getFullYear()) {
+    return month;
+  } else {
+    return `${month} ${year}`;
+  }
+};
 
 const monthNames = [
   "January",
@@ -62,7 +67,7 @@ export const isValidDateRange = ({ start, end }: DateRange): boolean =>
  * @param dateRange a date range
  */
 export const isPastDateRange = ({ start, end }: DateRange): boolean =>
-  isValidDateRange({ start, end }) && end < nightOwlToday();
+  isValidDateRange({ start, end }) && end < today();
 
 /**
  * Get whether a date range is recent (did not happen more than a week ago) or
@@ -77,22 +82,15 @@ export const isRecentOrUpcomingDateRange = (dateRange: DateRange): boolean => {
 };
 
 /**
- * Get today's date at the start (midnight).
+ * Get today's date at the start (midnight), optionally in night-owl mode.
+ * In night-owl mode, today is yesterday if now is before 8 AM. This makes
+ * sense to night owls: any time before going to sleep is in the same day as
+ * when the party started.
+ * @param nightOwl whether to use night-owl mode
  */
-export const today = () => {
+export const today = ({ nightOwl = true } = {}) => {
   const now = new Date();
-  now.setHours(0, 0, 0, 0);
-  return now;
-};
-
-/**
- * Get today's date at the start (midnight), where today is yesterday if now
- * is before 8 AM. This makes sense to night owls: any time before going to
- * sleep is in the same day as when the party started.
- */
-export const nightOwlToday = () => {
-  const now = new Date();
-  if (now.getHours() < 8) {
+  if (nightOwl && now.getHours() < 8) {
     now.setDate(now.getDate() - 1);
   }
   now.setHours(0, 0, 0, 0);

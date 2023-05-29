@@ -29,10 +29,23 @@ describe("getInitialLetter", () => {
 });
 
 describe("getMonth", () => {
-  test("returns the month of the openair's first starting date", () => {
+  test("returns the month of the first starting date", () => {
+    const now = new Date();
+    const year = now.getFullYear();
     const openair = Factory.Openair({
-      dates: [{ start: new Date(2023, 0, 1), end: new Date(2023, 1, 1) }],
+      dates: [{ start: new Date(year, 0, 1), end: new Date(year, 1, 1) }],
     });
     expect(getMonth(openair)).toBe("January");
+  });
+
+  test("returns month and year of the first starting date, if not in current year", () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const openair = Factory.Openair({
+      dates: [
+        { start: new Date(year + 1, 0, 1), end: new Date(year + 1, 1, 1) },
+      ],
+    });
+    expect(getMonth(openair)).toBe(`January ${year + 1}`);
   });
 });
