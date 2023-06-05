@@ -9,6 +9,7 @@ export interface Openair {
   musicTypes: MusicType[];
   dates: NonEmptyArray<DateRange>;
   gradient: Gradient;
+  artists?: string[];
 }
 
 type NonEmptyArray<T> = [T, ...T[]];
