@@ -874,6 +874,36 @@
     ]
   },
   {
+    "name": "Stimmen Festival",
+    "website": "https://stimmen.com/",
+    "place": "Basel",
+    "canton": "BS",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-23",
+        "end": "2023-07-30"
+      }
+    ]
+  },
+  {
+    "name": "Stolze Openair",
+    "website": "https://stolze-openair.ch/",
+    "place": "Zürich",
+    "canton": "ZH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-15",
+        "end": "2023-06-17"
+      }
+    ]
+  },
+  {
     "name": "Street Parade",
     "website": "https://www.streetparade.com",
     "place": "Zürich",
