@@ -41,7 +41,8 @@ export const getOpenairWebsiteText = async ({
 
   if (found && referenceParents[0] && referenceParents[0].textContent) {
     const minimumText = referenceParents[0].textContent;
-    return minimumText;
+    const strippedText = minimumText.replace(/(\r\n|\r|\n)\s+/g, "\n");
+    return strippedText;
   } else {
     const minimumText = dom.window.document.querySelector("body")?.textContent;
     return minimumText === null ? undefined : minimumText;

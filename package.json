@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest",
+    "scrape": "run(){ curl http://localhost:3000/api/program?name=$1; }; run"
   },
   "dependencies": {
     "@types/node": "^20.2.6",
