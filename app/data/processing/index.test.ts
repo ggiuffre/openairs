@@ -34,13 +34,31 @@ describe("getInitialLetter", () => {
 });
 
 describe("getMonth", () => {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
   test("returns the month of the first starting date", () => {
     const now = new Date();
     const year = now.getFullYear();
+    const month = now.getMonth();
     const openair = Factory.Openair({
-      dates: [{ start: new Date(year, 0, 1), end: new Date(year, 1, 1) }],
+      dates: [
+        { start: new Date(year, month, 1), end: new Date(year, month + 1, 1) },
+      ],
     });
-    expect(getMonth(openair)).toBe("January");
+    expect(getMonth(openair)).toBe(monthNames[month]);
   });
 
   test("returns month and year of the first starting date, if not in current year", () => {
@@ -52,6 +70,21 @@ describe("getMonth", () => {
       ],
     });
     expect(getMonth(openair)).toBe(`January ${year + 1}`);
+  });
+
+  test("returns current month if openair is happening now but started in the past", () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const openair = Factory.Openair({
+      dates: [
+        {
+          start: new Date(year, month - 2, 1),
+          end: new Date(year, month + 1, 1),
+        },
+      ],
+    });
+    expect(getMonth(openair)).toBe(monthNames[month]);
   });
 });
 

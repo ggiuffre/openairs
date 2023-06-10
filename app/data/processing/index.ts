@@ -27,14 +27,24 @@ export function* binned(
 export const getInitialLetter = (openair: Openair): string =>
   openair.name.length > 0 ? openair.name[0].toUpperCase() : "";
 
+/**
+ * Get the starting month of the most recent or upcoming date range of an
+ * openair. Append year to the month, if not in current year. Return current
+ * month, if aforementioned date range started in the past.
+ * @param openair an openair festival
+ */
 export const getMonth = (openair: Openair): string => {
   const nextRecentOrUpcomingDaterange =
     openair.dates.find(isRecentOrUpcomingDateRange) ?? openair.dates[0];
-  const month = monthNames[nextRecentOrUpcomingDaterange.start.getMonth()];
   const year = nextRecentOrUpcomingDaterange.start.getFullYear();
   if (year === today().getFullYear()) {
+    const monthIndex = nextRecentOrUpcomingDaterange.start.getMonth();
+    const currentMonthIndex = today().getMonth();
+    const month = monthNames[Math.max(monthIndex, currentMonthIndex)];
     return month;
   } else {
+    const monthIndex = nextRecentOrUpcomingDaterange.start.getMonth();
+    const month = monthNames[monthIndex];
     return `${month} ${year}`;
   }
 };
