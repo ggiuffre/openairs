@@ -1,98 +1,98 @@
+import { readFile, writeFile } from "fs/promises";
+import path from "path";
 import { Configuration, OpenAIApi } from "openai";
 import { JSDOM } from "jsdom";
-import type { Openair } from "../types";
 
-const allEqual = <T>(arr: T[]) => arr.every((v) => v === arr[0]);
+/**
+ * Get the text content of the body of a website, either from a cache in the
+ * filesystem or directly by crawling the website.
+ * @param website the website to scrape
+ */
+export const scrape = async (website: string): Promise<string> => {
+  // compute location of cache file:
+  const jsonDirectory = path.join(process.cwd(), "app/data/scraping/.cache/");
+  const fileName = website.slice(8).replaceAll("/", "_") + ".txt";
 
-export const getOpenairWebsiteText = async ({
-  openair,
-}: {
-  openair: Openair;
-}) => {
-  if (openair.artists === undefined) {
-    return "";
-  }
+  // return cached text if present, otherwise crawl website manually:
+  const websiteContent = await readFile(jsonDirectory + fileName, "utf8").catch(
+    async () => {
+      // declare function to recursively get content of text nodes:
+      function getText(node: ChildNode) {
+        if (node.nodeName === "SCRIPT") {
+          return "";
+        } else if (node.nodeType === 3) {
+          return node.textContent; // text node
+        } else {
+          let text = "";
+          for (const child of node.childNodes) {
+            text += getText(child);
+          }
+          return text;
+        }
+      }
 
-  const dom = await JSDOM.fromURL(openair.website);
-  const results = Array.from(
-    dom.window.document
-      .querySelector("body")
-      ?.querySelectorAll("*:not(script,svg,img)") ?? []
-  );
-  const references = [
-    openair.artists[0],
-    openair.artists[1],
-    openair.artists[10],
-  ];
-  const referenceNodes = references.map((reference) =>
-    results.find((node) => node.textContent === reference)
-  );
-  let relativeDegree = 0;
-  let referenceParents: (ParentNode | null | undefined)[] = referenceNodes;
-  let found = false;
-  while (!found && relativeDegree < 10) {
-    if (allEqual(referenceParents.map((ref) => ref?.textContent))) {
-      found = true;
-    } else {
-      referenceParents = referenceParents.map((ref) => ref?.parentNode);
-      relativeDegree += 1;
+      // read the website and scrape its content:
+      const dom = await JSDOM.fromURL(website);
+      const text = getText(dom.window.document.body);
+      const strippedText = text?.replace(/(\r\n|\r|\n)\s+/g, "\n");
+
+      // cache the scraped text to a file:
+      if (strippedText) {
+        const data = new Uint8Array(Buffer.from(strippedText));
+        await writeFile(jsonDirectory + fileName, data);
+      }
+
+      // return the scraped text:
+      return strippedText ?? "";
     }
-  }
-
-  if (found && referenceParents[0] && referenceParents[0].textContent) {
-    const minimumText = referenceParents[0].textContent;
-    const strippedText = minimumText.replace(/(\r\n|\r|\n)\s+/g, "\n");
-    return strippedText;
-  } else {
-    const minimumText = dom.window.document.querySelector("body")?.textContent;
-    return minimumText === null ? undefined : minimumText;
-  }
-};
-
-export const getLineupFromScrapedText = async ({
-  text,
-  references,
-}: {
-  text: string;
-  references: string[];
-}) => {
-  const api = new OpenAIApi(
-    new Configuration({
-      organization: process.env.OPENAI_ORG_ID,
-      apiKey: process.env.OPENAI_API_KEY,
-    })
   );
-
-  try {
-    const completion = await api.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "user",
-          content: `Please tell me an item listed in the following text.\n${text}`,
-        },
-        {
-          role: "assistant",
-          content: references[0],
-        },
-        {
-          role: "user",
-          content: "Can you tell me another item?",
-        },
-        {
-          role: "assistant",
-          content: references[1],
-        },
-        {
-          role: "user",
-          content: "What about all the other items?",
-        },
-      ],
-    });
-
-    const result = completion.data.choices[0].message?.content;
-    return result;
-  } catch {
-    return undefined;
-  }
+  return websiteContent;
 };
+
+// export const getLineupFromScrapedText = async ({
+//   text,
+//   references,
+// }: {
+//   text: string;
+//   references: string[];
+// }) => {
+//   const api = new OpenAIApi(
+//     new Configuration({
+//       organization: process.env.OPENAI_ORG_ID,
+//       apiKey: process.env.OPENAI_API_KEY,
+//     })
+//   );
+
+//   try {
+//     const completion = await api.createChatCompletion({
+//       model: "gpt-3.5-turbo",
+//       messages: [
+//         {
+//           role: "user",
+//           content: `Please tell me an item listed in the following text.\n${text}`,
+//         },
+//         {
+//           role: "assistant",
+//           content: references[0],
+//         },
+//         {
+//           role: "user",
+//           content: "Can you tell me another item?",
+//         },
+//         {
+//           role: "assistant",
+//           content: references[1],
+//         },
+//         {
+//           role: "user",
+//           content: "What about all the other items?",
+//         },
+//       ],
+//     });
+
+//     const result = completion.data.choices[0].message?.content;
+//     return result;
+//   } catch {
+//     return undefined;
+//   }
+// };
