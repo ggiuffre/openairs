@@ -2,7 +2,6 @@ import { readFile, writeFile } from "fs/promises";
 import path from "path";
 import { Configuration, OpenAIApi } from "openai";
 import { JSDOM } from "jsdom";
-import { encode } from "gpt-3-encoder";
 
 /**
  * Get the text content of the body of a website, either from a cache in the
@@ -58,8 +57,8 @@ export const embeddingsFromText = async (text: string) => {
     })
   );
 
-  const tokens = encode(text);
-  const maxSize = 8192;
+  const tokens = Array.from(text);
+  const maxSize = 1000;
   const tokenChunks = [];
   while (tokens.length > 0) {
     tokenChunks.push(tokens.splice(0, maxSize));
