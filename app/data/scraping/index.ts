@@ -2,6 +2,7 @@ import { readFile, writeFile } from "fs/promises";
 import path from "path";
 import { Configuration, OpenAIApi } from "openai";
 import { JSDOM } from "jsdom";
+import { encode } from "gpt-3-encoder";
 
 /**
  * Get the text content of the body of a website, either from a cache in the
@@ -47,6 +48,32 @@ export const scrape = async (website: string): Promise<string> => {
     }
   );
   return websiteContent;
+};
+
+export const embeddingsFromText = async (text: string) => {
+  const api = new OpenAIApi(
+    new Configuration({
+      organization: process.env.OPENAI_ORG_ID,
+      apiKey: process.env.OPENAI_API_KEY,
+    })
+  );
+
+  const tokens = encode(text);
+  const maxSize = 8192;
+  const tokenChunks = [];
+  while (tokens.length > 0) {
+    tokenChunks.push(tokens.splice(0, maxSize));
+  }
+
+  const embeddings = Promise.all(
+    tokenChunks.map((tokens) =>
+      api
+        .createEmbedding({ model: "text-embedding-ada-002", input: tokens })
+        .then((response) => response.data.data[0].embedding)
+    )
+  );
+
+  return embeddings;
 };
 
 // export const getLineupFromScrapedText = async ({
