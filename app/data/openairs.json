@@ -684,6 +684,19 @@
     ]
   },
   {
+    "name": "Saas Feestival",
+    "website": "https://www.saasfeestival.ch/",
+    "place": "Saas Fee",
+    "canton": "VS",
+    "musicTypes": ["all"],
+    "dates": [
+      {
+        "start": "2023-07-08",
+        "end": "2023-08-11"
+      }
+    ]
+  },
+  {
     "name": "Schupfart Festival",
     "website": "https://www.schupfartfestival.ch",
     "place": "Schupfart",
