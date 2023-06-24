@@ -6,7 +6,7 @@ import {
   getTextChunks,
   scrape,
 } from "@/app/data/scraping";
-import { readFile } from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -27,7 +27,11 @@ export async function GET(request: Request) {
     const embeddings: number[][] = await readFile(cacheFile, "utf8")
       .then(JSON.parse)
       .then((data) => data.embeddings)
-      .catch(() => embeddingsFromText(text));
+      .catch(async () => {
+        const embeddings = await embeddingsFromText(text);
+        await writeFile(cacheFile, JSON.stringify({ embeddings }), "utf8");
+        return embeddings;
+      });
     if (question) {
       const ans = await answer(question, { embeddings, textChunks });
       return NextResponse.json({ ans });

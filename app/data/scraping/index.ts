@@ -46,7 +46,7 @@ export const scrape = async (website: string): Promise<string> => {
 
 export const getTextChunks = (text: string) => {
   const tokens = Array.from(text);
-  const maxSize = 1000;
+  const maxSize = 2000;
   const chunks = [];
   while (tokens.length > 0) {
     chunks.push(tokens.splice(0, maxSize));
@@ -148,7 +148,7 @@ export const answer = async (
     distances,
     maxLength: 2000,
   });
-  console.log(`${question} Here is some context.\n\n###\n\n${context}`);
+  console.log(`${question} Hier ist etwas Kontext.\n\n###\n\n${context}`);
 
   try {
     const completion = await api.createChatCompletion({
@@ -156,7 +156,7 @@ export const answer = async (
       messages: [
         {
           role: "user",
-          content: `${question} Here is some context.\n\n###\n\n${context}`,
+          content: `${question} Hier ist etwas Kontext.\n\n###\n\n${context}`,
         },
       ],
     });
