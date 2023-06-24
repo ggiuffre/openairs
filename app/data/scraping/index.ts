@@ -44,6 +44,16 @@ export const scrape = async (website: string): Promise<string> => {
   return websiteContent;
 };
 
+export const getTextChunks = (text: string) => {
+  const tokens = Array.from(text);
+  const maxSize = 1000;
+  const chunks = [];
+  while (tokens.length > 0) {
+    chunks.push(tokens.splice(0, maxSize));
+  }
+  return chunks;
+};
+
 export const embeddingsFromText = async (text: string) => {
   const api = new OpenAIApi(
     new Configuration({
@@ -52,13 +62,7 @@ export const embeddingsFromText = async (text: string) => {
     })
   );
 
-  const tokens = Array.from(text);
-  const maxSize = 1000;
-  const tokenChunks = [];
-  while (tokens.length > 0) {
-    tokenChunks.push(tokens.splice(0, maxSize));
-  }
-
+  const tokenChunks = getTextChunks(text);
   const embeddings = Promise.all(
     tokenChunks.map((tokens) =>
       api
@@ -83,13 +87,46 @@ export const cacheFileFromWebsite = (
   return jsonDirectory + fileName + "." + extension;
 };
 
-export const cosineDistance = async ({
-  question,
+export const cosineDistance = ({
+  questionEmbedding,
   embedding,
 }: {
-  question: string;
+  questionEmbedding: number[];
   embedding: number[];
+}) => 1 - cosineSimilarity(questionEmbedding, embedding);
+
+export const getContext = ({
+  textChunks,
+  distances,
+  maxLength,
+}: {
+  textChunks: string[];
+  distances: number[];
+  maxLength: number;
 }) => {
+  // sort text chunks by distance to the question:
+  textChunks.sort(
+    (a, b) =>
+      distances[textChunks.indexOf(b)] - distances[textChunks.indexOf(a)]
+  );
+
+  // add the most relevant text chunks to the context, until the maximum size is reached:
+  let i = 0;
+  let currentLength = 0;
+  let mostRelevantEmbeddings: string[] = [];
+  while (i < textChunks.length && currentLength < maxLength) {
+    mostRelevantEmbeddings.push(textChunks[i]);
+    currentLength += textChunks[i].length + 4;
+    i++;
+  }
+
+  return mostRelevantEmbeddings.join("\n\n###\n\n");
+};
+
+export const answer = async (
+  question: string,
+  { embeddings, textChunks }: { embeddings: number[][]; textChunks: string[] }
+) => {
   const api = new OpenAIApi(
     new Configuration({
       organization: process.env.OPENAI_ORG_ID,
@@ -102,83 +139,44 @@ export const cosineDistance = async ({
     .createEmbedding({ model: "text-embedding-ada-002", input: questionTokens })
     .then((response) => response.data.data[0].embedding);
 
-  const similarity = cosineSimilarity(questionEmbedding, embedding);
-  const distance = 1 - similarity;
-  return distance;
+  const distances = embeddings.map((embedding) =>
+    cosineDistance({ questionEmbedding, embedding })
+  );
+
+  const context = getContext({
+    textChunks,
+    distances,
+    maxLength: 2000,
+  });
+  console.log(`${question} Here is some context.\n\n###\n\n${context}`);
+
+  try {
+    const completion = await api.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "user",
+          content: `${question} Here is some context.\n\n###\n\n${context}`,
+        },
+      ],
+    });
+
+    const result = completion.data.choices[0].message?.content;
+    return result;
+  } catch {
+    return undefined;
+  }
 };
 
-// export const getContext = ({
-//   questionEmbedding,
-//   embeddings,
-//   distances,
-//   maxLength,
-// }: {
-//   questionEmbedding: number[];
-//   embeddings: number[][];
-//   distances: number[];
-//   maxLength: number;
-// }) => {
-//   embeddings.sort((a, b) => distances.indexOf(a) - distances.indexOf(b));
-//   // ...
-// };
-
-// export const getLineupFromScrapedText = async ({
-//   text,
-//   references,
-// }: {
-//   text: string;
-//   references: string[];
-// }) => {
-//   const api = new OpenAIApi(
-//     new Configuration({
-//       organization: process.env.OPENAI_ORG_ID,
-//       apiKey: process.env.OPENAI_API_KEY,
-//     })
-//   );
-
-//   try {
-//     const completion = await api.createChatCompletion({
-//       model: "gpt-3.5-turbo",
-//       messages: [
-//         {
-//           role: "user",
-//           content: `Please tell me an item listed in the following text.\n${text}`,
-//         },
-//         {
-//           role: "assistant",
-//           content: references[0],
-//         },
-//         {
-//           role: "user",
-//           content: "Can you tell me another item?",
-//         },
-//         {
-//           role: "assistant",
-//           content: references[1],
-//         },
-//         {
-//           role: "user",
-//           content: "What about all the other items?",
-//         },
-//       ],
-//     });
-
-//     const result = completion.data.choices[0].message?.content;
-//     return result;
-//   } catch {
-//     return undefined;
-//   }
-// };
-
-function cosineSimilarity(A: number[], B: number[]) {
+function cosineSimilarity(a: number[], b: number[]) {
   let dotproduct = 0;
   let mA = 0;
   let mB = 0;
 
-  for (let i = 0; i < A.length; i++) {
-    dotproduct += A[i] * B[i];
-    mA += A[i] * A[i];
-    mB += B[i] * B[i];
+  for (let i = 0; i < a.length; i++) {
+    dotproduct += a[i] * b[i];
+    mA += a[i] * a[i];
+    mB += b[i] * b[i];
   }
 
   mA = Math.sqrt(mA);
