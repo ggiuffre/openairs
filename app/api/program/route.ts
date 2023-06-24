@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const name = searchParams.get("name"); // exact name of the festival
-  const embed = searchParams.get("embed"); // exact name of the festival
+  const embed = searchParams.get("embed"); // whether to get embeddings instead of text
 
   const openairs = await getOpenairs();
   const openair =
