@@ -13,17 +13,16 @@ export const scrape = async (website: string): Promise<string> => {
   const cacheFile = cacheFileFromWebsite(website, { extension: "txt" });
   const websiteContent = await readFile(cacheFile, "utf8").catch(async () => {
     // declare function to recursively get content of text nodes:
-    const getText = (node: ChildNode) => {
+    const getText = (node: ChildNode): string => {
       if (node.nodeName === "SCRIPT") {
         return "";
       } else if (node.nodeType === 3) {
-        return node.textContent; // text node
+        return node.textContent ?? ""; // text node
       } else {
-        let text = "";
-        for (const child of node.childNodes) {
-          text += getText(child);
-        }
-        return text;
+        return Array.from(node.childNodes)
+          .map(getText)
+          .filter((text) => text !== "")
+          .join(" ");
       }
     };
 
@@ -190,27 +189,11 @@ export const answer = async (
  * @param a the first array
  * @param b the second array
  */
-export const cosineDistance = (a: number[], b: number[]) =>
-  1 - cosineSimilarity(a, b);
-
-/**
- * Get the cosine similarity between two arrays of numbers `a` and `b`.
- * @param a the first array
- * @param b the second array
- */
-export const cosineSimilarity = (a: number[], b: number[]) => {
-  let dotProduct = 0;
-  let mA = 0;
-  let mB = 0;
-
-  for (let i = 0; i < a.length; i++) {
-    dotProduct += a[i] * b[i];
-    mA += a[i] * a[i];
-    mB += b[i] * b[i];
-  }
-
-  mA = Math.sqrt(mA);
-  mB = Math.sqrt(mB);
+export const cosineDistance = (a: number[], b: number[]) => {
+  const dotProduct = a.reduce((acc, val, index) => acc + val * b[index], 0);
+  const mA = Math.sqrt(a.reduce((acc, val) => acc + val * val, 0));
+  const mB = Math.sqrt(b.reduce((acc, val) => acc + val * val, 0));
   const similarity = dotProduct / (mA * mB);
-  return similarity;
+  const distance = 1 - similarity;
+  return distance;
 };
