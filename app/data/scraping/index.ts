@@ -4,47 +4,77 @@ import { Configuration, OpenAIApi } from "openai";
 import { JSDOM } from "jsdom";
 
 /**
- * Get the text content of the body of a website, either from a cache in the
- * filesystem or directly by crawling the website.
- * @param website the website to scrape
+ * Get the text content of the body of a web page, either from a cache in the
+ * filesystem or directly by crawling the web page.
+ * @param page the web page to scrape
  */
-export const scrape = async (website: string): Promise<string> => {
-  // return cached text if present, otherwise crawl website manually:
-  const cacheFile = cacheFileFromWebsite(website, { extension: "txt" });
-  const websiteContent = await readFile(cacheFile, "utf8").catch(async () => {
-    // declare function to recursively get content of text nodes:
-    const getText = (node: ChildNode): string => {
-      if (node.nodeName === "SCRIPT") {
-        return "";
-      } else if (node.nodeType === 3) {
-        return node.textContent ?? ""; // text node
-      } else {
-        return Array.from(node.childNodes)
-          .map(getText)
-          .filter((text) => text !== "")
-          .join(" ");
+export const scrape = async (
+  page: string,
+  { recursive = true }: { recursive?: boolean } = {}
+): Promise<string> => {
+  // return cached text if present, otherwise crawl page manually:
+  const cacheFile = cacheFileFromWebsite(page, { extension: "txt" });
+  const pageContent = await readFile(cacheFile, "utf8")
+    .catch(async () => {
+      // declare function to recursively get content of text nodes:
+      const getText = (node: ChildNode): string => {
+        if (node.nodeName === "SCRIPT") {
+          return "";
+        } else if (node.nodeType === 3) {
+          return node.textContent ?? ""; // text node
+        } else {
+          return Array.from(node.childNodes)
+            .map(getText)
+            .filter((text) => text !== "")
+            .join(" ");
+        }
+      };
+
+      // read the page and scrape its content:
+      const dom = await JSDOM.fromURL(page, {
+        runScripts: "dangerously",
+        pretendToBeVisual: true,
+      }).catch(() => JSDOM.fromURL(page, { pretendToBeVisual: true }));
+      const text = getText(dom.window.document.body);
+      const strippedText = text?.replace(/(\r\n|\r|\n)\s+/g, "\n");
+
+      if (recursive) {
+        const hrefs = Array.from(dom.window.document.querySelectorAll("a"))
+          .map((link) => link.href)
+          .filter((href) => !href.endsWith(".pdf"))
+          .filter((href) => !href.includes("/:"))
+          .map((href) => href.split("#")[0])
+          .filter(
+            (href) =>
+              href.includes(page) &&
+              withTrailingSlash(href) !== withTrailingSlash(page)
+          );
+        const uniqueHrefs = [...new Set(hrefs)];
+        const additionalText = await Promise.all(
+          uniqueHrefs.map((href) => scrape(href, { recursive: false }))
+        ).then((pageContents) => pageContents.join("\n\n"));
+
+        const totalText = (strippedText ?? "") + "\n\n" + additionalText;
+
+        // cache the scraped text to a file:
+        if (totalText) {
+          const data = new Uint8Array(Buffer.from(totalText));
+          await writeFile(cacheFile, data);
+        }
+
+        return totalText;
       }
-    };
 
-    // read the website and scrape its content:
-    const dom = await JSDOM.fromURL(website, {
-      runScripts: "dangerously",
-      pretendToBeVisual: true,
-    });
-    const text = getText(dom.window.document.body);
-    const strippedText = text?.replace(/(\r\n|\r|\n)\s+/g, "\n");
+      // return the scraped text:
+      return strippedText ?? "";
+    })
+    .catch(() => "");
 
-    // cache the scraped text to a file:
-    if (strippedText) {
-      const data = new Uint8Array(Buffer.from(strippedText));
-      await writeFile(cacheFile, data);
-    }
-
-    // return the scraped text:
-    return strippedText ?? "";
-  });
-  return websiteContent;
+  return pageContent;
 };
+
+const withTrailingSlash = (address: string) =>
+  address[-1] === "/" ? address : address + "/";
 
 /**
  * Get an array of character arrays from an arbitrarily long string, where each
@@ -82,13 +112,14 @@ export const embeddingsFromText = async (
   );
 
   const tokenChunks = getTextChunks(text, { maxSize });
-  const embeddings = Promise.all(
-    tokenChunks.map((tokens) =>
-      api
-        .createEmbedding({ model: "text-embedding-ada-002", input: tokens })
-        .then((response) => response.data.data[0].embedding)
-    )
-  );
+  const embeddings = [];
+  for (const tokens of tokenChunks) {
+    console.log(`creating embedding from chunk of size ${tokens.length}`);
+    const embedding = await api
+      .createEmbedding({ model: "text-embedding-ada-002", input: tokens })
+      .then((response) => response.data.data[0].embedding);
+    embeddings.push(embedding);
+  }
 
   return embeddings;
 };
@@ -165,9 +196,9 @@ export const answer = async (
   const context = getContext({
     textChunks,
     distances,
-    maxLength: 2000,
+    maxLength: 4000,
   });
-  console.log(`${question} Hier ist etwas Kontext.\n\n###\n\n${context}`);
+  console.log(`${question} Here is some context.\n\n###\n\n${context}`);
 
   try {
     const completion = await api.createChatCompletion({
