@@ -198,7 +198,10 @@ export const answer = async (
     distances,
     maxLength: 4000,
   });
-  console.log(`${question} Here is some context.\n\n###\n\n${context}`);
+  console.log(question, context);
+  // good prompts to get the line-up:
+  // - What artists are mentioned in the program?
+  // - What artists are mentioned?
 
   try {
     const completion = await api.createChatCompletion({
@@ -206,7 +209,7 @@ export const answer = async (
       messages: [
         {
           role: "user",
-          content: `${question} Hier ist etwas Kontext.\n\n###\n\n${context}`,
+          content: `${question} Here is some context.\n\n###\n\n${context}`,
         },
       ],
     });

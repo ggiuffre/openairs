@@ -34,7 +34,7 @@ export async function GET(request: Request) {
       });
     if (question) {
       const ans = await answer(question, { embeddings, textChunks });
-      return NextResponse.json({ ans });
+      return NextResponse.json({ question, ans });
     }
     return NextResponse.json({ embeddings });
   }
