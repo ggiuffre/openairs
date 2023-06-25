@@ -27,7 +27,10 @@ export const scrape = async (website: string): Promise<string> => {
     };
 
     // read the website and scrape its content:
-    const dom = await JSDOM.fromURL(website);
+    const dom = await JSDOM.fromURL(website, {
+      runScripts: "dangerously",
+      pretendToBeVisual: true,
+    });
     const text = getText(dom.window.document.body);
     const strippedText = text?.replace(/(\r\n|\r|\n)\s+/g, "\n");
 
