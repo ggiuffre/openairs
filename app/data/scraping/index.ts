@@ -13,7 +13,7 @@ export const scrape = async (website: string): Promise<string> => {
   const cacheFile = cacheFileFromWebsite(website, { extension: "txt" });
   const websiteContent = await readFile(cacheFile, "utf8").catch(async () => {
     // declare function to recursively get content of text nodes:
-    function getText(node: ChildNode) {
+    const getText = (node: ChildNode) => {
       if (node.nodeName === "SCRIPT") {
         return "";
       } else if (node.nodeType === 3) {
@@ -25,7 +25,7 @@ export const scrape = async (website: string): Promise<string> => {
         }
         return text;
       }
-    }
+    };
 
     // read the website and scrape its content:
     const dom = await JSDOM.fromURL(website);
@@ -44,9 +44,17 @@ export const scrape = async (website: string): Promise<string> => {
   return websiteContent;
 };
 
-export const getTextChunks = (text: string) => {
+/**
+ * Get an array of character arrays from an arbitrarily long string, where each
+ * character array is of a specified maximum length.
+ * @param text an arbitrarily long string of text
+ * @param maxSize the max amount of text that will be transformed into an embedding
+ */
+export const getTextChunks = (
+  text: string,
+  { maxSize = 2000 }: { maxSize?: number } = {}
+) => {
   const tokens = Array.from(text);
-  const maxSize = 2000;
   const chunks = [];
   while (tokens.length > 0) {
     chunks.push(tokens.splice(0, maxSize));
@@ -54,7 +62,16 @@ export const getTextChunks = (text: string) => {
   return chunks;
 };
 
-export const embeddingsFromText = async (text: string) => {
+/**
+ * Get an array of embeddings of a certain maximum size from some arbitrarily
+ * long text. Each resulting embedding is an array of numbers.
+ * @param text an arbitrarily long string of text
+ * @param maxSize the max amount of text that will be transformed into an embedding
+ */
+export const embeddingsFromText = async (
+  text: string,
+  { maxSize = 2000 }: { maxSize?: number } = {}
+) => {
   const api = new OpenAIApi(
     new Configuration({
       organization: process.env.OPENAI_ORG_ID,
@@ -62,7 +79,7 @@ export const embeddingsFromText = async (text: string) => {
     })
   );
 
-  const tokenChunks = getTextChunks(text);
+  const tokenChunks = getTextChunks(text, { maxSize });
   const embeddings = Promise.all(
     tokenChunks.map((tokens) =>
       api
@@ -77,23 +94,16 @@ export const embeddingsFromText = async (text: string) => {
 /**
  * Get the name of a cache file from a website to scrape information from.
  * @param website the website to scrape
+ * @param extension the extension of the cache file
  */
 export const cacheFileFromWebsite = (
   website: string,
-  { extension = "txt" }: { extension: "txt" | "json" }
+  { extension }: { extension: "html" | "txt" | "json" }
 ) => {
   const jsonDirectory = path.join(process.cwd(), "app/data/scraping/.cache/");
   const fileName = website.slice(8).replaceAll("/", "_");
   return jsonDirectory + fileName + "." + extension;
 };
-
-export const cosineDistance = ({
-  questionEmbedding,
-  embedding,
-}: {
-  questionEmbedding: number[];
-  embedding: number[];
-}) => 1 - cosineSimilarity(questionEmbedding, embedding);
 
 export const getContext = ({
   textChunks,
@@ -123,6 +133,13 @@ export const getContext = ({
   return mostRelevantEmbeddings.join("\n\n###\n\n");
 };
 
+/**
+ * Get the answer to a question, given some context in the form of text chunks
+ * and their corresponding embedding representation.
+ * @param question the question to ask
+ * @param embeddings the exmbeddings to use as a context
+ * @param textChunks the text chunks from which each embedding is derived
+ */
 export const answer = async (
   question: string,
   { embeddings, textChunks }: { embeddings: number[][]; textChunks: string[] }
@@ -140,7 +157,7 @@ export const answer = async (
     .then((response) => response.data.data[0].embedding);
 
   const distances = embeddings.map((embedding) =>
-    cosineDistance({ questionEmbedding, embedding })
+    cosineDistance(questionEmbedding, embedding)
   );
 
   const context = getContext({
@@ -168,19 +185,32 @@ export const answer = async (
   }
 };
 
-function cosineSimilarity(a: number[], b: number[]) {
-  let dotproduct = 0;
+/**
+ * Get the cosine distance between two arrays of numbers `a` and `b`.
+ * @param a the first array
+ * @param b the second array
+ */
+export const cosineDistance = (a: number[], b: number[]) =>
+  1 - cosineSimilarity(a, b);
+
+/**
+ * Get the cosine similarity between two arrays of numbers `a` and `b`.
+ * @param a the first array
+ * @param b the second array
+ */
+export const cosineSimilarity = (a: number[], b: number[]) => {
+  let dotProduct = 0;
   let mA = 0;
   let mB = 0;
 
   for (let i = 0; i < a.length; i++) {
-    dotproduct += a[i] * b[i];
+    dotProduct += a[i] * b[i];
     mA += a[i] * a[i];
     mB += b[i] * b[i];
   }
 
   mA = Math.sqrt(mA);
   mB = Math.sqrt(mB);
-  const similarity = dotproduct / (mA * mB);
+  const similarity = dotProduct / (mA * mB);
   return similarity;
-}
+};
