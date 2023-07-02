@@ -127,12 +127,14 @@ export const embeddingsFromText = async (
 
   const tokenChunks = getTextChunks(text, { maxSize });
   const embeddings = [];
+  let i = 1;
   for (const tokens of tokenChunks) {
-    console.log(`creating embedding from chunk of size ${tokens.length}`);
+    console.log(`creating embedding ${i}/${tokenChunks.length}...`);
     const embedding = await api
       .createEmbedding({ model: "text-embedding-ada-002", input: tokens })
       .then((response) => response.data.data[0].embedding);
     embeddings.push(embedding);
+    i++;
   }
 
   return embeddings;
