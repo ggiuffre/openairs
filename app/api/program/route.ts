@@ -1,12 +1,14 @@
 import { getOpenairs } from "@/app/data/getOpenairs";
 import {
   answer,
-  cacheFileFromWebsite,
   embeddingsFromText,
   getTextChunks,
   scrape,
 } from "@/app/data/scraping";
-import { readFile, writeFile } from "fs/promises";
+import {
+  getCachedEmbeddings,
+  storeCachedEmbeddings,
+} from "@/app/data/scraping/database";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -20,18 +22,12 @@ export async function GET(request: Request) {
     (name ? openairs.find((o) => o.name.includes(name)) : undefined);
   if (openair) {
     const text = await scrape(openair.website);
-    const cacheFile = cacheFileFromWebsite(openair.website, {
-      extension: "json",
-    });
     const textChunks = getTextChunks(text).map((chunk) => chunk.join(""));
-    const embeddings: number[][] = await readFile(cacheFile, "utf8")
-      .then(JSON.parse)
-      .then((data) => data.embeddings)
-      .catch(async () => {
-        const embeddings = await embeddingsFromText(text);
-        await writeFile(cacheFile, JSON.stringify({ embeddings }), "utf8");
-        return embeddings;
-      });
+    let embeddings = await getCachedEmbeddings(openair.website);
+    if (embeddings === undefined) {
+      embeddings = await embeddingsFromText(text);
+      await storeCachedEmbeddings(openair.website, embeddings);
+    }
     if (question) {
       const ans = await answer(question, { embeddings, textChunks });
       return NextResponse.json({ question, ans });

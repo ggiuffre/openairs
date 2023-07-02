@@ -207,7 +207,7 @@ export const answer = async (
   const context = getContext({
     textChunks,
     distances,
-    maxLength: 4000,
+    maxLength: 4500,
   });
   console.log(question, context);
   // good prompts to get the line-up:
