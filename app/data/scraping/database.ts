@@ -14,14 +14,19 @@ interface CachedWebsiteText {
   lines: string[];
 }
 
+interface CachedWebsiteEmbeddingsList {
+  website: string;
+  embeddings: number[];
+}
+
 export const getCachedText = async (website: string) => {
   const client = getClient();
   try {
     const database = client.db("scraping_cache");
-    const webpagesText = database.collection("webpages_text");
+    const collection = database.collection("webpages_text");
     const query = { website };
-    const text = await webpagesText.findOne<CachedWebsiteText>(query);
-    return text?.lines.join("\n");
+    const document = await collection.findOne<CachedWebsiteText>(query);
+    return document?.lines.join("\n");
   } finally {
     // ensure that the client closes when the "try" block finishes/errors:
     await client.close();
@@ -32,9 +37,9 @@ export const storeCachedText = async (website: string, lines: string[]) => {
   const client = getClient();
   try {
     const database = client.db("scraping_cache");
-    const webpagesText = database.collection("webpages_text");
-    const doc = { website, lines };
-    const result = await webpagesText.insertOne(doc);
+    const collection = database.collection("webpages_text");
+    const document = { website, lines };
+    const result = await collection.insertOne(document);
     console.log(`Inserted document with _id=${result.insertedId}`);
   } finally {
     // ensure that the client closes when the "try" block finishes/errors:
