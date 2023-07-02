@@ -23,6 +23,9 @@ export const scrape = async (
     if (["SCRIPT", "IFRAME"].includes(node.nodeName)) {
       return "";
     } else if (node.nodeType === 3) {
+      if (node.textContent?.startsWith("<iframe")) {
+        return "";
+      }
       return node.textContent ?? ""; // text node
     } else {
       return Array.from(node.childNodes)
