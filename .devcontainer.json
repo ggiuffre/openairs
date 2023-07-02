@@ -17,7 +17,10 @@
   },
   "containerEnv": {
     "OPENAI_ORG_ID": "${localEnv:OPENAI_ORG_ID}",
-    "OPENAI_API_KEY": "${localEnv:OPENAI_API_KEY}"
+    "OPENAI_API_KEY": "${localEnv:OPENAI_API_KEY}",
+    "MONGODB_USERNAME": "${localEnv:MONGODB_USERNAME}",
+    "MONGODB_PASSWORD": "${localEnv:MONGODB_PASSWORD}",
+    "MONGODB_HOST": "${localEnv:MONGODB_HOST}"
   },
   "postCreateCommand": "npm ci",
   "remoteUser": "node",

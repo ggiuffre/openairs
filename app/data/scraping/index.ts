@@ -1,7 +1,7 @@
-import { readFile, writeFile } from "fs/promises";
 import path from "path";
 import { Configuration, OpenAIApi } from "openai";
 import { JSDOM } from "jsdom";
+import { getCachedText, storeCachedText } from "./database";
 
 /**
  * Get the text content of the body of a web page, either from a cache in the
@@ -13,64 +13,75 @@ export const scrape = async (
   { recursive = true }: { recursive?: boolean } = {}
 ): Promise<string> => {
   // return cached text if present, otherwise crawl page manually:
-  const cacheFile = cacheFileFromWebsite(page, { extension: "txt" });
-  const pageContent = await readFile(cacheFile, "utf8")
-    .catch(async () => {
-      // declare function to recursively get content of text nodes:
-      const getText = (node: ChildNode): string => {
-        if (node.nodeName === "SCRIPT") {
-          return "";
-        } else if (node.nodeType === 3) {
-          return node.textContent ?? ""; // text node
-        } else {
-          return Array.from(node.childNodes)
-            .map(getText)
-            .filter((text) => text !== "")
-            .join(" ");
-        }
-      };
+  const cachedText = await getCachedText(page);
+  if (cachedText) {
+    return cachedText;
+  }
 
-      // read the page and scrape its content:
-      const dom = await JSDOM.fromURL(page, {
-        runScripts: "dangerously",
-        pretendToBeVisual: true,
-      }).catch(() => JSDOM.fromURL(page, { pretendToBeVisual: true }));
-      const text = getText(dom.window.document.body);
-      const strippedText = text?.replace(/(\r\n|\r|\n)\s+/g, "\n");
+  // declare function to recursively get content of text nodes:
+  const getText = (node: ChildNode): string => {
+    if (["SCRIPT", "IFRAME"].includes(node.nodeName)) {
+      return "";
+    } else if (node.nodeType === 3) {
+      return node.textContent ?? ""; // text node
+    } else {
+      return Array.from(node.childNodes)
+        .map(getText)
+        .filter((text) => text !== "")
+        .join(" ");
+    }
+  };
 
-      if (recursive) {
-        const hrefs = Array.from(dom.window.document.querySelectorAll("a"))
-          .map((link) => link.href)
-          .filter((href) => !href.endsWith(".pdf"))
-          .filter((href) => !href.includes("/:"))
-          .map((href) => href.split("#")[0])
-          .filter(
-            (href) =>
-              href.includes(page) &&
-              withTrailingSlash(href) !== withTrailingSlash(page)
-          );
-        const uniqueHrefs = [...new Set(hrefs)];
-        const additionalText = await Promise.all(
-          uniqueHrefs.map((href) => scrape(href, { recursive: false }))
-        ).then((pageContents) => pageContents.join("\n\n"));
-
-        const totalText = (strippedText ?? "") + "\n\n" + additionalText;
-
-        // cache the scraped text to a file:
-        if (totalText) {
-          const data = new Uint8Array(Buffer.from(totalText));
-          await writeFile(cacheFile, data);
-        }
-
-        return totalText;
-      }
-
-      // return the scraped text:
-      return strippedText ?? "";
+  // read the page and scrape its content:
+  let pageNotParseable = false;
+  const dom = await JSDOM.fromURL(page, {
+    runScripts: "dangerously",
+    pretendToBeVisual: true,
+  }).catch(() =>
+    JSDOM.fromURL(page, { pretendToBeVisual: true }).catch(() => {
+      pageNotParseable = true;
+      return undefined;
     })
-    .catch(() => "");
+  );
+  if (pageNotParseable || dom === undefined) {
+    return "";
+  }
 
-  return pageContent;
+  const text = getText(dom.window.document.body);
+  const strippedText = text
+    ?.replace(/(\r\n|\r|\n)\s+/g, "\n")
+    .replace(/\s\n/g, "\n")
+    .trim();
+
+  if (recursive) {
+    const hrefs = Array.from(dom.window.document.querySelectorAll("a"))
+      .map((link) => link.href)
+      .filter((href) => !href.endsWith(".pdf"))
+      .filter((href) => !href.endsWith("rss/"))
+      .filter((href) => !href.includes("/:"))
+      .map((href) => href.split("#")[0])
+      .filter(
+        (href) =>
+          href.includes(page) &&
+          withTrailingSlash(href) !== withTrailingSlash(page)
+      );
+    const uniqueHrefs = [...new Set(hrefs)];
+    const additionalText = await Promise.all(
+      uniqueHrefs.map((href) => scrape(href, { recursive: false }))
+    ).then((pageContents) => pageContents.join("\n\n"));
+
+    const totalText = (strippedText ?? "") + "\n\n" + additionalText;
+
+    // cache the scraped text:
+    if (totalText) {
+      await storeCachedText(page, totalText.split("\n"));
+    }
+
+    return totalText;
+  }
+
+  // return the scraped text:
+  return strippedText ?? "";
 };
 
 const withTrailingSlash = (address: string) =>
