@@ -115,7 +115,12 @@ export const getTextChunks = (
   const tokens = Array.from(text);
   const chunks = [];
   while (tokens.length > 0) {
-    chunks.push(tokens.splice(0, maxSize));
+    const lastSentenceEnd = tokens.findLastIndex(
+      (token, index) => index <= maxSize && (token === "." || token === "\n")
+    );
+    chunks.push(
+      tokens.splice(0, lastSentenceEnd > 0 ? lastSentenceEnd : maxSize)
+    );
   }
   return chunks;
 };
