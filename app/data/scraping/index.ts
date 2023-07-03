@@ -3,6 +3,7 @@ import { Configuration, OpenAIApi } from "openai";
 import { JSDOM } from "jsdom";
 import { getCachedText, storeCachedText } from "./database";
 import type { WordEmbedding } from "../types";
+import { decode, encode } from "gpt-tokenizer";
 
 /**
  * Get the text content of the body of a web page, either from a cache in the
@@ -103,21 +104,23 @@ const withTrailingSlash = (address: string) =>
   address[-1] === "/" ? address : address + "/";
 
 /**
- * Get an array of character arrays from an arbitrarily long string, where each
- * character array is of a specified maximum length.
+ * Get an array of token arrays from an arbitrarily long string, where each
+ * token array is of a specified maximum length.
  * @param text an arbitrarily long string of text
- * @param maxSize the max amount of text that will be transformed into an embedding
+ * @param maxSize the max amount of tokens that each element of the result should have
  */
-export const getTextChunks = (
+export const getTokenChunks = (
   text: string,
-  { maxSize = 2000 }: { maxSize?: number } = {}
+  { maxSize = 500 }: { maxSize?: number } = {}
 ) => {
-  const tokens = Array.from(text);
+  const tokens = encode(text);
   const chunks = [];
+  const delimiters = [".", "\n"].map((text) => encode(text)[0]);
   while (tokens.length > 0) {
     const lastSentenceEnd = tokens.findLastIndex(
-      (token, index) => index <= maxSize && (token === "." || token === "\n")
+      (token, index) => index <= maxSize && delimiters.includes(token)
     );
+    console.log(lastSentenceEnd);
     chunks.push(
       tokens.splice(0, lastSentenceEnd > 0 ? lastSentenceEnd : maxSize)
     );
@@ -129,11 +132,11 @@ export const getTextChunks = (
  * Get an array of embeddings of a certain maximum size from some arbitrarily
  * long text. Each resulting embedding is an array of numbers.
  * @param text an arbitrarily long string of text
- * @param maxSize the max amount of text that will be transformed into an embedding
+ * @param maxSize the max amount of tokens that will be transformed into an embedding
  */
 export const embeddingsFromText = async (
   text: string,
-  { maxSize = 2000 }: { maxSize?: number } = {}
+  { maxSize = 500 }: { maxSize?: number } = {}
 ): Promise<WordEmbedding[]> => {
   const api = new OpenAIApi(
     new Configuration({
@@ -142,7 +145,7 @@ export const embeddingsFromText = async (
     })
   );
 
-  const tokenChunks = getTextChunks(text, { maxSize });
+  const tokenChunks = getTokenChunks(text, { maxSize });
   const embeddings = [];
   let i = 1;
   for (const tokens of tokenChunks) {
@@ -150,7 +153,7 @@ export const embeddingsFromText = async (
     const vector = await api
       .createEmbedding({ model: "text-embedding-ada-002", input: tokens })
       .then((response) => response.data.data[0].embedding);
-    embeddings.push({ vector, originalText: tokens.join("") });
+    embeddings.push({ vector, originalText: decode(tokens) });
     i++;
   }
 
@@ -214,7 +217,7 @@ export const answer = async (question: string, embeddings: WordEmbedding[]) => {
     })
   );
 
-  const questionTokens = Array.from(question);
+  const questionTokens = encode(question);
   const questionEmbedding = await api
     .createEmbedding({ model: "text-embedding-ada-002", input: questionTokens })
     .then((response) => response.data.data[0].embedding);
