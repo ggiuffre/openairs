@@ -19,12 +19,23 @@ export const scrape = async (
     return cachedText;
   }
 
+  // declare texts that we want to ignore:
+  const ignoredTexts = [
+    "back to top",
+    "back to the top",
+    "go to main content",
+    "skip to main content",
+  ];
+
   // declare function to recursively get content of text nodes:
   const getText = (node: ChildNode): string => {
     if (["SCRIPT", "IFRAME"].includes(node.nodeName)) {
       return "";
     } else if (node.nodeType === 3) {
-      if (node.textContent?.startsWith("<iframe")) {
+      if (
+        node.textContent?.startsWith("<iframe") ||
+        ignoredTexts.includes(node.textContent?.toLowerCase() ?? "")
+      ) {
         return "";
       }
       return node.textContent ?? ""; // text node
