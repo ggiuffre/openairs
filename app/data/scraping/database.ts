@@ -21,21 +21,25 @@ interface WebsiteEmbeddings {
 }
 
 export const getCachedText = async (website: string) => {
+  let document;
   const client = getClient();
+
   try {
     const database = client.db("scraping_cache");
     const collection = database.collection("webpages_text");
     const query = { website };
-    const document = await collection.findOne<WebsiteText>(query);
-    return document?.lines.join("\n");
+    document = await collection.findOne<WebsiteText>(query);
   } finally {
     // ensure that the client closes when the "try" block finishes/errors:
     await client.close();
   }
+
+  return document?.lines.join("\n");
 };
 
 export const storeCachedText = async (website: string, lines: string[]) => {
   const client = getClient();
+
   try {
     const database = client.db("scraping_cache");
     const collection = database.collection("webpages_text");
@@ -49,17 +53,20 @@ export const storeCachedText = async (website: string, lines: string[]) => {
 };
 
 export const getCachedEmbeddings = async (website: string) => {
+  let document;
   const client = getClient();
+
   try {
     const database = client.db("scraping_cache");
     const collection = database.collection("embeddings");
     const query = { website };
-    const document = await collection.findOne<WebsiteEmbeddings>(query);
-    return document?.embeddings;
+    document = await collection.findOne<WebsiteEmbeddings>(query);
   } finally {
     // ensure that the client closes when the "try" block finishes/errors:
     await client.close();
   }
+
+  return document?.embeddings;
 };
 
 export const storeCachedEmbeddings = async (
@@ -67,6 +74,7 @@ export const storeCachedEmbeddings = async (
   embeddings: WordEmbedding[]
 ) => {
   const client = getClient();
+
   try {
     const database = client.db("scraping_cache");
     const collection = database.collection("embeddings");
