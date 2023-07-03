@@ -2,6 +2,7 @@ import path from "path";
 import { Configuration, OpenAIApi } from "openai";
 import { JSDOM } from "jsdom";
 import { getCachedText, storeCachedText } from "./database";
+import type { WordEmbedding } from "../types";
 
 /**
  * Get the text content of the body of a web page, either from a cache in the
@@ -117,7 +118,7 @@ export const getTextChunks = (
 export const embeddingsFromText = async (
   text: string,
   { maxSize = 2000 }: { maxSize?: number } = {}
-) => {
+): Promise<WordEmbedding[]> => {
   const api = new OpenAIApi(
     new Configuration({
       organization: process.env.OPENAI_ORG_ID,
@@ -130,10 +131,10 @@ export const embeddingsFromText = async (
   let i = 1;
   for (const tokens of tokenChunks) {
     console.log(`creating embedding ${i}/${tokenChunks.length}...`);
-    const embedding = await api
+    const vector = await api
       .createEmbedding({ model: "text-embedding-ada-002", input: tokens })
       .then((response) => response.data.data[0].embedding);
-    embeddings.push(embedding);
+    embeddings.push({ vector, originalText: tokens.join("") });
     i++;
   }
 
@@ -189,10 +190,7 @@ export const getContext = ({
  * @param embeddings the exmbeddings to use as a context
  * @param textChunks the text chunks from which each embedding is derived
  */
-export const answer = async (
-  question: string,
-  { embeddings, textChunks }: { embeddings: number[][]; textChunks: string[] }
-) => {
+export const answer = async (question: string, embeddings: WordEmbedding[]) => {
   const api = new OpenAIApi(
     new Configuration({
       organization: process.env.OPENAI_ORG_ID,
@@ -206,9 +204,10 @@ export const answer = async (
     .then((response) => response.data.data[0].embedding);
 
   const distances = embeddings.map((embedding) =>
-    cosineDistance(questionEmbedding, embedding)
+    cosineDistance(questionEmbedding, embedding.vector)
   );
 
+  const textChunks = embeddings.map((embedding) => embedding.originalText);
   const context = getContext({
     textChunks,
     distances,

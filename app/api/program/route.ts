@@ -1,10 +1,5 @@
 import { getOpenairs } from "@/app/data/getOpenairs";
-import {
-  answer,
-  embeddingsFromText,
-  getTextChunks,
-  scrape,
-} from "@/app/data/scraping";
+import { answer, embeddingsFromText, scrape } from "@/app/data/scraping";
 import {
   getCachedEmbeddings,
   storeCachedEmbeddings,
@@ -22,14 +17,13 @@ export async function GET(request: Request) {
     (name ? openairs.find((o) => o.name.includes(name)) : undefined);
   if (openair) {
     const text = await scrape(openair.website);
-    const textChunks = getTextChunks(text).map((chunk) => chunk.join(""));
     let embeddings = await getCachedEmbeddings(openair.website);
     if (embeddings === undefined) {
       embeddings = await embeddingsFromText(text);
       await storeCachedEmbeddings(openair.website, embeddings);
     }
     if (question) {
-      const ans = await answer(question, { embeddings, textChunks });
+      const ans = await answer(question, embeddings);
       return NextResponse.json({ question, ans });
     }
     return NextResponse.json({ embeddings });

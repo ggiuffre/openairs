@@ -1,4 +1,5 @@
 import { MongoClient } from "mongodb";
+import type { WordEmbedding } from "../types";
 
 const getClient = () => {
   const username = process.env.MONGODB_USERNAME;
@@ -16,7 +17,7 @@ interface WebsiteText {
 
 interface WebsiteEmbeddings {
   website: string;
-  embeddings: number[][];
+  embeddings: WordEmbedding[];
 }
 
 export const getCachedText = async (website: string) => {
@@ -63,7 +64,7 @@ export const getCachedEmbeddings = async (website: string) => {
 
 export const storeCachedEmbeddings = async (
   website: string,
-  embeddings: number[][]
+  embeddings: WordEmbedding[]
 ) => {
   const client = getClient();
   try {
