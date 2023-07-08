@@ -1,9 +1,10 @@
 import { getOpenairs } from "@/app/data/getOpenairs";
-import { answer, embeddingsFromText, scrape } from "@/app/data/scraping";
 import {
-  getCachedEmbeddings,
-  storeCachedEmbeddings,
-} from "@/app/data/scraping/database";
+  answer,
+  embeddingsFromText,
+  getAllPagesFromBaseUrl,
+  scrape,
+} from "@/app/data/scraping";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -16,17 +17,22 @@ export async function GET(request: Request) {
     openairs.find((o) => o.name === name) ??
     (name ? openairs.find((o) => o.name.includes(name)) : undefined);
   if (openair) {
-    const text = await scrape(openair.website);
-    let embeddings = await getCachedEmbeddings(openair.website);
-    if (embeddings === undefined) {
-      embeddings = await embeddingsFromText(text);
-      await storeCachedEmbeddings(openair.website, embeddings);
-    }
+    const pages = await getAllPagesFromBaseUrl(openair.website);
+    const pagesAsText = await Promise.all(pages.map(scrape));
+    const embeddings = await Promise.all(
+      pagesAsText.map((text) => embeddingsFromText(text))
+    ).then((result) => result.flat());
     if (question) {
       const ans = await answer(question, embeddings);
-      return NextResponse.json({ question, ans });
+      return NextResponse.json({
+        pages,
+        pagesAsText,
+        embeddings,
+        question,
+        ans,
+      });
     }
-    return NextResponse.json({ embeddings });
+    return NextResponse.json({ pages, pagesAsText, embeddings });
   }
   return NextResponse.json({ error: "Not found" }, { status: 404 });
 }

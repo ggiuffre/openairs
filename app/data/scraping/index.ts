@@ -1,19 +1,22 @@
 import path from "path";
 import { Configuration, OpenAIApi } from "openai";
 import { JSDOM } from "jsdom";
-import { getCachedText, storeCachedText } from "./database";
+import {
+  getCachedEmbeddings,
+  getCachedText,
+  storeCachedEmbeddings,
+  storeCachedText,
+} from "./database";
 import type { WordEmbedding } from "../types";
 import { decode, encode } from "gpt-tokenizer";
+import XXH from "xxhashjs";
 
 /**
  * Get the text content of the body of a web page, either from a cache in the
  * filesystem or directly by crawling the web page.
  * @param page the web page to scrape
  */
-export const scrape = async (
-  page: string,
-  { recursive = true }: { recursive?: boolean } = {}
-): Promise<string> => {
+export const scrape = async (page: string): Promise<string> => {
   // return cached text if present, otherwise crawl page manually:
   const cachedText = await getCachedText(page);
   if (cachedText) {
@@ -48,7 +51,7 @@ export const scrape = async (
     }
   };
 
-  // read the page and scrape its content:
+  // read the page and parse its content:
   let pageNotParseable = false;
   const dom = await JSDOM.fromURL(page, {
     runScripts: "dangerously",
@@ -63,13 +66,45 @@ export const scrape = async (
     return "";
   }
 
+  // scrape the page:
   const text = getText(dom.window.document.body);
   const strippedText = text
     ?.replace(/(\r\n|\r|\n)\s+/g, "\n")
     .replace(/\s\n/g, "\n")
     .trim();
 
-  if (recursive) {
+  // cache the scraped text:
+  await storeCachedText(page, strippedText.split("\n"));
+
+  // return the scraped text:
+  return strippedText ?? "";
+};
+
+/**
+ * Get a list of web pages recursively referenced from a base URL.
+ * @param baseUrl the base URL
+ */
+export const getAllPagesFromBaseUrl = async (
+  baseUrl: string
+): Promise<string[]> => {
+  // parse the page:
+  try {
+    const dom = await JSDOM.fromURL(baseUrl, {
+      runScripts: "dangerously",
+      pretendToBeVisual: true,
+    }).catch(() =>
+      JSDOM.fromURL(baseUrl, { pretendToBeVisual: true }).catch(() => {
+        return undefined;
+      })
+    );
+
+    if (dom === undefined) {
+      return [];
+    }
+
+    const withTrailingSlash = (address: string) =>
+      address[-1] === "/" ? address : address + "/";
+
     const hrefs = Array.from(dom.window.document.querySelectorAll("a"))
       .map((link) => link.href)
       .filter((href) => !href.endsWith(".pdf"))
@@ -78,30 +113,19 @@ export const scrape = async (
       .map((href) => href.split("#")[0])
       .filter(
         (href) =>
-          href.includes(page) &&
-          withTrailingSlash(href) !== withTrailingSlash(page)
+          href.includes(baseUrl) &&
+          withTrailingSlash(href) !== withTrailingSlash(baseUrl)
       );
-    const uniqueHrefs = [...new Set(hrefs)];
-    const additionalText = await Promise.all(
-      uniqueHrefs.map((href) => scrape(href, { recursive: false }))
-    ).then((pageContents) => pageContents.join("\n\n"));
+    const directChildren = [...new Set(hrefs)];
+    const descendants = await Promise.all(
+      directChildren.map(getAllPagesFromBaseUrl)
+    ).then((pages) => pages.flat());
 
-    const totalText = (strippedText ?? "") + "\n\n" + additionalText;
-
-    // cache the scraped text:
-    if (totalText) {
-      await storeCachedText(page, totalText.split("\n"));
-    }
-
-    return totalText;
+    return [baseUrl, ...new Set(descendants)];
+  } catch {
+    return [];
   }
-
-  // return the scraped text:
-  return strippedText ?? "";
 };
-
-const withTrailingSlash = (address: string) =>
-  address[-1] === "/" ? address : address + "/";
 
 /**
  * Get an array of token arrays from an arbitrarily long string, where each
@@ -138,6 +162,14 @@ export const embeddingsFromText = async (
   text: string,
   { maxSize = 500 }: { maxSize?: number } = {}
 ): Promise<WordEmbedding[]> => {
+  const seed = 0xabcd;
+  const hash = XXH.h32(text, seed).toString(16);
+
+  const cachedEmbeddings = await getCachedEmbeddings(hash);
+  if (cachedEmbeddings) {
+    return cachedEmbeddings;
+  }
+
   const api = new OpenAIApi(
     new Configuration({
       organization: process.env.OPENAI_ORG_ID,
@@ -157,6 +189,7 @@ export const embeddingsFromText = async (
     i++;
   }
 
+  await storeCachedEmbeddings(hash, embeddings);
   return embeddings;
 };
 

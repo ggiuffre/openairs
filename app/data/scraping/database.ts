@@ -52,14 +52,14 @@ export const storeCachedText = async (website: string, lines: string[]) => {
   }
 };
 
-export const getCachedEmbeddings = async (website: string) => {
+export const getCachedEmbeddings = async (identifier: string) => {
   let document;
   const client = getClient();
 
   try {
     const database = client.db("scraping_cache");
     const collection = database.collection("embeddings");
-    const query = { website };
+    const query = { identifier };
     document = await collection.findOne<WebsiteEmbeddings>(query);
   } finally {
     // ensure that the client closes when the "try" block finishes/errors:
@@ -70,7 +70,7 @@ export const getCachedEmbeddings = async (website: string) => {
 };
 
 export const storeCachedEmbeddings = async (
-  website: string,
+  identifier: string,
   embeddings: WordEmbedding[]
 ) => {
   const client = getClient();
@@ -78,7 +78,7 @@ export const storeCachedEmbeddings = async (
   try {
     const database = client.db("scraping_cache");
     const collection = database.collection("embeddings");
-    const document = { website, embeddings };
+    const document = { identifier, embeddings };
     const result = await collection.insertOne(document);
     console.log(`Inserted document with _id=${result.insertedId}`);
   } finally {
