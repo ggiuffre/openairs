@@ -13,14 +13,6 @@ import type { WordEmbedding } from "../types";
 import { decode, encode } from "gpt-tokenizer";
 import XXH from "xxhashjs";
 
-const getDomFromUrl = (url: string) =>
-  JSDOM.fromURL(url, {
-    runScripts: "dangerously",
-    pretendToBeVisual: true,
-  }).catch(() =>
-    JSDOM.fromURL(url, { pretendToBeVisual: true }).catch(() => undefined)
-  );
-
 /**
  * Get the text content of the body of a web page, either from a cache in the
  * filesystem or directly by crawling the web page.
@@ -40,7 +32,7 @@ export const scrape = async (page: string): Promise<string> => {
     console.log("🚲 Scraping page manually...");
 
     // read the page and parse its content:
-    const dom = await getDomFromUrl(page);
+    const dom = await JSDOM.fromURL(page).catch(() => undefined);
     if (dom === undefined) {
       console.warn("⚠️ Problem getting DOM from URL. Returning empty string.");
       return "";
@@ -112,7 +104,7 @@ export const getAllPagesFromBaseUrl = async (
 
   try {
     // parse the page:
-    const dom = await getDomFromUrl(baseUrl);
+    const dom = await JSDOM.fromURL(baseUrl).catch(() => undefined);
     if (dom === undefined) {
       return [];
     }
