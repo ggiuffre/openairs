@@ -146,17 +146,39 @@ export const getTokenChunks = (
   text: string,
   { maxSize = 500 }: { maxSize?: number } = {}
 ) => {
-  const tokens = encode(text);
-  const chunks = [];
-  const delimiters = [".", "\n"].map((text) => encode(text)[0]);
-  while (tokens.length > 0) {
-    const lastSentenceEnd = tokens.findLastIndex(
-      (token, index) => index <= maxSize && delimiters.includes(token)
-    );
-    chunks.push(
-      tokens.splice(0, lastSentenceEnd > 0 ? lastSentenceEnd : maxSize)
-    );
+  if (maxSize < 0) {
+    throw new Error(`getTokenChunks got invalid argument maxSize=${maxSize}`);
   }
+
+  const sentences = text.match(/[^\.!\?]+[\.!\?]+/g) ?? [];
+  const chunks: number[][] = [];
+
+  let i = 0;
+  let currentText = "";
+  let currentChunk: number[] = [];
+
+  while (i < sentences.length) {
+    const sentence = sentences[i].trim();
+    if (sentences[i]) {
+      const candidateText = (currentText + " " + sentence).trim();
+      const candidateChunk = encode(candidateText);
+      const isLastSentence = i === sentences.length - 1;
+      if (candidateChunk.length > maxSize) {
+        chunks.push(currentChunk);
+        currentText = sentence;
+        currentChunk = encode(sentence);
+      } else {
+        currentText = candidateText;
+        currentChunk = candidateChunk;
+      }
+
+      if (isLastSentence) {
+        chunks.push(currentChunk);
+      }
+    }
+    i++;
+  }
+
   return chunks;
 };
 
