@@ -123,6 +123,7 @@ export const getAllPagesFromBaseUrl = async (
       .filter((href) => !href.endsWith(".pdf"))
       .filter((href) => !href.endsWith("rss/"))
       .filter((href) => !href.includes("/:"))
+      .filter((href) => !href.includes("/login"))
       .map((href) => href.split("#")[0])
       .filter(
         (href) =>
