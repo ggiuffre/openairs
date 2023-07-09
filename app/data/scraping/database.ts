@@ -10,6 +10,11 @@ const getClient = () => {
   return client;
 };
 
+interface WebsiteUrls {
+  baseUrl: string;
+  urls: string[];
+}
+
 interface WebsiteText {
   website: string;
   lines: string[];
@@ -19,6 +24,38 @@ interface WebsiteEmbeddings {
   website: string;
   embeddings: WordEmbedding[];
 }
+
+export const getCachedUrls = async (baseUrl: string) => {
+  let document;
+  const client = getClient();
+
+  try {
+    const database = client.db("scraping_cache");
+    const collection = database.collection("webpages_urls");
+    const query = { baseUrl };
+    document = await collection.findOne<WebsiteUrls>(query);
+  } finally {
+    // ensure that the client closes when the "try" block finishes/errors:
+    await client.close();
+  }
+
+  return document?.urls;
+};
+
+export const storeCachedUrls = async (baseUrl: string, lines: string[]) => {
+  const client = getClient();
+
+  try {
+    const database = client.db("scraping_cache");
+    const collection = database.collection("webpages_urls");
+    const document = { baseUrl, lines };
+    const result = await collection.insertOne(document);
+    console.log(`Inserted document with _id=${result.insertedId}`);
+  } finally {
+    // ensure that the client closes when the "try" block finishes/errors:
+    await client.close();
+  }
+};
 
 export const getCachedText = async (website: string) => {
   let document;

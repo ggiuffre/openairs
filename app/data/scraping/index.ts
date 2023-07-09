@@ -4,8 +4,10 @@ import { JSDOM } from "jsdom";
 import {
   getCachedEmbeddings,
   getCachedText,
+  getCachedUrls,
   storeCachedEmbeddings,
   storeCachedText,
+  storeCachedUrls,
 } from "./database";
 import type { WordEmbedding } from "../types";
 import { decode, encode } from "gpt-tokenizer";
@@ -100,6 +102,11 @@ const getText = (node: ChildNode): string => {
 export const getAllPagesFromBaseUrl = async (
   baseUrl: string
 ): Promise<string[]> => {
+  const cachedUrls = await getCachedUrls(baseUrl);
+  if (cachedUrls) {
+    return cachedUrls;
+  }
+
   const withTrailingSlash = (address: string) =>
     address[-1] === "/" ? address : address + "/";
 
@@ -127,8 +134,10 @@ export const getAllPagesFromBaseUrl = async (
       directChildren.map(getAllPagesFromBaseUrl)
     ).then((pages) => pages.flat());
 
-    // return unique URLs that are sub-pages of the base URL:
-    return [baseUrl, ...new Set(descendants)];
+    // cache and return unique URLs that are sub-pages of the base URL:
+    const urls = [baseUrl, ...new Set(descendants)];
+    await storeCachedUrls(baseUrl, urls);
+    return urls;
   } catch {
     return [];
   }
