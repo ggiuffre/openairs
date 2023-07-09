@@ -11,73 +11,86 @@ import type { WordEmbedding } from "../types";
 import { decode, encode } from "gpt-tokenizer";
 import XXH from "xxhashjs";
 
+const getDomFromUrl = (url: string) =>
+  JSDOM.fromURL(url, {
+    runScripts: "dangerously",
+    pretendToBeVisual: true,
+  }).catch(() =>
+    JSDOM.fromURL(url, { pretendToBeVisual: true }).catch(() => undefined)
+  );
+
 /**
  * Get the text content of the body of a web page, either from a cache in the
  * filesystem or directly by crawling the web page.
  * @param page the web page to scrape
  */
 export const scrape = async (page: string): Promise<string> => {
+  console.log(`🚲 Start scraping: ${page}`);
+
   // return cached text if present, otherwise crawl page manually:
   const cachedText = await getCachedText(page);
   if (cachedText) {
+    console.log("✅ Found cached scraped text.");
     return cachedText;
   }
 
-  // declare texts that we want to ignore:
-  const ignoredTexts = [
-    "back to top",
-    "back to the top",
-    "go to main content",
-    "skip to main content",
-  ];
+  try {
+    console.log("🚲 Scraping page manually...");
 
-  // declare function to recursively get content of text nodes:
-  const getText = (node: ChildNode): string => {
-    if (["SCRIPT", "IFRAME"].includes(node.nodeName)) {
+    // read the page and parse its content:
+    const dom = await getDomFromUrl(page);
+    if (dom === undefined) {
+      console.warn("⚠️ Problem getting DOM from URL. Returning empty string.");
       return "";
-    } else if (node.nodeType === 3) {
-      if (
-        node.textContent?.startsWith("<iframe") ||
-        ignoredTexts.includes(node.textContent?.toLowerCase() ?? "")
-      ) {
-        return "";
-      }
-      return node.textContent ?? ""; // text node
-    } else {
-      return Array.from(node.childNodes)
-        .map(getText)
-        .filter((text) => text !== "")
-        .join(" ");
     }
-  };
 
-  // read the page and parse its content:
-  let pageNotParseable = false;
-  const dom = await JSDOM.fromURL(page, {
-    runScripts: "dangerously",
-    pretendToBeVisual: true,
-  }).catch(() =>
-    JSDOM.fromURL(page, { pretendToBeVisual: true }).catch(() => {
-      pageNotParseable = true;
-      return undefined;
-    })
-  );
-  if (pageNotParseable || dom === undefined) {
+    // scrape tex from the page:
+    const text = getText(dom.window.document.body)
+      ?.replace(/(\r\n|\r|\n)\s+/g, "\n")
+      .replace(/\s\n/g, "\n")
+      .trim();
+
+    // cache and return scraped text:
+    await storeCachedText(page, text.split("\n"));
+    console.log(`✅ Returning scraped text ${text.substring(0, 18)}...`);
+    return text;
+  } catch {
+    console.warn("⚠️ Exception was thrown. Returning empty string.");
     return "";
   }
+};
 
-  // scrape the page:
-  const text = getText(dom.window.document.body);
-  const strippedText = text
-    ?.replace(/(\r\n|\r|\n)\s+/g, "\n")
-    .replace(/\s\n/g, "\n")
-    .trim();
+/**
+ * Texts that we want to ignore while scraping a web page.
+ */
+const ignoredTexts = [
+  "back to top",
+  "back to the top",
+  "go to main content",
+  "skip to main content",
+];
 
-  // cache the scraped text:
-  await storeCachedText(page, strippedText.split("\n"));
-
-  // return the scraped text:
-  return strippedText ?? "";
+/**
+ * Get the text content of an HTML node.
+ * @param node the HTML node
+ */
+const getText = (node: ChildNode): string => {
+  if (["SCRIPT", "IFRAME"].includes(node.nodeName)) {
+    return "";
+  } else if (node.nodeType === 3) {
+    if (
+      node.textContent?.startsWith("<iframe") ||
+      ignoredTexts.includes(node.textContent?.toLowerCase() ?? "")
+    ) {
+      return "";
+    }
+    return node.textContent ?? ""; // text node
+  } else {
+    return Array.from(node.childNodes)
+      .map(getText)
+      .filter((text) => text !== "")
+      .join(" ");
+  }
 };
 
 /**
@@ -87,24 +100,17 @@ export const scrape = async (page: string): Promise<string> => {
 export const getAllPagesFromBaseUrl = async (
   baseUrl: string
 ): Promise<string[]> => {
-  // parse the page:
-  try {
-    const dom = await JSDOM.fromURL(baseUrl, {
-      runScripts: "dangerously",
-      pretendToBeVisual: true,
-    }).catch(() =>
-      JSDOM.fromURL(baseUrl, { pretendToBeVisual: true }).catch(() => {
-        return undefined;
-      })
-    );
+  const withTrailingSlash = (address: string) =>
+    address[-1] === "/" ? address : address + "/";
 
+  try {
+    // parse the page:
+    const dom = await getDomFromUrl(baseUrl);
     if (dom === undefined) {
       return [];
     }
 
-    const withTrailingSlash = (address: string) =>
-      address[-1] === "/" ? address : address + "/";
-
+    // get URLs of pages down the tree:
     const hrefs = Array.from(dom.window.document.querySelectorAll("a"))
       .map((link) => link.href)
       .filter((href) => !href.endsWith(".pdf"))
@@ -121,6 +127,7 @@ export const getAllPagesFromBaseUrl = async (
       directChildren.map(getAllPagesFromBaseUrl)
     ).then((pages) => pages.flat());
 
+    // return unique URLs that are sub-pages of the base URL:
     return [baseUrl, ...new Set(descendants)];
   } catch {
     return [];
@@ -144,7 +151,6 @@ export const getTokenChunks = (
     const lastSentenceEnd = tokens.findLastIndex(
       (token, index) => index <= maxSize && delimiters.includes(token)
     );
-    console.log(lastSentenceEnd);
     chunks.push(
       tokens.splice(0, lastSentenceEnd > 0 ? lastSentenceEnd : maxSize)
     );
@@ -162,11 +168,15 @@ export const embeddingsFromText = async (
   text: string,
   { maxSize = 500 }: { maxSize?: number } = {}
 ): Promise<WordEmbedding[]> => {
+  console.log(`🚲 Start create embeddings from "${text.substring(0, 10)}..."`);
+
   const seed = 0xabcd;
   const hash = XXH.h32(text, seed).toString(16);
 
+  // return cached embeddings if present, otherwise create them manually:
   const cachedEmbeddings = await getCachedEmbeddings(hash);
   if (cachedEmbeddings) {
+    console.log("✅ Found cached embeddings.");
     return cachedEmbeddings;
   }
 
@@ -181,7 +191,7 @@ export const embeddingsFromText = async (
   const embeddings = [];
   let i = 1;
   for (const tokens of tokenChunks) {
-    console.log(`creating embedding ${i}/${tokenChunks.length}...`);
+    console.log(`🚲 Creating embedding ${i}/${tokenChunks.length}...`);
     const vector = await api
       .createEmbedding({ model: "text-embedding-ada-002", input: tokens })
       .then((response) => response.data.data[0].embedding);
@@ -189,7 +199,9 @@ export const embeddingsFromText = async (
     i++;
   }
 
+  // cache and return newly created embeddings:
   await storeCachedEmbeddings(hash, embeddings);
+  console.log(`✅ Returning ${i} embeddings.`);
   return embeddings;
 };
 
@@ -198,7 +210,7 @@ export const embeddingsFromText = async (
  * @param website the website to scrape
  * @param extension the extension of the cache file
  */
-export const cacheFileFromWebsite = (
+export const getCacheFileName = (
   website: string,
   { extension }: { extension: "html" | "txt" | "json" }
 ) => {
@@ -207,6 +219,14 @@ export const cacheFileFromWebsite = (
   return jsonDirectory + fileName + "." + extension;
 };
 
+/**
+ * Get a string of maximally-relevant text chunks from an arbitrary amount of
+ * text chunks that each have a distance between their embedding representation
+ * and the embedding of a question string.
+ * @param textChunks array of strings, each one usually one or more sentences
+ * @param distances array of distances between text chunks and a question
+ * @param maxLength maximum length of text that should be returned
+ */
 export const getContext = ({
   textChunks,
   distances,
@@ -216,6 +236,8 @@ export const getContext = ({
   distances: number[];
   maxLength: number;
 }) => {
+  console.log(`🚲 Creating context out of ${textChunks.length} strings...`);
+
   // sort text chunks by distance to the question:
   textChunks.sort(
     (a, b) =>
@@ -232,6 +254,7 @@ export const getContext = ({
     i++;
   }
 
+  console.log(`✅ Returning context of size ${mostRelevantEmbeddings.length}.`);
   return mostRelevantEmbeddings.join("\n\n###\n\n");
 };
 
@@ -243,6 +266,8 @@ export const getContext = ({
  * @param textChunks the text chunks from which each embedding is derived
  */
 export const answer = async (question: string, embeddings: WordEmbedding[]) => {
+  console.log(`🚲 Start answering question "${question}"`);
+
   const api = new OpenAIApi(
     new Configuration({
       organization: process.env.OPENAI_ORG_ID,
@@ -250,6 +275,7 @@ export const answer = async (question: string, embeddings: WordEmbedding[]) => {
     })
   );
 
+  console.log("🚲 Tokenizing question and creating embedding...");
   const questionTokens = encode(question);
   const questionEmbedding = await api
     .createEmbedding({ model: "text-embedding-ada-002", input: questionTokens })
@@ -265,12 +291,9 @@ export const answer = async (question: string, embeddings: WordEmbedding[]) => {
     distances,
     maxLength: 4500,
   });
-  console.log(question, context);
-  // good prompts to get the line-up:
-  // - What artists are mentioned in the program?
-  // - What artists are mentioned?
 
   try {
+    console.log("🚲 Submitting question to OpenAI...");
     const completion = await api.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [
@@ -282,8 +305,10 @@ export const answer = async (question: string, embeddings: WordEmbedding[]) => {
     });
 
     const result = completion.data.choices[0].message?.content;
+    console.log(`✅ Returning answer "${result?.substring(0, 14)}..."`);
     return result;
   } catch {
+    console.warn("⚠️ Exception was thrown. Returning undefined.");
     return undefined;
   }
 };
