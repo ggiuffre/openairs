@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { getTokenChunks } from ".";
+import { cosineDistance, getTokenChunks } from ".";
 import { encode } from "gpt-tokenizer";
 
 describe("getTokenChunks", () => {
@@ -44,5 +44,44 @@ describe("getTokenChunks", () => {
     const tokens = tokenChunks.flat();
     expect(tokens[0]).toBe(encodedText[0]);
     expect(tokens[tokens.length - 1]).toBe(encodedText[encodedText.length - 1]);
+  });
+});
+
+describe("cosineDistance", () => {
+  test("of a vector with itself is close to zero", () => {
+    const length = Math.random() * 100;
+    const a = Array.from({ length }).map((_) => (Math.random() - 0.5) * 10);
+    expect(cosineDistance(a, a)).toBeCloseTo(0);
+  });
+
+  test("is commutative", () => {
+    const length = Math.random() * 100;
+    const a = Array.from({ length }).map((_) => (Math.random() - 0.5) * 10);
+    const b = Array.from({ length }).map((_) => (Math.random() - 0.5) * 10);
+    expect(cosineDistance(a, b)).toBe(cosineDistance(b, a));
+  });
+
+  test("is at least zero", () => {
+    const length = Math.random() * 100;
+    const a = Array.from({ length }).map((_) => (Math.random() - 0.5) * 10);
+    const b = Array.from({ length }).map((_) => (Math.random() - 0.5) * 10);
+    expect(cosineDistance(a, b)).toBeGreaterThanOrEqual(0);
+  });
+
+  test("is at most 2", () => {
+    const length = Math.random() * 100;
+    const a = Array.from({ length }).map((_) => (Math.random() - 0.5) * 10);
+    const b = Array.from({ length }).map((_) => (Math.random() - 0.5) * 10);
+    expect(cosineDistance(a, b)).toBeLessThanOrEqual(2);
+  });
+
+  test("does not depend on the magnitude of the vectors", () => {
+    const length = Math.random() * 100;
+    const k1 = Math.random() * 10;
+    const k2 = Math.random() * 10;
+    const a = Array.from({ length }).map((_) => (Math.random() - 0.5) * 10);
+    const b = a.map((e) => e * k1);
+    const c = a.map((e) => e * k2);
+    expect(cosineDistance(a, b)).toBeCloseTo(cosineDistance(a, c));
   });
 });
