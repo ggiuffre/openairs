@@ -9,7 +9,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const name = searchParams.get("name"); // exact name of the festival
+  const name = searchParams.get("name"); // name of the festival
   const question = searchParams.get("q"); // question to be asked to the model
 
   const openairs = await getOpenairs();
@@ -17,13 +17,19 @@ export async function GET(request: Request) {
     openairs.find((o) => o.name === name) ??
     (name ? openairs.find((o) => o.name.includes(name)) : undefined);
   if (openair) {
+    console.log(`✅ Selected ${openair.name}`);
+    console.log(`🚲 Discovering pages under ${openair.website}`);
     const pages = await getAllPagesFromBaseUrl(openair.website);
+    console.log("🚲 Starting to scrape web pages...");
     const pagesAsText = await Promise.all(pages.map(scrape));
+    console.log("🚲 Starting to generate embeddings...");
     const embeddings = await Promise.all(
       pagesAsText.map((text) => embeddingsFromText(text))
     ).then((result) => result.flat());
     if (question) {
+      console.log("🚲 Asking question to OpenAI...");
       const ans = await answer(question, embeddings);
+      console.log("✅ Returning response");
       return NextResponse.json({
         pages,
         pagesAsText,

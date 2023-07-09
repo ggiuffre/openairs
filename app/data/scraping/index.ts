@@ -25,7 +25,7 @@ export const scrape = async (page: string): Promise<string> => {
   const cachedText = await getCachedText(page);
   if (cachedText) {
     console.log("✅ Found cached scraped text.");
-    return cachedText;
+    return cachedText.join("\n");
   }
 
   try {
@@ -265,7 +265,7 @@ export const getContext = ({
   // sort text chunks by distance to the question:
   textChunks.sort(
     (a, b) =>
-      distances[textChunks.indexOf(b)] - distances[textChunks.indexOf(a)]
+      distances[textChunks.indexOf(a)] - distances[textChunks.indexOf(b)]
   );
 
   // add the most relevant text chunks to the context, until the maximum size is reached:

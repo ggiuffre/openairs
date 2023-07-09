@@ -10,116 +10,66 @@ const getClient = () => {
   return client;
 };
 
-interface WebsiteUrls {
-  baseUrl: string;
-  urls: string[];
-}
-
-interface WebsiteText {
-  website: string;
-  lines: string[];
-}
-
-interface WebsiteEmbeddings {
-  website: string;
-  embeddings: WordEmbedding[];
-}
-
-export const getCachedUrls = async (baseUrl: string) => {
+const getCached = async <T>(collectionName: string, identifier: string) => {
   let document;
   const client = getClient();
 
   try {
     const database = client.db("scraping_cache");
-    const collection = database.collection("webpages_urls");
-    const query = { baseUrl };
-    document = await collection.findOne<WebsiteUrls>(query);
-  } finally {
-    // ensure that the client closes when the "try" block finishes/errors:
-    await client.close();
-  }
-
-  return document?.urls;
-};
-
-export const storeCachedUrls = async (baseUrl: string, lines: string[]) => {
-  const client = getClient();
-
-  try {
-    const database = client.db("scraping_cache");
-    const collection = database.collection("webpages_urls");
-    const document = { baseUrl, lines };
-    const result = await collection.insertOne(document);
-    console.log(`Inserted document with _id=${result.insertedId}`);
-  } finally {
-    // ensure that the client closes when the "try" block finishes/errors:
-    await client.close();
-  }
-};
-
-export const getCachedText = async (website: string) => {
-  let document;
-  const client = getClient();
-
-  try {
-    const database = client.db("scraping_cache");
-    const collection = database.collection("webpages_text");
-    const query = { website };
-    document = await collection.findOne<WebsiteText>(query);
-  } finally {
-    // ensure that the client closes when the "try" block finishes/errors:
-    await client.close();
-  }
-
-  return document?.lines.join("\n");
-};
-
-export const storeCachedText = async (website: string, lines: string[]) => {
-  const client = getClient();
-
-  try {
-    const database = client.db("scraping_cache");
-    const collection = database.collection("webpages_text");
-    const document = { website, lines };
-    const result = await collection.insertOne(document);
-    console.log(`Inserted document with _id=${result.insertedId}`);
-  } finally {
-    // ensure that the client closes when the "try" block finishes/errors:
-    await client.close();
-  }
-};
-
-export const getCachedEmbeddings = async (identifier: string) => {
-  let document;
-  const client = getClient();
-
-  try {
-    const database = client.db("scraping_cache");
-    const collection = database.collection("embeddings");
+    const collection = database.collection(collectionName);
     const query = { identifier };
-    document = await collection.findOne<WebsiteEmbeddings>(query);
+    document = await collection.findOne<{ data: T }>(query);
   } finally {
     // ensure that the client closes when the "try" block finishes/errors:
     await client.close();
   }
 
-  return document?.embeddings;
+  if (document) {
+    console.log(`⚙️ Returning cached data from collection ${collectionName}`);
+    return document.data;
+  } else {
+    console.log(`⚙️ Coll. ${collectionName} has no data for ${identifier}`);
+    return undefined;
+  }
 };
 
-export const storeCachedEmbeddings = async (
+const cache = async <T>(
+  collectionName: string,
   identifier: string,
-  embeddings: WordEmbedding[]
+  data: T
 ) => {
   const client = getClient();
 
   try {
     const database = client.db("scraping_cache");
-    const collection = database.collection("embeddings");
-    const document = { identifier, embeddings };
+    const collection = database.collection(collectionName);
+    const document = { identifier, data };
     const result = await collection.insertOne(document);
-    console.log(`Inserted document with _id=${result.insertedId}`);
+    console.log(
+      `⚙️ Inserted document ${result.insertedId} into collection ${collectionName}`
+    );
   } finally {
     // ensure that the client closes when the "try" block finishes/errors:
     await client.close();
   }
 };
+
+export const getCachedUrls = (identifier: string) =>
+  getCached<string[]>("urls", identifier);
+
+export const storeCachedUrls = (identifier: string, data: string[]) =>
+  cache<string[]>("urls", identifier, data);
+
+export const getCachedText = (identifier: string) =>
+  getCached<string[]>("texts", identifier);
+
+export const storeCachedText = async (identifier: string, data: string[]) =>
+  cache<string[]>("texts", identifier, data);
+
+export const getCachedEmbeddings = (identifier: string) =>
+  getCached<WordEmbedding[]>("embeddings", identifier);
+
+export const storeCachedEmbeddings = async (
+  identifier: string,
+  data: WordEmbedding[]
+) => cache<WordEmbedding[]>("embeddings", identifier, data);
