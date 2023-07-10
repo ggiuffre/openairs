@@ -2,9 +2,11 @@ import path from "path";
 import { Configuration, OpenAIApi } from "openai";
 import { JSDOM } from "jsdom";
 import {
+  getCachedAnswer,
   getCachedEmbeddings,
   getCachedTexts,
   getCachedUrls,
+  storeCachedAnswer,
   storeCachedEmbeddings,
   storeCachedTexts,
   storeCachedUrls,
@@ -359,6 +361,13 @@ export const getContext = ({
 export const answer = async (question: string, embeddings: WordEmbedding[]) => {
   console.log(`🚲 Asking question "${question}"`);
 
+  // return cached answer if present, otherwise query OpenAI API:
+  const cachedAnswer = await getCachedAnswer(question);
+  if (cachedAnswer) {
+    console.log("✅ Found cached answer.");
+    return cachedAnswer;
+  }
+
   const api = new OpenAIApi(
     new Configuration({
       organization: process.env.OPENAI_ORG_ID,
@@ -390,8 +399,14 @@ export const answer = async (question: string, embeddings: WordEmbedding[]) => {
     });
 
     const result = completion.data.choices[0].message?.content;
-    console.log(`✅ Returning answer "${result?.substring(0, 14)}..."`);
-    return result;
+    if (result) {
+      await storeCachedAnswer(question, result);
+      console.log(`✅ Returning answer "${result?.substring(0, 14)}..."`);
+      return result;
+    } else {
+      console.warn("⚠️ A problem occurred. Returning undefined.");
+      return undefined;
+    }
   } catch {
     console.warn("⚠️ Exception was thrown. Returning undefined.");
     return undefined;
