@@ -2,7 +2,6 @@ import { getOpenairs } from "@/app/data/getOpenairs";
 import {
   answer,
   embeddingsFromPages,
-  getAllPagesFromBaseUrl,
   longestCommonPrefix,
   scrapeWebsite,
 } from "@/app/data/scraping";
@@ -20,24 +19,20 @@ export async function GET(request: Request) {
   if (openair) {
     console.log(`✅ Selected ${openair.name}`);
     const baseUrl = openair.website;
-    const pages = await getAllPagesFromBaseUrl({ baseUrl });
-    const pagesAsText = await scrapeWebsite(pages);
-    const prefix = longestCommonPrefix(pagesAsText);
-    console.log("🚲 Starting to generate embeddings...");
-    const embeddings = await embeddingsFromPages({ baseUrl, pagesAsText });
+    const pages = await scrapeWebsite(baseUrl);
+    const prefix = longestCommonPrefix(pages);
+    const embeddings = await embeddingsFromPages({ baseUrl, pages });
     if (question) {
       const ans = await answer(question, embeddings);
-      console.log("✅ Returning response");
       return NextResponse.json({
         pages,
-        pagesAsText,
         prefix,
         embeddings,
         question,
         ans,
       });
     }
-    return NextResponse.json({ pages, pagesAsText, prefix, embeddings });
+    return NextResponse.json({ pages, prefix, embeddings });
   }
   return NextResponse.json({ error: "Not found" }, { status: 404 });
 }

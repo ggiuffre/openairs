@@ -17,9 +17,9 @@ import { decode, encode } from "gpt-tokenizer";
  * directly by crawling all the web pages.
  * @param pages a list of web page URLs to scrape
  */
-export const scrapeWebsite = async (pages: string[]): Promise<string[]> => {
-  const baseUrl = longestCommonPrefix(pages);
-  console.log(`🚲 Starting to scrape web pages under ${baseUrl}`);
+export const scrapeWebsite = async (baseUrl: string): Promise<string[]> => {
+  console.log(`🚲 Scraping ${baseUrl}`);
+  const pages = await getAllPagesFromBaseUrl({ baseUrl });
 
   const cachedTexts = await getCachedTexts(baseUrl);
   if (cachedTexts) {
@@ -103,7 +103,7 @@ const getText = (node: ChildNode): string => {
  * @param baseUrl the base URL
  * @param isRoot whether this is the root of the website
  */
-export const getAllPagesFromBaseUrl = async ({
+const getAllPagesFromBaseUrl = async ({
   baseUrl,
   isRoot = true,
 }: {
@@ -111,6 +111,7 @@ export const getAllPagesFromBaseUrl = async ({
   isRoot?: boolean;
 }): Promise<string[]> => {
   console.log(`🚲 Discovering pages under ${baseUrl}`);
+
   if (isRoot) {
     const cachedUrls = await getCachedUrls(baseUrl);
     if (cachedUrls) {
@@ -164,8 +165,6 @@ export const getAllPagesFromBaseUrl = async ({
  * @param strings the strings to be compared
  */
 export const longestCommonPrefix = (strings: string[]): string => {
-  console.log("🚲 Calculating longest common prefix among pages...");
-
   const sortedStrings = strings.sort((a, b) => (a < b ? -1 : 1));
 
   let output = [];
@@ -233,16 +232,16 @@ export const getTokenChunks = (
  * strings. Each string gives one or more embeddings, and all embeddings get
  * flattened onto a single array of embeddings. Each resulting embedding is an
  * array of numbers.
- * @param pagesAsText an array of strings
+ * @param pages an array of strings (each string being the text of a web page)
  * @param maxSize the max amount of tokens that will be transformed into an embedding
  */
 export const embeddingsFromPages = async ({
   baseUrl,
-  pagesAsText,
+  pages,
   maxSize = 500,
 }: {
   baseUrl: string;
-  pagesAsText: string[];
+  pages: string[];
   maxSize?: number;
 }) => {
   console.log(`🚲 Starting to generate embeddings for ${baseUrl}`);
@@ -255,7 +254,7 @@ export const embeddingsFromPages = async ({
   }
 
   const embeddings = await Promise.all(
-    pagesAsText.map((text) => embeddingsFromText(text, { maxSize }))
+    pages.map((text) => embeddingsFromText(text, { maxSize }))
   ).then((result) => result.flat());
 
   // cache and return newly created embeddings:
