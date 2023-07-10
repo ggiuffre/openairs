@@ -3,10 +3,10 @@ import { Configuration, OpenAIApi } from "openai";
 import { JSDOM } from "jsdom";
 import {
   getCachedEmbeddings,
-  getCachedText,
+  getCachedTexts,
   getCachedUrls,
   storeCachedEmbeddings,
-  storeCachedText,
+  storeCachedTexts,
   storeCachedUrls,
 } from "./database";
 import type { WordEmbedding } from "../types";
@@ -14,23 +14,34 @@ import { decode, encode } from "gpt-tokenizer";
 import XXH from "xxhashjs";
 
 /**
- * Get the text content of the body of a web page, either from a cache in the
- * filesystem or directly by crawling the web page.
- * @param page the web page to scrape
+ * Get the text content of the pages of a website, either from a cache or
+ * directly by crawling all the web pages.
+ * @param pages a list of web page URLs to scrape
  */
-export const scrape = async (page: string): Promise<string> => {
-  console.log(`🚲 Start scraping: ${page}`);
+export const scrapeWebsite = async (pages: string[]): Promise<string[]> => {
+  const baseUrl = longestCommonPrefix(pages);
+  console.log(`🚲 Starting to scrape web pages under ${baseUrl}`);
 
-  // return cached text if present, otherwise crawl page manually:
-  const cachedText = await getCachedText(page);
-  if (cachedText) {
-    console.log("✅ Found cached scraped text.");
-    return cachedText.join("\n");
+  const cachedTexts = await getCachedTexts(baseUrl);
+  if (cachedTexts) {
+    console.log("✅ Found cached scraped texts.");
+    return cachedTexts;
   }
 
-  try {
-    console.log("🚲 Scraping page manually...");
+  const pagesAsText = await Promise.all(pages.map(scrape));
+  await storeCachedTexts(baseUrl, pagesAsText);
+  console.log("✅ Successfully scraped and cached website.");
+  return pagesAsText;
+};
 
+/**
+ * Get the text content of the body of a web page.
+ * @param page URL of the web page to scrape
+ */
+const scrape = async (page: string): Promise<string> => {
+  console.log(`🚲 Start scraping: ${page}`);
+
+  try {
     // read the page and parse its content:
     const dom = await JSDOM.fromURL(page).catch(() => undefined);
     if (dom === undefined) {
@@ -44,8 +55,7 @@ export const scrape = async (page: string): Promise<string> => {
       .replace(/\s\n/g, "\n")
       .trim();
 
-    // cache and return scraped text:
-    await storeCachedText(page, text.split("\n"));
+    // return scraped text:
     console.log(`✅ Returning scraped text ${text.substring(0, 18)}...`);
     return text;
   } catch {
@@ -62,6 +72,8 @@ const ignoredTexts = [
   "back to the top",
   "go to main content",
   "skip to main content",
+  "skip to content",
+  "direkt zum inhalt",
 ];
 
 /**
@@ -90,13 +102,21 @@ const getText = (node: ChildNode): string => {
 /**
  * Get a list of web pages recursively referenced from a base URL.
  * @param baseUrl the base URL
+ * @param isRoot whether this is the root of the website
  */
-export const getAllPagesFromBaseUrl = async (
-  baseUrl: string
-): Promise<string[]> => {
-  const cachedUrls = await getCachedUrls(baseUrl);
-  if (cachedUrls) {
-    return cachedUrls;
+export const getAllPagesFromBaseUrl = async ({
+  baseUrl,
+  isRoot = true,
+}: {
+  baseUrl: string;
+  isRoot?: boolean;
+}): Promise<string[]> => {
+  if (isRoot) {
+    console.log(`🚲 Discovering pages under ${baseUrl}`);
+    const cachedUrls = await getCachedUrls(baseUrl);
+    if (cachedUrls) {
+      return cachedUrls;
+    }
   }
 
   const withTrailingSlash = (address: string) =>
@@ -119,21 +139,48 @@ export const getAllPagesFromBaseUrl = async (
       .map((href) => href.split("#")[0])
       .filter(
         (href) =>
-          href.includes(baseUrl) &&
+          href.startsWith(baseUrl) &&
           withTrailingSlash(href) !== withTrailingSlash(baseUrl)
       );
     const directChildren = [...new Set(hrefs)];
     const descendants = await Promise.all(
-      directChildren.map(getAllPagesFromBaseUrl)
+      directChildren.map((child) =>
+        getAllPagesFromBaseUrl({ baseUrl: child, isRoot: false })
+      )
     ).then((pages) => pages.flat());
 
     // cache and return unique URLs that are sub-pages of the base URL:
     const urls = [baseUrl, ...new Set(descendants)];
-    await storeCachedUrls(baseUrl, urls);
+    if (isRoot) {
+      await storeCachedUrls(baseUrl, urls);
+    }
     return urls;
   } catch {
     return [];
   }
+};
+
+/**
+ * Get the longest prefix common to a list of strings.
+ * @param strings the strings to be compared
+ */
+export const longestCommonPrefix = (strings: string[]): string => {
+  console.log("🚲 Calculating longest common prefix among pages...");
+
+  const sortedStrings = strings.sort((a, b) => (a < b ? -1 : 1));
+
+  let output = [];
+  const firstString = sortedStrings[0];
+  const lastString = sortedStrings[sortedStrings.length - 1];
+  for (let i = 0; i < firstString.length; i++) {
+    if (firstString[i] === lastString[i]) {
+      output.push(firstString[i]);
+    } else {
+      break;
+    }
+  }
+
+  return output.join("");
 };
 
 /**
@@ -290,7 +337,7 @@ export const getContext = ({
  * @param textChunks the text chunks from which each embedding is derived
  */
 export const answer = async (question: string, embeddings: WordEmbedding[]) => {
-  console.log(`🚲 Start answering question "${question}"`);
+  console.log(`🚲 Asking question "${question}"`);
 
   const api = new OpenAIApi(
     new Configuration({

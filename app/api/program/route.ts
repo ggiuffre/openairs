@@ -3,7 +3,8 @@ import {
   answer,
   embeddingsFromText,
   getAllPagesFromBaseUrl,
-  scrape,
+  longestCommonPrefix,
+  scrapeWebsite,
 } from "@/app/data/scraping";
 import { NextResponse } from "next/server";
 
@@ -18,27 +19,26 @@ export async function GET(request: Request) {
     (name ? openairs.find((o) => o.name.includes(name)) : undefined);
   if (openair) {
     console.log(`✅ Selected ${openair.name}`);
-    console.log(`🚲 Discovering pages under ${openair.website}`);
-    const pages = await getAllPagesFromBaseUrl(openair.website);
-    console.log("🚲 Starting to scrape web pages...");
-    const pagesAsText = await Promise.all(pages.map(scrape));
+    const pages = await getAllPagesFromBaseUrl({ baseUrl: openair.website });
+    const pagesAsText = await scrapeWebsite(pages);
+    const prefix = longestCommonPrefix(pagesAsText);
     console.log("🚲 Starting to generate embeddings...");
     const embeddings = await Promise.all(
       pagesAsText.map((text) => embeddingsFromText(text))
     ).then((result) => result.flat());
     if (question) {
-      console.log("🚲 Asking question to OpenAI...");
       const ans = await answer(question, embeddings);
       console.log("✅ Returning response");
       return NextResponse.json({
         pages,
         pagesAsText,
+        prefix,
         embeddings,
         question,
         ans,
       });
     }
-    return NextResponse.json({ pages, pagesAsText, embeddings });
+    return NextResponse.json({ pages, pagesAsText, prefix, embeddings });
   }
   return NextResponse.json({ error: "Not found" }, { status: 404 });
 }

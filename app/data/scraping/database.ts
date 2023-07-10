@@ -70,10 +70,10 @@ export const getCachedUrls = (identifier: string) =>
 export const storeCachedUrls = (identifier: string, data: string[]) =>
   cache<string[]>({ collection: "urls", identifier, data });
 
-export const getCachedText = (identifier: string) =>
+export const getCachedTexts = (identifier: string) =>
   getCached<string[]>({ collection: "texts", identifier });
 
-export const storeCachedText = async (identifier: string, data: string[]) =>
+export const storeCachedTexts = async (identifier: string, data: string[]) =>
   cache<string[]>({ collection: "texts", identifier, data });
 
 export const getCachedEmbeddings = (identifier: string) =>
