@@ -11,7 +11,6 @@ import {
 } from "./database";
 import type { WordEmbedding } from "../types";
 import { decode, encode } from "gpt-tokenizer";
-import XXH from "xxhashjs";
 
 /**
  * Get the text content of the pages of a website, either from a cache or
