@@ -315,38 +315,38 @@ export const getCacheFileName = (
  * Get a string of maximally-relevant text chunks from an arbitrary amount of
  * text chunks that each have a distance between their embedding representation
  * and the embedding of a question string.
- * @param textChunks array of strings, each one usually one or more sentences
+ * @param embeddings array of embeddings, each one w/ vector and original text
  * @param distances array of distances between text chunks and a question
- * @param maxLength maximum length of text that should be returned
+ * @param maxLength maximum length of context to return, in tokens
  */
 export const getContext = ({
-  textChunks,
+  embeddings,
   distances,
-  maxLength,
+  maxLength = 4000,
 }: {
-  textChunks: string[];
+  embeddings: WordEmbedding[];
   distances: number[];
-  maxLength: number;
+  maxLength?: number;
 }) => {
-  console.log(`🚲 Creating context out of ${textChunks.length} strings...`);
+  console.log(`🚲 Creating context out of ${embeddings.length} embeddings...`);
 
-  // sort text chunks by distance to the question:
-  textChunks.sort(
+  // sort embeddings by distance to the question:
+  embeddings.sort(
     (a, b) =>
-      distances[textChunks.indexOf(a)] - distances[textChunks.indexOf(b)]
+      distances[embeddings.indexOf(a)] - distances[embeddings.indexOf(b)]
   );
 
   // add the most relevant text chunks to the context, until the maximum size is reached:
   let i = 0;
   let currentLength = 0;
   let mostRelevantEmbeddings: string[] = [];
-  while (i < textChunks.length && currentLength < maxLength) {
-    mostRelevantEmbeddings.push(textChunks[i]);
-    currentLength += textChunks[i].length + 4;
+  while (i < embeddings.length && currentLength < maxLength) {
+    mostRelevantEmbeddings.push(embeddings[i].originalText);
+    currentLength += embeddings[i].vector.length + 4;
     i++;
   }
 
-  console.log(`✅ Returning context of size ${mostRelevantEmbeddings.length}.`);
+  console.log(`✅ Returning context of size ${mostRelevantEmbeddings.length}`);
   return mostRelevantEmbeddings.join("\n\n###\n\n");
 };
 
@@ -355,7 +355,6 @@ export const getContext = ({
  * and their corresponding embedding representation.
  * @param question the question to ask
  * @param embeddings the exmbeddings to use as a context
- * @param textChunks the text chunks from which each embedding is derived
  */
 export const answer = async (question: string, embeddings: WordEmbedding[]) => {
   console.log(`🚲 Asking question "${question}"`);
@@ -372,17 +371,11 @@ export const answer = async (question: string, embeddings: WordEmbedding[]) => {
   const questionEmbedding = await api
     .createEmbedding({ model: "text-embedding-ada-002", input: questionTokens })
     .then((response) => response.data.data[0].embedding);
-
   const distances = embeddings.map((embedding) =>
     cosineDistance(questionEmbedding, embedding.vector)
   );
 
-  const textChunks = embeddings.map((embedding) => embedding.originalText);
-  const context = getContext({
-    textChunks,
-    distances,
-    maxLength: 4500,
-  });
+  const context = getContext({ embeddings, distances });
 
   try {
     console.log("🚲 Submitting question to OpenAI...");
