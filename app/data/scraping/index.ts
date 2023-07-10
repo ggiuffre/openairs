@@ -21,13 +21,14 @@ import { decode, encode } from "gpt-tokenizer";
  */
 export const scrapeWebsite = async (baseUrl: string): Promise<string[]> => {
   console.log(`🚲 Scraping ${baseUrl}`);
-  const pages = await getAllPagesFromBaseUrl({ baseUrl });
 
   const cachedTexts = await getCachedTexts(baseUrl);
   if (cachedTexts) {
     console.log("✅ Found cached scraped texts.");
     return cachedTexts;
   }
+
+  const pages = await getAllPagesFromBaseUrl({ baseUrl });
 
   const pagesAsText = await Promise.all(pages.map(scrape));
   await storeCachedTexts(baseUrl, pagesAsText);
