@@ -23,7 +23,7 @@ export async function GET(request: Request) {
     const prefix = longestCommonPrefix(pages);
     const embeddings = await embeddingsFromPages({ baseUrl, pages });
     if (question) {
-      const ans = await answer(question, embeddings);
+      const ans = await answer(question, baseUrl, embeddings);
       return NextResponse.json({
         pages,
         prefix,

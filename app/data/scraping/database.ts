@@ -89,8 +89,19 @@ export const storeCachedEmbeddings = async (
     data: embeddings,
   });
 
-export const getCachedAnswer = (question: string) =>
-  getCached<string>({ collection: "answers", identifier: question });
+export const getCachedAnswer = (website: string, question: string) =>
+  getCached<string>({
+    collection: "answers",
+    identifier: `${website} | ${question}`,
+  });
 
-export const storeCachedAnswer = async (question: string, answer: string) =>
-  cache<string>({ collection: "answers", identifier: question, data: answer });
+export const storeCachedAnswer = async (
+  website: string,
+  question: string,
+  answer: string
+) =>
+  cache<string>({
+    collection: "answers",
+    identifier: `${website} | ${question}`,
+    data: answer,
+  });

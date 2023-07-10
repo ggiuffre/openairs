@@ -357,13 +357,18 @@ export const getContext = ({
  * Get the answer to a question, given some context in the form of text chunks
  * and their corresponding embedding representation.
  * @param question the question to ask
+ * @param website a website that provides context to the question
  * @param embeddings the exmbeddings to use as a context
  */
-export const answer = async (question: string, embeddings: WordEmbedding[]) => {
+export const answer = async (
+  question: string,
+  website: string,
+  embeddings: WordEmbedding[]
+) => {
   console.log(`🚲 Asking question "${question}"`);
 
   // return cached answer if present, otherwise query OpenAI API:
-  const cachedAnswer = await getCachedAnswer(question);
+  const cachedAnswer = await getCachedAnswer(website, question);
   if (cachedAnswer) {
     console.log("✅ Found cached answer.");
     return cachedAnswer;
@@ -401,7 +406,7 @@ export const answer = async (question: string, embeddings: WordEmbedding[]) => {
 
     const result = completion.data.choices[0].message?.content;
     if (result) {
-      await storeCachedAnswer(question, result);
+      await storeCachedAnswer(website, question, result);
       console.log(`✅ Returning answer "${result?.substring(0, 14)}..."`);
       return result;
     } else {
