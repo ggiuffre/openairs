@@ -64,22 +64,33 @@ const cache = async <T>({
   }
 };
 
-export const getCachedUrls = (identifier: string) =>
-  getCached<string[]>({ collection: "urls", identifier });
+export const getCachedUrls = (website: string) =>
+  getCached<string[]>({ collection: "urls", identifier: website });
 
-export const storeCachedUrls = (identifier: string, data: string[]) =>
-  cache<string[]>({ collection: "urls", identifier, data });
+export const storeCachedUrls = (website: string, urls: string[]) =>
+  cache<string[]>({ collection: "urls", identifier: website, data: urls });
 
-export const getCachedTexts = (identifier: string) =>
-  getCached<string[]>({ collection: "texts", identifier });
+export const getCachedTexts = (website: string) =>
+  getCached<string[]>({ collection: "texts", identifier: website });
 
-export const storeCachedTexts = async (identifier: string, data: string[]) =>
-  cache<string[]>({ collection: "texts", identifier, data });
+export const storeCachedTexts = async (website: string, texts: string[]) =>
+  cache<string[]>({ collection: "texts", identifier: website, data: texts });
 
-export const getCachedEmbeddings = (identifier: string) =>
-  getCached<WordEmbedding[]>({ collection: "embeddings", identifier });
+export const getCachedEmbeddings = (website: string) =>
+  getCached<WordEmbedding[]>({ collection: "embeddings", identifier: website });
 
 export const storeCachedEmbeddings = async (
-  identifier: string,
-  data: WordEmbedding[]
-) => cache<WordEmbedding[]>({ collection: "embeddings", identifier, data });
+  website: string,
+  embeddings: WordEmbedding[]
+) =>
+  cache<WordEmbedding[]>({
+    collection: "embeddings",
+    identifier: website,
+    data: embeddings,
+  });
+
+export const getCachedAnswer = (question: string) =>
+  getCached<string>({ collection: "answers", identifier: question });
+
+export const storeCachedAnswer = async (question: string, answer: string) =>
+  cache<string>({ collection: "answers", identifier: question, data: answer });
