@@ -10,43 +10,53 @@ const getClient = () => {
   return client;
 };
 
-const getCached = async <T>(collectionName: string, identifier: string) => {
+const getCached = async <T>({
+  collection,
+  identifier,
+}: {
+  collection: string;
+  identifier: string;
+}) => {
   let document;
   const client = getClient();
 
   try {
     const database = client.db("scraping_cache");
-    const collection = database.collection(collectionName);
+    const collectionRef = database.collection(collection);
     const query = { identifier };
-    document = await collection.findOne<{ data: T }>(query);
+    document = await collectionRef.findOne<{ data: T }>(query);
   } finally {
     // ensure that the client closes when the "try" block finishes/errors:
     await client.close();
   }
 
   if (document) {
-    console.log(`⚙️ Returning cached data from collection ${collectionName}`);
+    console.log(`⚙️ Returning cached data from collection ${collection}`);
     return document.data;
   } else {
-    console.log(`⚙️ Coll. ${collectionName} has no data for ${identifier}`);
+    console.log(`⚙️ Coll. ${collection} has no data for ${identifier}`);
     return undefined;
   }
 };
 
-const cache = async <T>(
-  collectionName: string,
-  identifier: string,
-  data: T
-) => {
+const cache = async <T>({
+  collection,
+  identifier,
+  data,
+}: {
+  collection: string;
+  identifier: string;
+  data: T;
+}) => {
   const client = getClient();
 
   try {
     const database = client.db("scraping_cache");
-    const collection = database.collection(collectionName);
+    const collectionRef = database.collection(collection);
     const document = { identifier, data };
-    const result = await collection.insertOne(document);
+    const result = await collectionRef.insertOne(document);
     console.log(
-      `⚙️ Inserted document ${result.insertedId} into collection ${collectionName}`
+      `⚙️ Inserted document ${result.insertedId} into collection ${collection}`
     );
   } finally {
     // ensure that the client closes when the "try" block finishes/errors:
@@ -55,21 +65,21 @@ const cache = async <T>(
 };
 
 export const getCachedUrls = (identifier: string) =>
-  getCached<string[]>("urls", identifier);
+  getCached<string[]>({ collection: "urls", identifier });
 
 export const storeCachedUrls = (identifier: string, data: string[]) =>
-  cache<string[]>("urls", identifier, data);
+  cache<string[]>({ collection: "urls", identifier, data });
 
 export const getCachedText = (identifier: string) =>
-  getCached<string[]>("texts", identifier);
+  getCached<string[]>({ collection: "texts", identifier });
 
 export const storeCachedText = async (identifier: string, data: string[]) =>
-  cache<string[]>("texts", identifier, data);
+  cache<string[]>({ collection: "texts", identifier, data });
 
 export const getCachedEmbeddings = (identifier: string) =>
-  getCached<WordEmbedding[]>("embeddings", identifier);
+  getCached<WordEmbedding[]>({ collection: "embeddings", identifier });
 
 export const storeCachedEmbeddings = async (
   identifier: string,
   data: WordEmbedding[]
-) => cache<WordEmbedding[]>("embeddings", identifier, data);
+) => cache<WordEmbedding[]>({ collection: "embeddings", identifier, data });
