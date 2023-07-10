@@ -432,3 +432,45 @@ export const cosineDistance = (a: number[], b: number[]) => {
   const distance = 1 - similarity;
   return distance;
 };
+
+/**
+ * Get a JSON object from unstructured data containing information that can be
+ * represented as JSON. This function calls the OpenAI API.
+ * @param data a string containing the unstructured data
+ */
+export const jsonFromUnstructuredData = async (
+  data: string
+): Promise<object> => {
+  console.log("🚲 Asking OpenAI to convert unstructured data to JSON...");
+
+  const api = new OpenAIApi(
+    new Configuration({
+      organization: process.env.OPENAI_ORG_ID,
+      apiKey: process.env.OPENAI_API_KEY,
+    })
+  );
+
+  try {
+    const completion = await api.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "user",
+          content: `Please convert the following unstructured data into RFC8259-compliant JSON format:\n\n\`\`\`\n${data}\n\`\`\``,
+        },
+      ],
+    });
+
+    const result = completion.data.choices[0].message?.content;
+    if (result) {
+      console.log(`✅ Returning JSON data`);
+      return await JSON.parse(result);
+    } else {
+      console.warn("⚠️ A problem occurred. Returning empty object.");
+      return {};
+    }
+  } catch {
+    console.warn("⚠️ Exception was thrown. Returning empty object.");
+    return {};
+  }
+};

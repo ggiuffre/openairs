@@ -2,6 +2,7 @@ import { getOpenairs } from "@/app/data/getOpenairs";
 import {
   answer,
   embeddingsFromPages,
+  jsonFromUnstructuredData,
   longestCommonPrefix,
   scrapeWebsite,
 } from "@/app/data/scraping";
@@ -24,12 +25,14 @@ export async function GET(request: Request) {
     const embeddings = await embeddingsFromPages({ baseUrl, pages });
     if (question) {
       const ans = await answer(question, baseUrl, embeddings);
+      const jsonAns = ans ? await jsonFromUnstructuredData(ans) : {};
       return NextResponse.json({
         pages,
         prefix,
         embeddings,
         question,
         ans,
+        jsonAns,
       });
     }
     return NextResponse.json({ pages, prefix, embeddings });
