@@ -1,7 +1,7 @@
 import { getOpenairs } from "@/app/data/getOpenairs";
 import {
   answer,
-  embeddingsFromText,
+  embeddingsFromPages,
   getAllPagesFromBaseUrl,
   longestCommonPrefix,
   scrapeWebsite,
@@ -19,13 +19,12 @@ export async function GET(request: Request) {
     (name ? openairs.find((o) => o.name.includes(name)) : undefined);
   if (openair) {
     console.log(`✅ Selected ${openair.name}`);
-    const pages = await getAllPagesFromBaseUrl({ baseUrl: openair.website });
+    const baseUrl = openair.website;
+    const pages = await getAllPagesFromBaseUrl({ baseUrl });
     const pagesAsText = await scrapeWebsite(pages);
     const prefix = longestCommonPrefix(pagesAsText);
     console.log("🚲 Starting to generate embeddings...");
-    const embeddings = await Promise.all(
-      pagesAsText.map((text) => embeddingsFromText(text))
-    ).then((result) => result.flat());
+    const embeddings = await embeddingsFromPages({ baseUrl, pagesAsText });
     if (question) {
       const ans = await answer(question, embeddings);
       console.log("✅ Returning response");

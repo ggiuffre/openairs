@@ -111,8 +111,8 @@ export const getAllPagesFromBaseUrl = async ({
   baseUrl: string;
   isRoot?: boolean;
 }): Promise<string[]> => {
+  console.log(`🚲 Discovering pages under ${baseUrl}`);
   if (isRoot) {
-    console.log(`🚲 Discovering pages under ${baseUrl}`);
     const cachedUrls = await getCachedUrls(baseUrl);
     if (cachedUrls) {
       return cachedUrls;
@@ -230,26 +230,51 @@ export const getTokenChunks = (
 };
 
 /**
+ * Get an array of embeddings of a certain maximum size from an array of
+ * strings. Each string gives one or more embeddings, and all embeddings get
+ * flattened onto a single array of embeddings. Each resulting embedding is an
+ * array of numbers.
+ * @param pagesAsText an array of strings
+ * @param maxSize the max amount of tokens that will be transformed into an embedding
+ */
+export const embeddingsFromPages = async ({
+  baseUrl,
+  pagesAsText,
+  maxSize = 500,
+}: {
+  baseUrl: string;
+  pagesAsText: string[];
+  maxSize?: number;
+}) => {
+  console.log(`🚲 Starting to generate embeddings for ${baseUrl}`);
+
+  // return cached embeddings if present, otherwise create them manually:
+  const cachedEmbeddings = await getCachedEmbeddings(baseUrl);
+  if (cachedEmbeddings) {
+    console.log("✅ Found cached embeddings.");
+    return cachedEmbeddings;
+  }
+
+  const embeddings = await Promise.all(
+    pagesAsText.map((text) => embeddingsFromText(text, { maxSize }))
+  ).then((result) => result.flat());
+
+  // cache and return newly created embeddings:
+  await storeCachedEmbeddings(baseUrl, embeddings);
+  return embeddings;
+};
+
+/**
  * Get an array of embeddings of a certain maximum size from some arbitrarily
  * long text. Each resulting embedding is an array of numbers.
  * @param text an arbitrarily long string of text
  * @param maxSize the max amount of tokens that will be transformed into an embedding
  */
-export const embeddingsFromText = async (
+const embeddingsFromText = async (
   text: string,
   { maxSize = 500 }: { maxSize?: number } = {}
 ): Promise<WordEmbedding[]> => {
   console.log(`🚲 Start create embeddings from "${text.substring(0, 10)}..."`);
-
-  const seed = 0xabcd;
-  const hash = XXH.h32(text, seed).toString(16);
-
-  // return cached embeddings if present, otherwise create them manually:
-  const cachedEmbeddings = await getCachedEmbeddings(hash);
-  if (cachedEmbeddings) {
-    console.log("✅ Found cached embeddings.");
-    return cachedEmbeddings;
-  }
 
   const api = new OpenAIApi(
     new Configuration({
@@ -270,8 +295,6 @@ export const embeddingsFromText = async (
     i++;
   }
 
-  // cache and return newly created embeddings:
-  await storeCachedEmbeddings(hash, embeddings);
   console.log(`✅ Returning ${i} embeddings.`);
   return embeddings;
 };
