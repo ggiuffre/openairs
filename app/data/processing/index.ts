@@ -106,3 +106,24 @@ export const today = ({ nightOwl = true } = {}) => {
   now.setHours(0, 0, 0, 0);
   return now;
 };
+
+/**
+ * Get a slug from an openair's title
+ * @param title the title of an openair
+ */
+export const getSlug = (title: string): string => {
+  const slug = title
+    .toLowerCase()
+    .replaceAll("ä", "ae")
+    .replaceAll("ö", "oe")
+    .replaceAll("ü", "ue")
+    .replaceAll(/á|à/g, "a")
+    .replaceAll(/é|è/g, "e")
+    .replaceAll(/í|ì/g, "i")
+    .replaceAll(/ó|ò/g, "o")
+    .replaceAll(/ú|ù/g, "u")
+    .split(/[^a-z]+/)
+    .join("-");
+
+  return slug.length > 8 ? slug : slug.replaceAll(/[^a-z]+/g, "");
+};
