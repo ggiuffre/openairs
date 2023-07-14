@@ -1,4 +1,5 @@
 import { getOpenairs } from "@/app/data/getOpenairs";
+import { getSlug } from "@/app/data/processing";
 import {
   answer,
   embeddingsFromPages,
@@ -6,6 +7,7 @@ import {
   longestCommonPrefix,
   scrapeWebsite,
 } from "@/app/data/scraping";
+import { updateOpenairInfo } from "@/app/data/scraping/database";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -26,6 +28,21 @@ export async function GET(request: Request) {
     if (question) {
       const ans = await answer(question, baseUrl, embeddings);
       const jsonAns = ans ? await jsonFromUnstructuredData(ans) : {};
+      if ("artists" in jsonAns && Array.isArray(jsonAns["artists"])) {
+        console.log(`✅ Answer converted to JSON`);
+        const slug = getSlug(openair.name);
+        const lineup: string[] = jsonAns["artists"];
+        await updateOpenairInfo({ identifier: slug, data: { lineup } });
+        console.log(`✅ JSON answer stored`);
+      } else if (Array.isArray(jsonAns)) {
+        console.log(`✅ Answer converted to JSON`);
+        const slug = getSlug(openair.name);
+        const lineup: string[] = jsonAns;
+        await updateOpenairInfo({ identifier: slug, data: { lineup } });
+        console.log(`✅ JSON answer stored`);
+      } else {
+        console.warn("⚠️ Answer could not be converted to JSON");
+      }
       return NextResponse.json({
         pages,
         prefix,
