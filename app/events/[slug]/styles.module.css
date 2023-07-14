@@ -1,0 +1,23 @@
+.main {
+  padding: 1rem;
+  max-width: var(--max-width);
+  margin: auto;
+}
+
+.header {
+  max-width: var(--max-width);
+  margin: auto;
+}
+
+.info {
+  margin-top: 4rem;
+}
+
+.info dt {
+  margin-top: 1.5rem;
+  font-weight: 600;
+}
+
+.info dd {
+  margin: 0.5rem 0;
+}

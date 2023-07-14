@@ -127,3 +127,10 @@ export const getSlug = (title: string): string => {
 
   return slug.length > 8 ? slug : slug.replaceAll(/[^a-z]+/g, "");
 };
+
+export const dateStringFromRange = (dateRange: DateRange): string =>
+  dateRange.start?.getDate() === dateRange.end?.getDate()
+    ? dateRange.start?.toLocaleDateString(["de-ch"])
+    : `${dateRange.start?.toLocaleDateString([
+        "de-ch",
+      ])} - ${dateRange.end?.toLocaleDateString(["de-ch"])}`;

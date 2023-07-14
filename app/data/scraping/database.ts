@@ -131,3 +131,9 @@ export const updateOpenairInfo = async <T>({
     await client.close();
   }
 };
+
+export const getOpenairInfo = async (slug: string) =>
+  getCached<{ lineup: string[] }>({
+    collection: "openairs_info",
+    identifier: slug,
+  });
