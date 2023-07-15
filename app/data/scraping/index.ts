@@ -114,7 +114,7 @@ const getAllPagesFromBaseUrl = async ({
   level?: number;
 }): Promise<string[]> => {
   // Don't scrape beyond a certain depth:
-  const maxScrapingDepth = 7;
+  const maxScrapingDepth = 5;
   if (level < maxScrapingDepth) {
     console.log(`🚲 Discovering pages under ${baseUrl}`);
   } else {
