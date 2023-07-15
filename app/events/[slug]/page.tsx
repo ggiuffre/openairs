@@ -10,6 +10,7 @@ const EventPage = async ({ params }: { params: { slug: string } }) => {
   const openair = openairs.find((o) => getSlug(o.name) === slug);
   const artists = await getOpenairInfo(slug)
     .then((info) => [...new Set(info?.lineup)])
+    .then((artists) => artists.filter((artist) => typeof artist === "string"))
     .catch(() => undefined);
   return (
     <>
@@ -28,7 +29,7 @@ const EventPage = async ({ params }: { params: { slug: string } }) => {
             <dd>{openair.dates.map(dateStringFromRange).join(", ")}</dd>
             <dt>main music styles</dt>
             <dd>{openair.musicTypes}</dd>
-            {artists && (
+            {artists && artists.length > 0 && (
               <>
                 <dt>featured artists (AI-generated, may be inaccurate)</dt>
                 <dd>
