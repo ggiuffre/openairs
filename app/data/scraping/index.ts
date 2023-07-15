@@ -108,22 +108,27 @@ const getText = (node: ChildNode): string => {
  */
 const getAllPagesFromBaseUrl = async ({
   baseUrl,
-  isRoot = true,
+  level = 0,
 }: {
   baseUrl: string;
-  isRoot?: boolean;
+  level?: number;
 }): Promise<string[]> => {
-  console.log(`🚲 Discovering pages under ${baseUrl}`);
+  // Don't scrape beyond a certain depth:
+  const maxScrapingDepth = 7;
+  if (level < maxScrapingDepth) {
+    console.log(`🚲 Discovering pages under ${baseUrl}`);
+  } else {
+    console.log(`🚲 Reached maximum scraping depth`);
+    return [];
+  }
 
-  if (isRoot) {
+  // if a cached list of URLs is available, return it:
+  if (level === 0) {
     const cachedUrls = await getCachedUrls(baseUrl);
     if (cachedUrls) {
       return cachedUrls;
     }
   }
-
-  const withTrailingSlash = (address: string) =>
-    address[-1] === "/" ? address : address + "/";
 
   try {
     // parse the page:
@@ -131,6 +136,10 @@ const getAllPagesFromBaseUrl = async ({
     if (dom === undefined) {
       return [];
     }
+
+    // declare function to normalize ending of URLs:
+    const withTrailingSlash = (address: string) =>
+      address[-1] === "/" ? address : address + "/";
 
     // get URLs of pages down the tree:
     const hrefs = Array.from(dom.window.document.querySelectorAll("a"))
@@ -148,13 +157,13 @@ const getAllPagesFromBaseUrl = async ({
     const directChildren = [...new Set(hrefs)];
     const descendants = await Promise.all(
       directChildren.map((child) =>
-        getAllPagesFromBaseUrl({ baseUrl: child, isRoot: false })
+        getAllPagesFromBaseUrl({ baseUrl: child, level: level + 1 })
       )
     ).then((pages) => pages.flat());
 
     // cache and return unique URLs that are sub-pages of the base URL:
     const urls = [baseUrl, ...new Set(descendants)];
-    if (isRoot) {
+    if (level === 0) {
       await storeCachedUrls(baseUrl, urls);
     }
     return urls;
