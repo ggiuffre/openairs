@@ -265,11 +265,18 @@ export const embeddingsFromPages = async ({
     return cachedEmbeddings;
   }
 
-  const embeddings = await Promise.all(
-    pages.map((text) => embeddingsFromText(text, { maxSize }))
-  ).then((result) => result.flat());
+  let results: WordEmbedding[][] = [];
+  let i = 1;
+  for (const text of pages) {
+    console.log(`🚲 Gathering embeddings for page ${i}/${pages.length}`);
+    const result = await embeddingsFromText(text, { maxSize });
+    results.push(result);
+    i++;
+  }
+  const embeddings = results.flat();
 
   // cache and return newly created embeddings:
+  console.log(`🚲 Caching ${embeddings.length} embeddings`);
   await storeCachedEmbeddings(baseUrl, embeddings);
   return embeddings;
 };
