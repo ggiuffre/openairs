@@ -80,12 +80,12 @@ export const isPastDateRange = ({ start, end }: DateRange): boolean =>
   isValidDateRange({ start, end }) && end < today();
 
 /**
- * Get whether a date range is recent (did not happen more than a week ago) or
+ * Get whether a date range is recent (did not happen more than 2 days ago) or
  * upcoming (in the present or future).
  * @param dateRange a date range
  */
 export const isRecentOrUpcomingDateRange = (dateRange: DateRange): boolean => {
-  const includePastDays = 7; // n
+  const includePastDays = 2; // n
   const reference = new Date(); // today
   reference.setDate(reference.getDate() - includePastDays); // n days ago
   return dateRange.end >= reference;
