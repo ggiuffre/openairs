@@ -11,6 +11,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const name = searchParams.get("name"); // name of the festival
   const question = searchParams.get("q"); // question to be asked to the model
+  const cache = isTruthy(searchParams.get("cache") ?? true); // whether to use cached answer or not
 
   const openairs = await getOpenairs();
   const openair =
@@ -19,9 +20,9 @@ export async function GET(request: Request) {
   if (openair && question) {
     console.log(`🚲 Selected ${openair.name}`);
     const baseUrl = openair.website;
-    const ans = await answer(question, baseUrl);
     const slug = getSlug(openair.name);
-    let jsonAnswer = await getOpenairInfo(slug);
+    const ans = await answer({ question, baseUrl, cache });
+    let jsonAnswer = cache ? await getOpenairInfo(slug) : undefined;
     if (jsonAnswer !== undefined) {
       console.log(`✅ Found cached JSON answer`);
     } else {
@@ -48,5 +49,5 @@ export async function GET(request: Request) {
   return NextResponse.json({ error: "Not found" }, { status: 404 });
 }
 
-const isTruthy = (param: string): boolean =>
-  ["true", "1", "on", "yes"].includes(param.toLowerCase());
+const isTruthy = (param: string | boolean): boolean =>
+  ["true", "1", "on", "yes"].includes(param.toString().toLowerCase());

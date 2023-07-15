@@ -358,12 +358,23 @@ export const getContext = ({
  * and their corresponding embedding representation.
  * @param question the question to ask
  * @param baseUrl a website that provides context to the question
+ * @param cache whether to use cached answer or not
  */
-export const answer = async (question: string, baseUrl: string) => {
-  console.log(`🚲 Asking question "${question}"`);
+export const answer = async ({
+  question,
+  baseUrl,
+  cache = true,
+}: {
+  question: string;
+  baseUrl: string;
+  cache?: boolean;
+}) => {
+  console.log(`🚲 Asking question with cache=${cache}: "${question}"`);
 
-  // return cached answer if present, otherwise query OpenAI API:
-  const cachedAnswer = await getCachedAnswer(baseUrl, question);
+  // return cached answer if present and if 'cache' argument is not false:
+  const cachedAnswer = cache
+    ? await getCachedAnswer(baseUrl, question)
+    : undefined;
   if (cachedAnswer) {
     console.log("✅ Found cached answer.");
     return cachedAnswer;
