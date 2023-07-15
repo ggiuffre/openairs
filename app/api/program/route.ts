@@ -27,7 +27,12 @@ export async function GET(request: Request) {
       console.log(`✅ Found cached JSON answer`);
     } else {
       console.warn("🚲 Converting answer to JSON");
-      const unsafeJson = ans ? await jsonFromUnstructuredData(ans) : {};
+      const unsafeJson = ans
+        ? await jsonFromUnstructuredData({
+            data: ans,
+            content: question.includes("artists") ? "artists" : undefined,
+          })
+        : {};
       if ("artists" in unsafeJson && Array.isArray(unsafeJson["artists"])) {
         console.log(`✅ Answer converted to JSON`);
         const lineup: string[] = unsafeJson["artists"];

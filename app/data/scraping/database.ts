@@ -124,7 +124,9 @@ export const updateOpenairInfo = async <T>({
     const options = { upsert: true };
     const result = await collectionRef.updateOne(filter, update, options);
     console.log(
-      `⚙️ Updated document ${result.upsertedId} of collection ${collection}`
+      result.upsertedId
+        ? `⚙️ Inserted document ${result.upsertedId} into collection ${collection}`
+        : `⚙️ Updated existing document of collection ${collection}`
     );
   } finally {
     // ensure that the client closes when the "try" block finishes/errors:

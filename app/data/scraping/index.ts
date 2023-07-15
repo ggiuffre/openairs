@@ -449,9 +449,13 @@ export const cosineDistance = (a: number[], b: number[]) => {
  * represented as JSON. This function calls the OpenAI API.
  * @param data a string containing the unstructured data
  */
-export const jsonFromUnstructuredData = async (
-  data: string
-): Promise<object> => {
+export const jsonFromUnstructuredData = async ({
+  data,
+  content,
+}: {
+  data: string;
+  content?: "artists" | "isCampingPossible" | "isFree";
+}): Promise<object> => {
   console.log("🚲 Asking OpenAI to convert unstructured data to JSON...");
 
   const api = new OpenAIApi(
@@ -461,15 +465,15 @@ export const jsonFromUnstructuredData = async (
     })
   );
 
+  const desiredFormat = content
+    ? `RFC8259-compliant JSON format containing a field named ${content}`
+    : "RFC8259-compliant JSON format";
+  const question = `Please convert the following unstructured data into ${desiredFormat}:\n\n\`\`\`\n${data}\n\`\`\``;
+
   try {
     const completion = await api.createChatCompletion({
       model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "user",
-          content: `Please convert the following unstructured data into RFC8259-compliant JSON format:\n\n\`\`\`\n${data}\n\`\`\``,
-        },
-      ],
+      messages: [{ role: "user", content: question }],
     });
 
     const result = completion.data.choices[0].message?.content;
