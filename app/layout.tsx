@@ -34,14 +34,30 @@ const RootLayout: React.FC<Props> = ({ children }) => (
             margin: "auto",
           }}
         >
-          created by{" "}
+          Created by{" "}
           <a
             href="https://ggiuffre.github.io/"
             style={{ textDecoration: "underline" }}
           >
             Giorgio Giuffrè
           </a>{" "}
-          as a personal project
+          as a personal project.
+        </p>
+        <p
+          style={{
+            maxWidth: "var(--max-width)",
+            margin: "0.8rem auto",
+          }}
+        >
+          Source code available on{" "}
+          <a
+            href="https://github.com/ggiuffre/openairs"
+            target="_blank"
+            style={{ textDecoration: "underline" }}
+            title="source code repository"
+          >
+            GitHub
+          </a>
         </p>
       </footer>
     </body>
