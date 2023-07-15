@@ -1,13 +1,10 @@
 import { getOpenairs } from "@/app/data/getOpenairs";
 import { getSlug } from "@/app/data/processing";
+import { answer, jsonFromUnstructuredData } from "@/app/data/scraping";
 import {
-  answer,
-  embeddingsFromPages,
-  jsonFromUnstructuredData,
-  longestCommonPrefix,
-  scrapeWebsite,
-} from "@/app/data/scraping";
-import { updateOpenairInfo } from "@/app/data/scraping/database";
+  getOpenairInfo,
+  updateOpenairInfo,
+} from "@/app/data/scraping/database";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -19,40 +16,34 @@ export async function GET(request: Request) {
   const openair =
     openairs.find((o) => o.name === name) ??
     (name ? openairs.find((o) => o.name.includes(name)) : undefined);
-  if (openair) {
-    console.log(`✅ Selected ${openair.name}`);
+  if (openair && question) {
+    console.log(`🚲 Selected ${openair.name}`);
     const baseUrl = openair.website;
-    const pages = await scrapeWebsite(baseUrl);
-    const prefix = longestCommonPrefix(pages);
-    const embeddings = await embeddingsFromPages({ baseUrl, pages });
-    if (question) {
-      const ans = await answer(question, baseUrl, embeddings);
-      const jsonAns = ans ? await jsonFromUnstructuredData(ans) : {};
-      if ("artists" in jsonAns && Array.isArray(jsonAns["artists"])) {
+    const ans = await answer(question, baseUrl);
+    const slug = getSlug(openair.name);
+    let jsonAnswer = await getOpenairInfo(slug);
+    if (jsonAnswer !== undefined) {
+      console.log(`✅ Found cached JSON answer`);
+    } else {
+      console.warn("🚲 Converting answer to JSON");
+      const unsafeJson = ans ? await jsonFromUnstructuredData(ans) : {};
+      if ("artists" in unsafeJson && Array.isArray(unsafeJson["artists"])) {
         console.log(`✅ Answer converted to JSON`);
-        const slug = getSlug(openair.name);
-        const lineup: string[] = jsonAns["artists"];
+        const lineup: string[] = unsafeJson["artists"];
         await updateOpenairInfo({ identifier: slug, data: { lineup } });
+        jsonAnswer = { lineup };
         console.log(`✅ JSON answer stored`);
-      } else if (Array.isArray(jsonAns)) {
+      } else if (Array.isArray(unsafeJson)) {
         console.log(`✅ Answer converted to JSON`);
-        const slug = getSlug(openair.name);
-        const lineup: string[] = jsonAns;
+        const lineup: string[] = unsafeJson;
         await updateOpenairInfo({ identifier: slug, data: { lineup } });
+        jsonAnswer = { lineup };
         console.log(`✅ JSON answer stored`);
       } else {
         console.warn("⚠️ Answer could not be converted to JSON");
       }
-      return NextResponse.json({
-        pages,
-        prefix,
-        embeddings,
-        question,
-        ans,
-        jsonAns,
-      });
     }
-    return NextResponse.json({ pages, prefix, embeddings });
+    return NextResponse.json({ question, ans, jsonAnswer });
   }
   return NextResponse.json({ error: "Not found" }, { status: 404 });
 }

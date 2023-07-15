@@ -357,23 +357,23 @@ export const getContext = ({
  * Get the answer to a question, given some context in the form of text chunks
  * and their corresponding embedding representation.
  * @param question the question to ask
- * @param website a website that provides context to the question
- * @param embeddings the exmbeddings to use as a context
+ * @param baseUrl a website that provides context to the question
  */
-export const answer = async (
-  question: string,
-  website: string,
-  embeddings: WordEmbedding[]
-) => {
+export const answer = async (question: string, baseUrl: string) => {
   console.log(`🚲 Asking question "${question}"`);
 
   // return cached answer if present, otherwise query OpenAI API:
-  const cachedAnswer = await getCachedAnswer(website, question);
+  const cachedAnswer = await getCachedAnswer(baseUrl, question);
   if (cachedAnswer) {
     console.log("✅ Found cached answer.");
     return cachedAnswer;
   }
 
+  // scrape information from website and create embeddings out of it:
+  const pages = await scrapeWebsite(baseUrl);
+  const embeddings = await embeddingsFromPages({ baseUrl, pages });
+
+  // query OpenAI API:
   const api = new OpenAIApi(
     new Configuration({
       organization: process.env.OPENAI_ORG_ID,
@@ -406,7 +406,7 @@ export const answer = async (
 
     const result = completion.data.choices[0].message?.content;
     if (result) {
-      await storeCachedAnswer(website, question, result);
+      await storeCachedAnswer(baseUrl, question, result);
       console.log(`✅ Returning answer "${result?.substring(0, 14)}..."`);
       return result;
     } else {
