@@ -16,16 +16,18 @@ export const ListView: React.FC<Props> = ({ openairs, sortMethod }) => {
   );
 
   return binnedOpenairs.length > 0 ? (
-    <>
+    <ul className={styles.list}>
       {binnedOpenairs.flatMap((bin) => [
-        <p key={getBin(bin[0])} className={styles.sectionTitle}>
+        <li key={getBin(bin[0])} className={styles.sectionTitle}>
           {getBin(bin[0])}
-        </p>,
+        </li>,
         ...bin.map((openair) => (
-          <ItemCard key={openair.name + openair.website} openair={openair} />
+          <li key={openair.name + openair.website}>
+            <ItemCard openair={openair} />
+          </li>
         )),
       ])}
-    </>
+    </ul>
   ) : (
     <NoResults />
   );

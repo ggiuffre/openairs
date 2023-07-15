@@ -3,6 +3,7 @@ import { MenuTopBar } from "@/app/components/MenuTopBar";
 import { getOpenairs } from "@/app/data/getOpenairs";
 import { dateStringFromRange, getSlug } from "@/app/data/processing";
 import { getOpenairInfo } from "@/app/data/scraping/database";
+import { ExternalLink } from "react-feather";
 
 const EventPage = async ({ params }: { params: { slug: string } }) => {
   const openairs = await getOpenairs();
@@ -27,6 +28,23 @@ const EventPage = async ({ params }: { params: { slug: string } }) => {
             </dd>
             <dt>when</dt>
             <dd>{openair.dates.map(dateStringFromRange).join(", ")}</dd>
+            <dt>event website</dt>
+            <dd>
+              <a
+                className={styles.website + " tag clickable"}
+                href={openair.website}
+                target="_blank"
+                title="event website"
+              >
+                <span style={{ marginInlineEnd: "0.8rem" }}>
+                  {openair.website}
+                </span>
+                <ExternalLink
+                  size="1.4em"
+                  style={{ verticalAlign: "text-bottom" }}
+                />
+              </a>
+            </dd>
             <dt>main music styles</dt>
             <dd>{openair.musicTypes}</dd>
             {artists && artists.length > 0 && (

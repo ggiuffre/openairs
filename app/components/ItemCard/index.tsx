@@ -1,54 +1,40 @@
-"use client";
-
 import React from "react";
 import styles from "./styles.module.css";
 import type { DateRange, Openair } from "@/app/data/types";
-import { ExternalLink } from "react-feather";
 import {
   dateStringFromRange,
   getSlug,
   isPastDateRange,
 } from "@/app/data/processing";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface Props {
   openair: Openair;
   expanded?: boolean;
 }
 
-export const ItemCard: React.FC<Props> = ({ openair, expanded = false }) => {
-  const { push } = useRouter();
-  return (
-    <article
-      className={styles.itemCard}
-      style={{ background: openair.gradient, cursor: "pointer" }}
-      onClick={() => push(`/events/${getSlug(openair.name)}`)}
-    >
-      <h2>{openair.name}</h2>
-      <a
-        className={styles.website + " tag clickable"}
-        href={openair.website}
-        target="_blank"
-        title="event website"
-      >
-        <ExternalLink />
-      </a>
+export const ItemCard: React.FC<Props> = ({ openair, expanded = false }) => (
+  <Link
+    className={styles.itemCard}
+    style={{ background: openair.gradient, cursor: "pointer" }}
+    href={`/events/${getSlug(openair.name)}`}
+  >
+    <h2>{openair.name}</h2>
+    <p>
+      {openair.place}, {openair.canton}
+    </p>
+    {openair.dates.map(dateNodeFromRange)}
+    {expanded && (
       <p>
-        {openair.place}, {openair.canton}
+        {openair.musicTypes.map((tag) => (
+          <span className="tag" key={tag}>
+            {tag}
+          </span>
+        ))}
       </p>
-      {openair.dates.map(dateNodeFromRange)}
-      {expanded && (
-        <p>
-          {openair.musicTypes.map((tag) => (
-            <span className="tag" key={tag}>
-              {tag}
-            </span>
-          ))}
-        </p>
-      )}
-    </article>
-  );
-};
+    )}
+  </Link>
+);
 
 const dateNodeFromRange = (dateRange: DateRange): React.ReactNode => (
   <p
