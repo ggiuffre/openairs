@@ -51,7 +51,7 @@ export const Filter: React.FC<Props> = ({
       </p>
       <button
         className={styles.moreFilters + " tag clickable"}
-        title="show more filters"
+        title={isExpanded ? "show less filters" : "show more filters"}
         onClick={() => setIsExpanded((value) => !value)}
       >
         {isExpanded ? <ChevronUp /> : <ChevronDown />}
