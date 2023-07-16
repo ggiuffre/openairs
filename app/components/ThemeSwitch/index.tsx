@@ -5,10 +5,10 @@ import styles from "./styles.module.css";
 import { Moon, Sun } from "react-feather";
 
 export const ThemeSwitch: React.FC = () => {
-  const osTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
-  const defaultTheme = localStorage.getItem("theme") ?? osTheme;
+  // const osTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+  //   ? "dark"
+  //   : "light";
+  const defaultTheme = localStorage.getItem("theme") ?? "light"; // until we fix SSR flash
   const [currentTheme, setCurrentTheme] = useState(defaultTheme);
 
   useEffect(() => {
