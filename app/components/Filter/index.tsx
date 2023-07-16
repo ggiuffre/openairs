@@ -28,7 +28,7 @@ export const Filter: React.FC<Props> = ({
   selectedCantons,
   setSelectedCantons,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   return (
     <div className={styles.filter}>
       <p style={{ maxWidth: "85%" }}>
