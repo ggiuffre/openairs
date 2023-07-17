@@ -8,6 +8,12 @@ import {
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
+  // only expose this route on development:
+  const environment = process.env.NODE_ENV;
+  if (environment !== "development") {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   const { searchParams } = new URL(request.url);
   const name = searchParams.get("name"); // name of the festival
   const question = searchParams.get("q"); // question to be asked to the model
