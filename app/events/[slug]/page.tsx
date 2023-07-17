@@ -15,7 +15,7 @@ const EventPage = async ({ params }: { params: { slug: string } }) => {
     .catch(() => undefined);
   return (
     <>
-      <MenuTopBar />
+      <MenuTopBar homeButton="back" />
       {openair ? (
         <main className={styles.main}>
           <header className={styles.header}>
