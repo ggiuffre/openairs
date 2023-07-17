@@ -21,3 +21,7 @@
 .info dd {
   margin: 0.5rem 0;
 }
+
+.info dt .aigenerated {
+  font-weight: normal;
+}

@@ -9,10 +9,14 @@ const EventPage = async ({ params }: { params: { slug: string } }) => {
   const openairs = await getOpenairs();
   const { slug } = params;
   const openair = openairs.find((o) => getSlug(o.name) === slug);
-  const artists = await getOpenairInfo(slug)
-    .then((info) => [...new Set(info?.lineup)])
-    .then((artists) => artists.filter((artist) => typeof artist === "string"))
-    .catch(() => undefined);
+  const { artists, isCampingPossible } = await getOpenairInfo(slug)
+    .then((info) => ({
+      artists: [...new Set(info?.lineup)].filter(
+        (artist) => typeof artist === "string"
+      ),
+      isCampingPossible: info?.isCampingPossible,
+    }))
+    .catch(() => ({ artists: undefined, isCampingPossible: undefined }));
   return (
     <>
       <MenuTopBar homeButton="back" />
@@ -47,9 +51,37 @@ const EventPage = async ({ params }: { params: { slug: string } }) => {
             </dd>
             <dt>main music styles</dt>
             <dd>{openair.musicTypes}</dd>
+            <dt>
+              camping{" "}
+              <span className={styles.aigenerated}>
+                (AI-generated, may be inaccurate)
+              </span>
+            </dt>
+            <dd>
+              {isCampingPossible ? (
+                <span
+                  className="tag"
+                  style={{ backgroundColor: "rgba(0, 255, 0, 0.3)" }}
+                >
+                  possible
+                </span>
+              ) : (
+                <span
+                  className="tag"
+                  style={{ backgroundColor: "rgba(255, 240, 0, 0.3)" }}
+                >
+                  unknown
+                </span>
+              )}
+            </dd>
             {artists && artists.length > 0 && (
               <>
-                <dt>featured artists (AI-generated, may be inaccurate)</dt>
+                <dt>
+                  featured artists{" "}
+                  <span className={styles.aigenerated}>
+                    (AI-generated, may be inaccurate)
+                  </span>
+                </dt>
                 <dd>
                   {artists.map((artist, i) => (
                     <span
