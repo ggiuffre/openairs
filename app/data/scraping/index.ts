@@ -83,7 +83,7 @@ const ignoredTexts = [
  * @param node the HTML node
  */
 const getText = (node: ChildNode): string => {
-  if (["SCRIPT", "IFRAME"].includes(node.nodeName)) {
+  if (["SCRIPT", "IFRAME", "PAGES-CSS", "STYLE"].includes(node.nodeName)) {
     return "";
   } else if (node.nodeType === 3) {
     if (
