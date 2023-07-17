@@ -266,7 +266,10 @@ export const embeddingsFromPages = async ({
   }
 
   // scrape text from website:
-  const pages = await scrapeWebsite(baseUrl);
+  const maxPages = 100;
+  const pages = await scrapeWebsite(baseUrl).then((result) =>
+    result.length > maxPages ? result.slice(0, maxPages) : result
+  );
 
   // generate embeddings from text:
   let results: WordEmbedding[][] = [];
