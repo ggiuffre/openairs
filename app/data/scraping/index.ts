@@ -243,19 +243,17 @@ export const getTokenChunks = (
 
 /**
  * Get an array of embeddings of a certain maximum size from an array of
- * strings. Each string gives one or more embeddings, and all embeddings get
- * flattened onto a single array of embeddings. Each resulting embedding is an
- * array of numbers.
- * @param pages an array of strings (each string being the text of a web page)
+ * strings scraped from the pages of a website. Each string gives one or more
+ * embeddings, and all embeddings get flattened onto a single array of
+ * embeddings. Each resulting embedding is an array of numbers.
+ * @param baseUrl the base URL root to some web pages
  * @param maxSize the max amount of tokens that will be transformed into an embedding
  */
 export const embeddingsFromPages = async ({
   baseUrl,
-  pages,
   maxSize = 500,
 }: {
   baseUrl: string;
-  pages: string[];
   maxSize?: number;
 }) => {
   console.log(`🚲 Starting to generate embeddings for ${baseUrl}`);
@@ -267,6 +265,10 @@ export const embeddingsFromPages = async ({
     return cachedEmbeddings;
   }
 
+  // scrape text from website:
+  const pages = await scrapeWebsite(baseUrl);
+
+  // generate embeddings from text:
   let results: WordEmbedding[][] = [];
   let i = 1;
   for (const text of pages) {
@@ -399,8 +401,7 @@ export const answer = async ({
   }
 
   // scrape information from website and create embeddings out of it:
-  const pages = await scrapeWebsite(baseUrl);
-  const embeddings = await embeddingsFromPages({ baseUrl, pages });
+  const embeddings = await embeddingsFromPages({ baseUrl });
 
   // query OpenAI API:
   const api = new OpenAIApi(
