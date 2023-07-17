@@ -419,6 +419,11 @@ export const answer = async ({
 
   const context = getContext({ embeddings, distances });
 
+  if (context.length === 0) {
+    console.warn("⚠️ Got context of size 0. Returning undefined.");
+    return undefined;
+  }
+
   try {
     console.log("🚲 Submitting question to OpenAI...");
     const completion = await api.createChatCompletion({
