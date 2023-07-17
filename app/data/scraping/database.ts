@@ -135,7 +135,7 @@ export const updateOpenairInfo = async <T>({
 };
 
 export const getOpenairInfo = async (slug: string) =>
-  getCached<{ lineup: string[] }>({
+  getCached<{ lineup?: string[]; isCampingPossible?: boolean }>({
     collection: "openairs_info",
     identifier: slug,
   });
