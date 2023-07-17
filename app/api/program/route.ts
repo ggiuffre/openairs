@@ -30,11 +30,11 @@ export async function GET(request: Request) {
     const ans = await answer({ question, baseUrl, cache });
     let jsonAnswer = cache ? await getOpenairInfo(slug) : undefined;
 
-    console.warn("🚲 Converting answer to JSON");
     if (question.includes("artists")) {
       if (jsonAnswer?.artists !== undefined) {
         console.log(`✅ Found cached JSON answer`);
       } else {
+        console.warn("🚲 Converting answer to JSON");
         const unsafeJson = ans
           ? await jsonFromUnstructuredData({ data: ans, content: "artists" })
           : {};
@@ -66,6 +66,7 @@ export async function GET(request: Request) {
       if (jsonAnswer?.isCampingPossible !== undefined) {
         console.log(`✅ Found cached JSON answer`);
       } else {
+        console.warn("🚲 Converting answer to JSON");
         const unsafeJson = ans
           ? await jsonFromUnstructuredData({
               data: ans,
