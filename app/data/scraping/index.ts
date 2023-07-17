@@ -148,6 +148,8 @@ const getAllPagesFromBaseUrl = async ({
       .filter((href) => !href.endsWith("rss/"))
       .filter((href) => !href.includes("/:"))
       .filter((href) => !href.includes("/login"))
+      .filter((href) => !href.includes("/pictures/200"))
+      .filter((href) => !href.includes("/pictures/201"))
       .map((href) => href.split("#")[0])
       .filter(
         (href) =>
