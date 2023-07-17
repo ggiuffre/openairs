@@ -500,6 +500,7 @@ export const jsonFromUnstructuredData = async ({
     });
 
     const result = completion.data.choices[0].message?.content;
+    console.log(`🚲 Result of JSON transformation request was: ${result}`);
     if (result) {
       console.log(`✅ Returning JSON data`);
       return await JSON.parse(result);
