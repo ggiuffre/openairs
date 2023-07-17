@@ -273,8 +273,12 @@ export const embeddingsFromPages = async ({
   let i = 1;
   for (const text of pages) {
     console.log(`🚲 Gathering embeddings for page ${i}/${pages.length}`);
-    const result = await embeddingsFromText(text, { maxSize });
-    results.push(result);
+    try {
+      const result = await embeddingsFromText(text, { maxSize });
+      results.push(result);
+    } catch {
+      console.warn(`⚠️ An exception was thrown. Skipping embedding ${i}.`);
+    }
     i++;
   }
   const embeddings = results.flat();
