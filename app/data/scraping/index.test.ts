@@ -48,6 +48,12 @@ describe("getTokenChunks", () => {
 });
 
 describe("cosineDistance", () => {
+  test("of two all-zero vectors is zero", () => {
+    const length = Math.random() * 100;
+    const a = Array.from({ length }).map((_) => 0);
+    expect(cosineDistance(a, a)).toBe(0);
+  });
+
   test("of a vector with itself is close to zero", () => {
     const length = Math.random() * 100;
     const a = Array.from({ length }).map((_) => (Math.random() - 0.5) * 10);

@@ -459,10 +459,18 @@ export const answer = async ({
  * @param b the second array
  */
 export const cosineDistance = (a: number[], b: number[]) => {
+  // if the vectors are both null (hence identical), return a distance of zero:
+  if (a.every((val) => val === 0) && b.every((val) => val === 0)) {
+    return 0;
+  }
+
+  // otherwise calculate their similarity:
   const dotProduct = a.reduce((acc, val, index) => acc + val * b[index], 0);
   const mA = Math.sqrt(a.reduce((acc, val) => acc + val * val, 0));
   const mB = Math.sqrt(b.reduce((acc, val) => acc + val * val, 0));
   const similarity = dotProduct / (mA * mB);
+
+  // return their distance, i.e. 1 minus their similarity:
   const distance = 1 - similarity;
   return distance;
 };
