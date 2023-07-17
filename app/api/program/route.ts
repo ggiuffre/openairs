@@ -29,30 +29,43 @@ export async function GET(request: Request) {
     const slug = getSlug(openair.name);
     const ans = await answer({ question, baseUrl, cache });
     let jsonAnswer = cache ? await getOpenairInfo(slug) : undefined;
-    if (jsonAnswer !== undefined) {
-      console.log(`✅ Found cached JSON answer`);
-    } else {
-      console.warn("🚲 Converting answer to JSON");
-      if (question.includes("artists")) {
+
+    console.warn("🚲 Converting answer to JSON");
+    if (question.includes("artists")) {
+      if (jsonAnswer?.artists !== undefined) {
+        console.log(`✅ Found cached JSON answer`);
+      } else {
         const unsafeJson = ans
           ? await jsonFromUnstructuredData({ data: ans, content: "artists" })
           : {};
         if ("artists" in unsafeJson && Array.isArray(unsafeJson["artists"])) {
           console.log(`✅ Answer converted to JSON`);
-          const lineup: string[] = unsafeJson["artists"];
-          await updateOpenairInfo({ identifier: slug, data: { lineup } });
-          jsonAnswer = { lineup };
+          const artists: string[] = unsafeJson["artists"];
+          const newData = {
+            artists,
+            isCampingPossible: jsonAnswer?.isCampingPossible,
+          };
+          await updateOpenairInfo({ identifier: slug, data: newData });
+          jsonAnswer = newData;
           console.log(`✅ JSON answer stored`);
         } else if (Array.isArray(unsafeJson)) {
           console.log(`✅ Answer converted to JSON`);
-          const lineup: string[] = unsafeJson;
-          await updateOpenairInfo({ identifier: slug, data: { lineup } });
-          jsonAnswer = { lineup };
+          const artists: string[] = unsafeJson;
+          const newData = {
+            artists,
+            isCampingPossible: jsonAnswer?.isCampingPossible,
+          };
+          await updateOpenairInfo({ identifier: slug, data: newData });
+          jsonAnswer = newData;
           console.log(`✅ JSON answer stored`);
         } else {
           console.warn("⚠️ Answer could not be converted to JSON");
         }
-      } else if (question.includes("camp") || question.includes("tent")) {
+      }
+    } else if (question.includes("camp") || question.includes("tent")) {
+      if (jsonAnswer?.isCampingPossible !== undefined) {
+        console.log(`✅ Found cached JSON answer`);
+      } else {
         const unsafeJson = ans
           ? await jsonFromUnstructuredData({
               data: ans,
@@ -65,20 +78,22 @@ export async function GET(request: Request) {
         ) {
           console.log(`✅ Answer converted to JSON`);
           const isCampingPossible: boolean = unsafeJson["isCampingPossible"];
-          await updateOpenairInfo({
-            identifier: slug,
-            data: { isCampingPossible },
-          });
-          jsonAnswer = { isCampingPossible };
+          const newData = {
+            artists: jsonAnswer?.artists,
+            isCampingPossible,
+          };
+          await updateOpenairInfo({ identifier: slug, data: newData });
+          jsonAnswer = newData;
           console.log(`✅ JSON answer stored`);
         } else if (typeof unsafeJson === "boolean") {
           console.log(`✅ Answer converted to JSON`);
           const isCampingPossible: boolean = unsafeJson;
-          await updateOpenairInfo({
-            identifier: slug,
-            data: { isCampingPossible },
-          });
-          jsonAnswer = { isCampingPossible };
+          const newData = {
+            artists: jsonAnswer?.artists,
+            isCampingPossible,
+          };
+          await updateOpenairInfo({ identifier: slug, data: newData });
+          jsonAnswer = newData;
           console.log(`✅ JSON answer stored`);
         } else {
           console.warn("⚠️ Answer could not be converted to JSON");

@@ -11,7 +11,7 @@ const EventPage = async ({ params }: { params: { slug: string } }) => {
   const openair = openairs.find((o) => getSlug(o.name) === slug);
   const { artists, isCampingPossible } = await getOpenairInfo(slug)
     .then((info) => ({
-      artists: [...new Set(info?.lineup)].filter(
+      artists: [...new Set(info?.artists)].filter(
         (artist) => typeof artist === "string"
       ),
       isCampingPossible: info?.isCampingPossible,
