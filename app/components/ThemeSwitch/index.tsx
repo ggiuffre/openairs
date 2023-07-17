@@ -22,7 +22,11 @@ export const ThemeSwitch: React.FC = () => {
   };
 
   return (
-    <button className={styles.switch + " tag"} onClick={toggleTheme}>
+    <button
+      className={styles.switch + " tag"}
+      title={currentTheme === "dark" ? "use bright mode" : "use dark mode"}
+      onClick={toggleTheme}
+    >
       {currentTheme === "dark" ? <Moon /> : <Sun />}
     </button>
   );
