@@ -487,6 +487,7 @@ export const cosineDistance = (a: number[], b: number[]) => {
  * Get a JSON object from unstructured data containing information that can be
  * represented as JSON. This function calls the OpenAI API.
  * @param data a string containing the unstructured data
+ * @param content type of content that the output should be made of
  */
 export const jsonFromUnstructuredData = async ({
   data,
@@ -528,4 +529,39 @@ export const jsonFromUnstructuredData = async ({
     console.warn("⚠️ Exception was thrown. Returning empty object.");
     return {};
   }
+};
+
+/**
+ * Get a list of artists as strings from unstructured data via the OpenAI API.
+ * @param data a string containing the unstructured data
+ */
+export const getArtistsFromUnstructuredData = async (
+  data: string
+): Promise<string[] | undefined> => {
+  const unsafeJson = data
+    ? await jsonFromUnstructuredData({ data, content: "artists" })
+    : {};
+  return "artists" in unsafeJson && Array.isArray(unsafeJson["artists"])
+    ? unsafeJson["artists"]
+    : Array.isArray(unsafeJson)
+    ? unsafeJson
+    : undefined;
+};
+
+/**
+ * Get whether camping is available from unstructured data via the OpenAI API.
+ * @param data a string containing the unstructured data
+ */
+export const getCampingInfoFromUnstructuredData = async (
+  data: string
+): Promise<boolean | undefined> => {
+  const unsafeJson = data
+    ? await jsonFromUnstructuredData({ data, content: "isCampingPossible" })
+    : {};
+  return "isCampingPossible" in unsafeJson &&
+    typeof unsafeJson["isCampingPossible"] === "boolean"
+    ? unsafeJson["isCampingPossible"]
+    : typeof unsafeJson === "boolean"
+    ? unsafeJson
+    : undefined;
 };

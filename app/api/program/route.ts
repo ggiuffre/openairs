@@ -1,6 +1,10 @@
 import { getOpenairs } from "@/app/data/getOpenairs";
 import { getSlug } from "@/app/data/processing";
-import { answer, jsonFromUnstructuredData } from "@/app/data/scraping";
+import {
+  answer,
+  getArtistsFromUnstructuredData,
+  getCampingInfoFromUnstructuredData,
+} from "@/app/data/scraping";
 import {
   getOpenairInfo,
   updateOpenairInfo,
@@ -14,15 +18,19 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
+  // parse query parameters:
   const { searchParams } = new URL(request.url);
   const name = searchParams.get("name"); // name of the festival
   const question = searchParams.get("q"); // question to be asked to the model
   const cache = isTruthy(searchParams.get("cache") ?? true); // whether to use cached answer or not
 
+  // find festival providing context to question:
   const openairs = await getOpenairs();
   const openair =
     openairs.find((o) => o.name === name) ??
     (name ? openairs.find((o) => o.name.includes(name)) : undefined);
+
+  // answer question:
   if (openair && question) {
     console.log(`🚲 Selected ${openair.name}`);
     const baseUrl = openair.website;
@@ -30,27 +38,15 @@ export async function GET(request: Request) {
     const ans = await answer({ question, baseUrl, cache });
     let jsonAnswer = cache ? await getOpenairInfo(slug) : undefined;
 
-    if (question.includes("artists")) {
+    if (question.includes("artists") || question.includes("lineup")) {
       if (jsonAnswer?.artists !== undefined) {
         console.log(`✅ Found cached JSON answer`);
       } else {
         console.warn("🚲 Converting answer to JSON");
-        const unsafeJson = ans
-          ? await jsonFromUnstructuredData({ data: ans, content: "artists" })
-          : {};
-        if ("artists" in unsafeJson && Array.isArray(unsafeJson["artists"])) {
-          console.log(`✅ Answer converted to JSON`);
-          const artists: string[] = unsafeJson["artists"];
-          const newData = {
-            artists,
-            isCampingPossible: jsonAnswer?.isCampingPossible,
-          };
-          await updateOpenairInfo({ identifier: slug, data: newData });
-          jsonAnswer = newData;
-          console.log(`✅ JSON answer stored`);
-        } else if (Array.isArray(unsafeJson)) {
-          console.log(`✅ Answer converted to JSON`);
-          const artists: string[] = unsafeJson;
+        const artists = ans
+          ? await getArtistsFromUnstructuredData(ans)
+          : undefined;
+        if (artists !== undefined) {
           const newData = {
             artists,
             isCampingPossible: jsonAnswer?.isCampingPossible,
@@ -67,28 +63,10 @@ export async function GET(request: Request) {
         console.log(`✅ Found cached JSON answer`);
       } else {
         console.warn("🚲 Converting answer to JSON");
-        const unsafeJson = ans
-          ? await jsonFromUnstructuredData({
-              data: ans,
-              content: "isCampingPossible",
-            })
-          : {};
-        if (
-          "isCampingPossible" in unsafeJson &&
-          typeof unsafeJson["isCampingPossible"] === "boolean"
-        ) {
-          console.log(`✅ Answer converted to JSON`);
-          const isCampingPossible: boolean = unsafeJson["isCampingPossible"];
-          const newData = {
-            artists: jsonAnswer?.artists,
-            isCampingPossible,
-          };
-          await updateOpenairInfo({ identifier: slug, data: newData });
-          jsonAnswer = newData;
-          console.log(`✅ JSON answer stored`);
-        } else if (typeof unsafeJson === "boolean") {
-          console.log(`✅ Answer converted to JSON`);
-          const isCampingPossible: boolean = unsafeJson;
+        const isCampingPossible = ans
+          ? await getCampingInfoFromUnstructuredData(ans)
+          : undefined;
+        if (isCampingPossible !== undefined) {
           const newData = {
             artists: jsonAnswer?.artists,
             isCampingPossible,
@@ -103,6 +81,7 @@ export async function GET(request: Request) {
     }
     return NextResponse.json({ question, ans, jsonAnswer });
   }
+
   return NextResponse.json({ error: "Not found" }, { status: 404 });
 }
 
