@@ -36,10 +36,10 @@ export async function GET(request: Request) {
     const baseUrl = openair.website;
     const slug = getSlug(openair.name);
     const ans = await answer({ question, baseUrl, cache });
-    let jsonAnswer = cache ? await getOpenairInfo(slug) : undefined;
+    let jsonAnswer = await getOpenairInfo(slug);
 
     if (question.includes("artists") || question.includes("lineup")) {
-      if (jsonAnswer?.artists !== undefined) {
+      if (cache !== false && jsonAnswer?.artists !== undefined) {
         console.log(`✅ Found cached JSON answer`);
       } else {
         console.warn("🚲 Converting answer to JSON");
@@ -59,7 +59,7 @@ export async function GET(request: Request) {
         }
       }
     } else if (question.includes("camp") || question.includes("tent")) {
-      if (jsonAnswer?.isCampingPossible !== undefined) {
+      if (cache !== false && jsonAnswer?.isCampingPossible !== undefined) {
         console.log(`✅ Found cached JSON answer`);
       } else {
         console.warn("🚲 Converting answer to JSON");
