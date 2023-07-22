@@ -72,6 +72,7 @@ const scrape = async (page: string): Promise<string> => {
 const ignoredTexts = [
   "back to top",
   "back to the top",
+  "go to the top",
   "go to main content",
   "skip to main content",
   "skip to content",
