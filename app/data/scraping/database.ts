@@ -1,5 +1,5 @@
 import { MongoClient } from "mongodb";
-import type { WordEmbedding } from "../types";
+import type { ScrapedOpenairInfo, WordEmbedding } from "../types";
 
 const getClient = () => {
   const username = process.env.MONGODB_USERNAME;
@@ -135,7 +135,7 @@ export const updateOpenairInfo = async <T>({
 };
 
 export const getOpenairInfo = async (slug: string) =>
-  getCached<{ artists?: string[]; isCampingPossible?: boolean }>({
+  getCached<ScrapedOpenairInfo>({
     collection: "openairs_info",
     identifier: slug,
   });

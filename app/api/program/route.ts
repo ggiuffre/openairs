@@ -4,11 +4,13 @@ import {
   answer,
   getArtistsFromUnstructuredData,
   getCampingInfoFromUnstructuredData,
+  getPriceInfoFromUnstructuredData,
 } from "@/app/data/scraping";
 import {
   getOpenairInfo,
   updateOpenairInfo,
 } from "@/app/data/scraping/database";
+import type { ScrapedOpenairInfo } from "@/app/data/types";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -47,9 +49,10 @@ export async function GET(request: Request) {
           ? await getArtistsFromUnstructuredData(ans)
           : undefined;
         if (artists !== undefined) {
-          const newData = {
+          const newData: ScrapedOpenairInfo = {
             artists,
             isCampingPossible: jsonAnswer?.isCampingPossible,
+            isFree: jsonAnswer?.isFree,
           };
           await updateOpenairInfo({ identifier: slug, data: newData });
           jsonAnswer = newData;
@@ -67,9 +70,31 @@ export async function GET(request: Request) {
           ? await getCampingInfoFromUnstructuredData(ans)
           : undefined;
         if (isCampingPossible !== undefined) {
-          const newData = {
+          const newData: ScrapedOpenairInfo = {
             artists: jsonAnswer?.artists,
             isCampingPossible,
+            isFree: jsonAnswer?.isFree,
+          };
+          await updateOpenairInfo({ identifier: slug, data: newData });
+          jsonAnswer = newData;
+          console.log(`✅ JSON answer stored`);
+        } else {
+          console.warn("⚠️ Answer could not be converted to JSON");
+        }
+      }
+    } else if (question.includes("price") || question.includes("free")) {
+      if (cache !== false && jsonAnswer?.isFree !== undefined) {
+        console.log(`✅ Found cached JSON answer`);
+      } else {
+        console.warn("🚲 Converting answer to JSON");
+        const isFree = ans
+          ? await getPriceInfoFromUnstructuredData(ans)
+          : undefined;
+        if (isFree !== undefined) {
+          const newData: ScrapedOpenairInfo = {
+            artists: jsonAnswer?.artists,
+            isCampingPossible: jsonAnswer?.isCampingPossible,
+            isFree,
           };
           await updateOpenairInfo({ identifier: slug, data: newData });
           jsonAnswer = newData;

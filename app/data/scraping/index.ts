@@ -11,7 +11,7 @@ import {
   storeCachedTexts,
   storeCachedUrls,
 } from "./database";
-import type { WordEmbedding } from "../types";
+import type { ScrapedOpenairInfo, WordEmbedding } from "../types";
 import { decode, encode } from "gpt-tokenizer";
 
 /**
@@ -494,7 +494,7 @@ export const jsonFromUnstructuredData = async ({
   content,
 }: {
   data: string;
-  content?: "artists" | "isCampingPossible" | "isFree";
+  content?: keyof ScrapedOpenairInfo;
 }): Promise<object> => {
   console.log("🚲 Asking OpenAI to convert unstructured data to JSON...");
 
@@ -561,6 +561,23 @@ export const getCampingInfoFromUnstructuredData = async (
   return "isCampingPossible" in unsafeJson &&
     typeof unsafeJson["isCampingPossible"] === "boolean"
     ? unsafeJson["isCampingPossible"]
+    : typeof unsafeJson === "boolean"
+    ? unsafeJson
+    : undefined;
+};
+
+/**
+ * Get whether a festival is free from unstructured data via the OpenAI API.
+ * @param data a string containing the unstructured data
+ */
+export const getPriceInfoFromUnstructuredData = async (
+  data: string
+): Promise<boolean | undefined> => {
+  const unsafeJson = data
+    ? await jsonFromUnstructuredData({ data, content: "isFree" })
+    : {};
+  return "isFree" in unsafeJson && typeof unsafeJson["isFree"] === "boolean"
+    ? unsafeJson["isFree"]
     : typeof unsafeJson === "boolean"
     ? unsafeJson
     : undefined;

@@ -12,6 +12,12 @@ export interface Openair {
   artists?: string[];
 }
 
+export interface ScrapedOpenairInfo {
+  artists?: string[];
+  isCampingPossible?: boolean;
+  isFree?: boolean;
+}
+
 type NonEmptyArray<T> = [T, ...T[]];
 
 /// Date range
