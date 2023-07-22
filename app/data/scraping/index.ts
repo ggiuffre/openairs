@@ -176,27 +176,6 @@ const getAllPagesFromBaseUrl = async ({
 };
 
 /**
- * Get the longest prefix common to a list of strings.
- * @param strings the strings to be compared
- */
-export const longestCommonPrefix = (strings: string[]): string => {
-  const sortedStrings = strings.sort((a, b) => (a < b ? -1 : 1));
-
-  let output = [];
-  const firstString = sortedStrings[0];
-  const lastString = sortedStrings[sortedStrings.length - 1];
-  for (let i = 0; i < firstString.length; i++) {
-    if (firstString[i] === lastString[i]) {
-      output.push(firstString[i]);
-    } else {
-      break;
-    }
-  }
-
-  return output.join("");
-};
-
-/**
  * Get an array of token arrays from an arbitrarily long string, where each
  * token array is of a specified maximum length.
  * @param text an arbitrarily long string of text
