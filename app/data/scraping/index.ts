@@ -13,27 +13,52 @@ import {
 } from "./database";
 import type { ScrapedOpenairInfo, WordEmbedding } from "../types";
 import { decode, encode } from "gpt-tokenizer";
+import { longestCommonPrefix, withoutRepeatedPrefix } from "./text";
 
 /**
  * Get the text content of the pages of a website, either from a cache or
- * directly by crawling all the web pages.
- * @param pages a list of web page URLs to scrape
+ * directly by crawling all the web pages from a base URL
+ * @param baseUrl the base URL under which some pages are found
+ * @param cache whether to return cached texts if present
+ * @param removePrefix whether to stripe the longest common prefix from page texts
  */
-export const scrapeWebsite = async (baseUrl: string): Promise<string[]> => {
+export const scrapeWebsite = async ({
+  baseUrl,
+  cache = true,
+  removePrefix = false,
+}: {
+  baseUrl: string;
+  cache?: boolean;
+  removePrefix?: boolean;
+}): Promise<string[]> => {
   console.log(`🚲 Scraping ${baseUrl}`);
 
-  const cachedTexts = await getCachedTexts(baseUrl);
+  // returned cached text is present and if 'cache' argument is not false:
+  const cachedTexts = cache ? await getCachedTexts(baseUrl) : undefined;
   if (cachedTexts) {
     console.log("✅ Found cached scraped texts.");
     return cachedTexts;
   }
 
   const pages = await getAllPagesFromBaseUrl({ baseUrl });
-
   const pagesAsText = await Promise.all(pages.map(scrape));
-  await storeCachedTexts(baseUrl, pagesAsText);
-  console.log("✅ Successfully scraped and cached website.");
-  return pagesAsText;
+
+  const prefix =
+    removePrefix && pagesAsText ? longestCommonPrefix(pagesAsText) : undefined;
+  if (prefix !== undefined && pagesAsText.length > 0) {
+    console.log(
+      `🚲 Found prefix of length ${prefix.length} common to all pages: ${prefix}`
+    );
+    console.log("🚲 Removing prefix from all pages except first");
+    const shortenedTexts = withoutRepeatedPrefix(pagesAsText);
+    await storeCachedTexts(baseUrl, shortenedTexts);
+    console.log("✅ Successfully scraped and cached website");
+    return shortenedTexts;
+  } else {
+    await storeCachedTexts(baseUrl, pagesAsText);
+    console.log("✅ Successfully scraped and cached website");
+    return pagesAsText;
+  }
 };
 
 /**
@@ -228,18 +253,23 @@ export const getTokenChunks = (
  * embeddings. Each resulting embedding is an array of numbers.
  * @param baseUrl the base URL root to some web pages
  * @param maxSize the max amount of tokens that will be transformed into an embedding
+ * @param cache whether to return cached embeddings if present
  */
 export const embeddingsFromPages = async ({
   baseUrl,
   maxSize = 500,
+  cache = true,
 }: {
   baseUrl: string;
   maxSize?: number;
+  cache?: boolean;
 }) => {
   console.log(`🚲 Starting to generate embeddings for ${baseUrl}`);
 
-  // return cached embeddings if present, otherwise create them manually:
-  const cachedEmbeddings = await getCachedEmbeddings(baseUrl);
+  // return cached embeddings if present and if 'cache' argument is not false:
+  const cachedEmbeddings = cache
+    ? await getCachedEmbeddings(baseUrl)
+    : undefined;
   if (cachedEmbeddings) {
     console.log("✅ Found cached embeddings.");
     return cachedEmbeddings;
@@ -247,7 +277,7 @@ export const embeddingsFromPages = async ({
 
   // scrape text from website:
   const maxPages = 100;
-  const pages = await scrapeWebsite(baseUrl).then((result) =>
+  const pages = await scrapeWebsite({ baseUrl, cache }).then((result) =>
     result.length > maxPages ? result.slice(0, maxPages) : result
   );
 
@@ -388,7 +418,7 @@ export const answer = async ({
   }
 
   // scrape information from website and create embeddings out of it:
-  const embeddings = await embeddingsFromPages({ baseUrl });
+  const embeddings = await embeddingsFromPages({ baseUrl, cache });
 
   // query OpenAI API:
   const api = new OpenAIApi(

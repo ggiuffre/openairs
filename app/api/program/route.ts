@@ -24,7 +24,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const name = searchParams.get("name"); // name of the festival
   const question = searchParams.get("q"); // question to be asked to the model
-  const cache = isTruthy(searchParams.get("cache") ?? true); // whether to use cached answer or not
+  const cache = isTruthy(searchParams.get("cache") ?? true); // whether to use cached info or not
 
   // find festival providing context to question:
   const openairs = await getOpenairs();
