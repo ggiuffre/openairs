@@ -9,7 +9,6 @@ export interface Openair {
   musicTypes: MusicType[];
   dates: NonEmptyArray<DateRange>;
   gradient: Gradient;
-  artists?: string[];
 }
 
 export interface ScrapedOpenairInfo {
