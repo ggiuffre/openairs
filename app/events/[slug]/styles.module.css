@@ -25,3 +25,7 @@
 .info dt .aigenerated {
   font-weight: normal;
 }
+
+.website {
+  display: inline-block;
+}
