@@ -724,6 +724,21 @@
     ]
   },
   {
+    "name": "Reeds Festival",
+    "website": "https://www.reeds-festival.ch/",
+    "place": "Pfäffikon",
+    "canton": "ZH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-21",
+        "end": "2023-07-23"
+      }
+    ]
+  },
+  {
     "name": "Rockfest",
     "website": "https://www.rockfest.ch/",
     "place": "Schmerikon",
