@@ -38,6 +38,11 @@ export const MainView: React.FC<Props> = ({ openairs }) => {
     new Set(cantons)
   );
 
+  const filteredOpenairs = openairs
+    .filter((openair) => selectedMusicTypes.has(openair.musicTypes[0]))
+    .filter((openair) => selectedCantons.has(openair.canton))
+    .sort(compareFunctions[sortMethod]);
+
   return (
     <main className={styles.main}>
       <header className={styles.header}>
@@ -51,13 +56,12 @@ export const MainView: React.FC<Props> = ({ openairs }) => {
         selectedCantons={selectedCantons}
         setSelectedCantons={setSelectedCantons}
       />
-      <ListView
-        sortMethod={sortMethod}
-        openairs={openairs
-          .filter((openair) => selectedMusicTypes.has(openair.musicTypes[0]))
-          .filter((openair) => selectedCantons.has(openair.canton))
-          .sort(compareFunctions[sortMethod])}
-      />
+      <h2 className={styles.resultSummary}>
+        {filteredOpenairs.length === 1
+          ? "Only 1 result"
+          : `${filteredOpenairs.length} results`}
+      </h2>
+      <ListView sortMethod={sortMethod} openairs={filteredOpenairs} />
     </main>
   );
 };

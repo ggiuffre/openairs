@@ -8,3 +8,7 @@
   max-width: var(--max-width);
   margin: auto;
 }
+
+.resultSummary {
+  margin: 2rem 0;
+}
