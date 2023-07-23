@@ -62,7 +62,11 @@ export async function GET(request: Request) {
         }
       }
     } else if (question.includes("camp") || question.includes("tent")) {
-      if (cache !== false && jsonAnswer?.isCampingPossible !== undefined) {
+      if (
+        cache !== false &&
+        jsonAnswer?.isCampingPossible !== undefined &&
+        jsonAnswer?.isCampingPossible !== null
+      ) {
         console.log(`✅ Found cached JSON answer`);
       } else {
         console.warn("🚲 Converting answer to JSON");
@@ -83,7 +87,11 @@ export async function GET(request: Request) {
         }
       }
     } else if (question.includes("price") || question.includes("free")) {
-      if (cache !== false && jsonAnswer?.isFree !== undefined) {
+      if (
+        cache !== false &&
+        jsonAnswer?.isFree !== undefined &&
+        jsonAnswer?.isFree !== null
+      ) {
         console.log(`✅ Found cached JSON answer`);
       } else {
         console.warn("🚲 Converting answer to JSON");
