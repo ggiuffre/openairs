@@ -1026,6 +1026,21 @@
     ]
   },
   {
+    "name": "Tension Festival",
+    "website": "https://www.tension-festival.ch/",
+    "place": "Münchenstein",
+    "canton": "BL",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-29",
+        "end": "2023-07-30"
+      }
+    ]
+  },
+  {
     "name": "Trucker & Country Festival",
     "website": "https://www.truckerfestival.ch/",
     "place": "Interlaken",
