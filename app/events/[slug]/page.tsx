@@ -1,7 +1,11 @@
 import styles from "./styles.module.css";
 import { MenuTopBar } from "@/app/components/MenuTopBar";
 import { getOpenairs } from "@/app/data/getOpenairs";
-import { dateStringFromRange, getSlug } from "@/app/data/processing";
+import {
+  dateStringFromRange,
+  getSlug,
+  withoutTrailingSlash,
+} from "@/app/data/processing";
 import { getOpenairInfo } from "@/app/data/scraping/database";
 import { ExternalLink } from "react-feather";
 
@@ -41,7 +45,9 @@ const EventPage = async ({ params }: { params: { slug: string } }) => {
                 title="event website"
               >
                 <span style={{ marginInlineEnd: "0.8rem" }}>
-                  {openair.website}
+                  {withoutTrailingSlash(
+                    openair.website.replace("https://", "")
+                  )}
                 </span>
                 <ExternalLink
                   size="1.4em"

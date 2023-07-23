@@ -14,6 +14,7 @@ import {
 import type { ScrapedOpenairInfo, WordEmbedding } from "../types";
 import { decode, encode } from "gpt-tokenizer";
 import { longestCommonPrefix, withoutRepeatedPrefix } from "./text";
+import { withTrailingSlash } from "../processing";
 
 /**
  * Get the text content of the pages of a website, either from a cache or
@@ -162,10 +163,6 @@ const getAllPagesFromBaseUrl = async ({
     if (dom === undefined) {
       return [];
     }
-
-    // declare function to normalize ending of URLs:
-    const withTrailingSlash = (address: string) =>
-      address[-1] === "/" ? address : address + "/";
 
     // get URLs of pages down the tree:
     const hrefs = Array.from(dom.window.document.querySelectorAll("a"))
