@@ -1,7 +1,7 @@
 [
   {
     "name": "Afro-Pfingsten",
-    "website": "https://www.afro-pfingsten.ch",
+    "website": "https://www.afro-pfingsten.ch/",
     "place": "Winterthur",
     "canton": "ZH",
     "musicTypes": [
@@ -46,7 +46,7 @@
   },
   {
     "name": "Argovia Fäscht",
-    "website": "https://argoviafaescht.ch",
+    "website": "https://argoviafaescht.ch/",
     "place": "Wohlen",
     "canton": "AG",
     "musicTypes": [
@@ -61,7 +61,7 @@
   },
   {
     "name": "Baloise Session",
-    "website": "https://www.baloisesession.ch",
+    "website": "https://www.baloisesession.ch/",
     "place": "Basel",
     "canton": "BS",
     "musicTypes": [
@@ -121,7 +121,7 @@
   },
   {
     "name": "Buskers Bern Strassenmusik-Festival",
-    "website": "https://buskersbern.ch",
+    "website": "https://buskersbern.ch/",
     "place": "Bern",
     "canton": "BE",
     "musicTypes": [
@@ -136,7 +136,7 @@
   },
   {
     "name": "Caliente",
-    "website": "https://caliente.ch",
+    "website": "https://caliente.ch/",
     "place": "Zürich",
     "canton": "ZH",
     "musicTypes": [
@@ -151,7 +151,7 @@
   },
   {
     "name": "Caribana",
-    "website": "https://caribana.ch",
+    "website": "https://caribana.ch/",
     "place": "Crans",
     "canton": "VD",
     "musicTypes": [
@@ -166,7 +166,7 @@
   },
   {
     "name": "Clanx Festival",
-    "website": "https://www.clanx.ch",
+    "website": "https://www.clanx.ch/",
     "place": "Appenzell",
     "canton": "AI",
     "musicTypes": [
@@ -181,7 +181,7 @@
   },
   {
     "name": "Country Night",
-    "website": "https://www.countrynight-gstaad.ch",
+    "website": "https://www.countrynight-gstaad.ch/",
     "place": "Gstaad",
     "canton": "BE",
     "musicTypes": [
@@ -196,7 +196,7 @@
   },
   {
     "name": "Em Bebbi sy Jazz",
-    "website": "https://www.embebbisyjazz.ch",
+    "website": "https://www.embebbisyjazz.ch/",
     "place": "Basel",
     "canton": "BS",
     "musicTypes": [
@@ -211,7 +211,7 @@
   },
   {
     "name": "Engadin Festival",
-    "website": "https://www.engadin.ch/en/events/engadin-festival-2023",
+    "website": "https://www.engadin.ch/en/events/engadin-festival-2023/",
     "place": "St. Moritz",
     "canton": "GR",
     "musicTypes": [
@@ -226,7 +226,7 @@
   },
   {
     "name": "Etziken",
-    "website": "https://openair-etziken.ch",
+    "website": "https://openair-etziken.ch/",
     "place": "Etziken",
     "canton": "SO",
     "musicTypes": [
@@ -256,7 +256,7 @@
   },
   {
     "name": "Festival La Folia",
-    "website": "https://www.festival-la-folia.com",
+    "website": "https://www.festival-la-folia.com/",
     "place": "Rougemont",
     "canton": "VD",
     "musicTypes": [
@@ -271,7 +271,7 @@
   },
   {
     "name": "Festi'Neuch",
-    "website": "https://festineuch.ch",
+    "website": "https://festineuch.ch/",
     "place": "Neuchâtel",
     "canton": "NE",
     "musicTypes": [
@@ -286,7 +286,7 @@
   },
   {
     "name": "Frauenfeld",
-    "website": "https://www.openair-frauenfeld.ch",
+    "website": "https://www.openair-frauenfeld.ch/",
     "place": "Frauenfeld",
     "canton": "TG",
     "musicTypes": [
@@ -301,7 +301,7 @@
   },
   {
     "name": "Open Air Gampel",
-    "website": "https://www.openairgampel.ch",
+    "website": "https://www.openairgampel.ch/",
     "place": "Gampel",
     "canton": "VS",
     "musicTypes": [
@@ -316,7 +316,7 @@
   },
   {
     "name": "Greenfield",
-    "website": "https://www.greenfieldfestival.ch",
+    "website": "https://www.greenfieldfestival.ch/",
     "place": "Interlaken",
     "canton": "BE",
     "musicTypes": [
@@ -331,7 +331,7 @@
   },
   {
     "name": "Gurtenfestival",
-    "website": "https://gurtenfestival.ch",
+    "website": "https://gurtenfestival.ch/",
     "place": "Bern",
     "canton": "BE",
     "musicTypes": [
@@ -346,7 +346,7 @@
   },
   {
     "name": "Heitere Open Air",
-    "website": "https://heitere.ch",
+    "website": "https://heitere.ch/",
     "place": "Zofingen",
     "canton": "AG",
     "musicTypes": [
@@ -376,7 +376,7 @@
   },
   {
     "name": "Horse Park Festival",
-    "website": "https://www.terrazzza.com",
+    "website": "https://www.terrazzza.com/",
     "place": "Dielsdorf",
     "canton": "ZH",
     "musicTypes": [
@@ -391,7 +391,7 @@
   },
   {
     "name": "Irish Openair",
-    "website": "https://www.irish-openair.ch",
+    "website": "https://www.irish-openair.ch/",
     "place": "Toggenburg",
     "canton": "SG",
     "musicTypes": [
@@ -406,7 +406,7 @@
   },
   {
     "name": "Jazz Night Zug",
-    "website": "https://www.jazznight.ch",
+    "website": "https://www.jazznight.ch/",
     "place": "Zug",
     "canton": "ZG",
     "musicTypes": [
@@ -421,7 +421,7 @@
   },
   {
     "name": "Jazznojazz",
-    "website": "https://jazznojazz.ch",
+    "website": "https://jazznojazz.ch/",
     "place": "Zürich",
     "canton": "ZH",
     "musicTypes": [
@@ -436,7 +436,7 @@
   },
   {
     "name": "Kleinstadt Openair",
-    "website": "https://kleinstadt-openair.ch",
+    "website": "https://kleinstadt-openair.ch/",
     "place": "Walenstadt",
     "canton": "SG",
     "musicTypes": [
@@ -466,7 +466,7 @@
   },
   {
     "name": "Lakelive",
-    "website": "https://www.lakelive.ch",
+    "website": "https://www.lakelive.ch/",
     "place": "Biel",
     "canton": "BE",
     "musicTypes": [
@@ -496,7 +496,7 @@
   },
   {
     "name": "Longlake Festival",
-    "website": "https://longlake.ch",
+    "website": "https://longlake.ch/",
     "place": "Lugano",
     "canton": "TI",
     "musicTypes": [
@@ -511,7 +511,7 @@
   },
   {
     "name": "Openair Lumnezia",
-    "website": "https://openair-lumnezia.ch",
+    "website": "https://openair-lumnezia.ch/",
     "place": "Degen",
     "canton": "GR",
     "musicTypes": [
@@ -526,7 +526,7 @@
   },
   {
     "name": "Lucerne Festival",
-    "website": "https://www.lucernefestival.ch",
+    "website": "https://www.lucernefestival.ch/",
     "place": "Luzern",
     "canton": "LU",
     "musicTypes": [
@@ -575,7 +575,7 @@
   },
   {
     "name": "Montreux Jazz Festival",
-    "website": "https://www.montreuxjazzfestival.com",
+    "website": "https://www.montreuxjazzfestival.com/",
     "place": "Montreux",
     "canton": "VD",
     "musicTypes": [
@@ -590,7 +590,7 @@
   },
   {
     "name": "Moon & Stars",
-    "website": "https://moonandstars.ch",
+    "website": "https://moonandstars.ch/",
     "place": "Locarno",
     "canton": "TI",
     "musicTypes": [
@@ -605,7 +605,7 @@
   },
   {
     "name": "Murten Classics",
-    "website": "https://murtenclassics.ch",
+    "website": "https://murtenclassics.ch/",
     "place": "Murten",
     "canton": "FR",
     "musicTypes": [
@@ -635,7 +635,7 @@
   },
   {
     "name": "Openair Cavaglia",
-    "website": "https://openaircavaglia.ch",
+    "website": "https://openaircavaglia.ch/",
     "place": "Cavaglia",
     "canton": "GR",
     "musicTypes": [
@@ -665,7 +665,7 @@
   },
   {
     "name": "Paléo Festival",
-    "website": "https://yeah.paleo.ch",
+    "website": "https://yeah.paleo.ch/",
     "place": "Nyon",
     "canton": "VD",
     "musicTypes": [
@@ -680,7 +680,7 @@
   },
   {
     "name": "Postplatzfestival",
-    "website": "https://www.postplatzfestival.ch",
+    "website": "https://www.postplatzfestival.ch/",
     "place": "Appenzell",
     "canton": "AI",
     "musicTypes": [
@@ -695,7 +695,7 @@
   },
   {
     "name": "Rampe Openair",
-    "website": "https://www.rampeopenair.ch",
+    "website": "https://www.rampeopenair.ch/",
     "place": "Hausen am Albis",
     "canton": "ZH",
     "musicTypes": [
@@ -710,7 +710,7 @@
   },
   {
     "name": "Riverside",
-    "website": "https://www.riversideaarburg.com",
+    "website": "https://www.riversideaarburg.com/",
     "place": "Aarburg",
     "canton": "AG",
     "musicTypes": [
@@ -740,7 +740,7 @@
   },
   {
     "name": "Royal Arena",
-    "website": "https://www.royalarena.ch",
+    "website": "https://www.royalarena.ch/",
     "place": "Biel",
     "canton": "BE",
     "musicTypes": [
@@ -770,7 +770,7 @@
   },
   {
     "name": "Schupfart Festival",
-    "website": "https://www.schupfartfestival.ch",
+    "website": "https://www.schupfartfestival.ch/",
     "place": "Schupfart",
     "canton": "AG",
     "musicTypes": [],
@@ -783,7 +783,7 @@
   },
   {
     "name": "Snowpenair",
-    "website": "https://www.snowpenair.ch",
+    "website": "https://www.snowpenair.ch/",
     "place": "Grindelwald",
     "canton": "BE",
     "musicTypes": [
@@ -802,7 +802,7 @@
   },
   {
     "name": "Sound of Glarus",
-    "website": "https://soundofglarus.ch",
+    "website": "https://soundofglarus.ch/",
     "place": "Glarus",
     "canton": "GL",
     "musicTypes": [
@@ -817,7 +817,7 @@
   },
   {
     "name": "Stanser Musiktage",
-    "website": "https://www.stansermusiktage.ch",
+    "website": "https://www.stansermusiktage.ch/",
     "place": "Stans",
     "canton": "NW",
     "musicTypes": [
@@ -832,7 +832,7 @@
   },
   {
     "name": "Stars in Town",
-    "website": "https://starsintown.ch",
+    "website": "https://starsintown.ch/",
     "place": "Schaffhausen",
     "canton": "SH",
     "musicTypes": [
@@ -847,7 +847,7 @@
   },
   {
     "name": "Stars of Sounds Aarberg",
-    "website": "https://starsofsounds.ch",
+    "website": "https://starsofsounds.ch/",
     "place": "Aarberg",
     "canton": "BE",
     "musicTypes": [
@@ -862,7 +862,7 @@
   },
   {
     "name": "Stars of Sounds Murten",
-    "website": "https://starsofsounds.ch",
+    "website": "https://starsofsounds.ch/",
     "place": "Murten",
     "canton": "FR",
     "musicTypes": [
@@ -907,7 +907,7 @@
   },
   {
     "name": "Street Parade",
-    "website": "https://www.streetparade.com",
+    "website": "https://www.streetparade.com/",
     "place": "Zürich",
     "canton": "ZH",
     "musicTypes": [
@@ -922,7 +922,7 @@
   },
   {
     "name": "OpenAir St. Gallen",
-    "website": "https://www.openairsg.ch",
+    "website": "https://www.openairsg.ch/",
     "place": "St. Gallen",
     "canton": "SG",
     "musicTypes": [
@@ -937,7 +937,7 @@
   },
   {
     "name": "Summerblues",
-    "website": "https://summerblues.ch",
+    "website": "https://summerblues.ch/",
     "place": "Basel",
     "canton": "BS",
     "musicTypes": [
@@ -952,7 +952,7 @@
   },
   {
     "name": "SummerDays Festival",
-    "website": "https://www.summerdays.ch",
+    "website": "https://www.summerdays.ch/",
     "place": "Arbon",
     "canton": "TG",
     "musicTypes": [
@@ -997,7 +997,7 @@
   },
   {
     "name": "Summerstage",
-    "website": "https://www.summerstage.ch",
+    "website": "https://www.summerstage.ch/",
     "place": "Basel",
     "canton": "BS",
     "musicTypes": [
@@ -1012,7 +1012,7 @@
   },
   {
     "name": "Trucker & Country Festival",
-    "website": "https://www.truckerfestival.ch",
+    "website": "https://www.truckerfestival.ch/",
     "place": "Interlaken",
     "canton": "BE",
     "musicTypes": [
@@ -1027,7 +1027,7 @@
   },
   {
     "name": "VolksSchlager Openair",
-    "website": "https://www.galfri.ch/volksschlager/volksschlager-openair",
+    "website": "https://www.galfri.ch/volksschlager/volksschlager-openair/",
     "place": "Zofingen",
     "canton": "AG",
     "musicTypes": [
@@ -1042,7 +1042,7 @@
   },
   {
     "name": "Weihern",
-    "website": "https://www.weihern.ch",
+    "website": "https://www.weihern.ch/",
     "place": "St.Gallen",
     "canton": "SG",
     "musicTypes": [
@@ -1057,7 +1057,7 @@
   },
   {
     "name": "Wildhaus Openair",
-    "website": "https://www.openairwildhaus.ch",
+    "website": "https://www.openairwildhaus.ch/",
     "place": "Toggenburg",
     "canton": "SG",
     "musicTypes": [
@@ -1072,7 +1072,7 @@
   },
   {
     "name": "Jazzfestival Willisau",
-    "website": "https://www.jazzfestivalwillisau.ch",
+    "website": "https://www.jazzfestivalwillisau.ch/",
     "place": "Willisau",
     "canton": "LU",
     "musicTypes": [
@@ -1102,7 +1102,7 @@
   },
   {
     "name": "Zermatt Unplugged",
-    "website": "https://zermatt-unplugged.ch",
+    "website": "https://zermatt-unplugged.ch/",
     "place": "Zermatt",
     "canton": "VS",
     "musicTypes": [
@@ -1117,7 +1117,7 @@
   },
   {
     "name": "Zürich Openair",
-    "website": "https://zurichopenair.ch",
+    "website": "https://zurichopenair.ch/",
     "place": "Zürich",
     "canton": "ZH",
     "musicTypes": [
