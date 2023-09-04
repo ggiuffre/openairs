@@ -1,0 +1,1163 @@
+[
+  {
+    "name": "Afro-Pfingsten",
+    "website": "https://www.afro-pfingsten.ch/",
+    "place": "Winterthur",
+    "canton": "ZH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-05-24",
+        "end": "2023-05-29"
+      }
+    ]
+  },
+  {
+    "name": "Aigl'in Music",
+    "website": "https://aiglinmusic.ch/",
+    "place": "Aigle",
+    "canton": "VD",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-09",
+        "end": "2023-06-10"
+      }
+    ]
+  },
+  {
+    "name": "Alles Post- MusikFest",
+    "website": "https://www.dynamo.ch/event/alles-post-musik-fest",
+    "place": "Zürich",
+    "canton": "ZH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-10-03",
+        "end": "2023-11-03"
+      }
+    ]
+  },
+  {
+    "name": "Argovia Fäscht",
+    "website": "https://argoviafaescht.ch/",
+    "place": "Wohlen",
+    "canton": "AG",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-10",
+        "end": "2023-06-10"
+      }
+    ]
+  },
+  {
+    "name": "Baloise Session",
+    "website": "https://www.baloisesession.ch/",
+    "place": "Basel",
+    "canton": "BS",
+    "musicTypes": [
+      "classical music"
+    ],
+    "dates": [
+      {
+        "start": "2023-10-19",
+        "end": "2023-11-09"
+      }
+    ]
+  },
+  {
+    "name": "blues'n'jazz",
+    "website": "https://www.bluesnjazz.ch/",
+    "place": "Rapperswil-Jona",
+    "canton": "SG",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-16",
+        "end": "2023-06-18"
+      }
+    ]
+  },
+  {
+    "name": "Breganzona Estate",
+    "website": "https://breganzonaestate.ch/",
+    "place": "Lugano",
+    "canton": "TI",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-09",
+        "end": "2023-06-10"
+      }
+    ]
+  },
+  {
+    "name": "B-sides Festival",
+    "website": "https://2023.b-sides.ch/",
+    "place": "Kriens",
+    "canton": "LU",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-15",
+        "end": "2023-06-17"
+      }
+    ]
+  },
+  {
+    "name": "Buskers Bern Strassenmusik-Festival",
+    "website": "https://buskersbern.ch/",
+    "place": "Bern",
+    "canton": "BE",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-10",
+        "end": "2023-08-12"
+      }
+    ]
+  },
+  {
+    "name": "Caliente",
+    "website": "https://caliente.ch/",
+    "place": "Zürich",
+    "canton": "ZH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-30",
+        "end": "2023-07-01"
+      }
+    ]
+  },
+  {
+    "name": "Caribana",
+    "website": "https://caribana.ch/",
+    "place": "Crans",
+    "canton": "VD",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-15",
+        "end": "2023-06-19"
+      }
+    ]
+  },
+  {
+    "name": "Clanx Festival",
+    "website": "https://www.clanx.ch/",
+    "place": "Appenzell",
+    "canton": "AI",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-23",
+        "end": "2023-08-27"
+      }
+    ]
+  },
+  {
+    "name": "Country Night",
+    "website": "https://www.countrynight-gstaad.ch/",
+    "place": "Gstaad",
+    "canton": "BE",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-09-08",
+        "end": "2023-09-09"
+      }
+    ]
+  },
+  {
+    "name": "Em Bebbi sy Jazz",
+    "website": "https://www.embebbisyjazz.ch/",
+    "place": "Basel",
+    "canton": "BS",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-18",
+        "end": "2023-08-18"
+      }
+    ]
+  },
+  {
+    "name": "Engadin Festival",
+    "website": "https://www.engadin.ch/en/events/engadin-festival-2023/",
+    "place": "St. Moritz",
+    "canton": "GR",
+    "musicTypes": [
+      "classical music"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-29",
+        "end": "2023-08-11"
+      }
+    ]
+  },
+  {
+    "name": "Etziken",
+    "website": "https://openair-etziken.ch/",
+    "place": "Etziken",
+    "canton": "SO",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-28",
+        "end": "2023-07-29"
+      }
+    ]
+  },
+  {
+    "name": "Festival Da Jazz",
+    "website": "https://www.festivaldajazz.ch/",
+    "place": "St. Moritz",
+    "canton": "GR",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-06",
+        "end": "2023-07-31"
+      }
+    ]
+  },
+  {
+    "name": "Festival La Folia",
+    "website": "https://www.festival-la-folia.com/",
+    "place": "Rougemont",
+    "canton": "VD",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-05-25",
+        "end": "2023-05-29"
+      }
+    ]
+  },
+  {
+    "name": "Festi'Neuch",
+    "website": "https://festineuch.ch/",
+    "place": "Neuchâtel",
+    "canton": "NE",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-15",
+        "end": "2023-06-18"
+      }
+    ]
+  },
+  {
+    "name": "Frauenfeld",
+    "website": "https://www.openair-frauenfeld.ch/",
+    "place": "Frauenfeld",
+    "canton": "TG",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-06",
+        "end": "2023-07-08"
+      }
+    ]
+  },
+  {
+    "name": "Open Air Gampel",
+    "website": "https://www.openairgampel.ch/",
+    "place": "Gampel",
+    "canton": "VS",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-17",
+        "end": "2023-08-20"
+      }
+    ]
+  },
+  {
+    "name": "Greenfield",
+    "website": "https://www.greenfieldfestival.ch/",
+    "place": "Interlaken",
+    "canton": "BE",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-08",
+        "end": "2023-06-10"
+      }
+    ]
+  },
+  {
+    "name": "Gurtenfestival",
+    "website": "https://gurtenfestival.ch/",
+    "place": "Bern",
+    "canton": "BE",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-12",
+        "end": "2023-07-16"
+      }
+    ]
+  },
+  {
+    "name": "Heitere Open Air",
+    "website": "https://heitere.ch/",
+    "place": "Zofingen",
+    "canton": "AG",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-11",
+        "end": "2023-08-13"
+      }
+    ]
+  },
+  {
+    "name": "Hive Air",
+    "website": "https://www.hiveair.ch/",
+    "place": "Wohlen",
+    "canton": "AG",
+    "musicTypes": [
+      "techno"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-03",
+        "end": "2023-06-03"
+      }
+    ]
+  },
+  {
+    "name": "Horse Park Festival",
+    "website": "https://www.terrazzza.com/",
+    "place": "Dielsdorf",
+    "canton": "ZH",
+    "musicTypes": [
+      "techno"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-30",
+        "end": "2023-07-01"
+      }
+    ]
+  },
+  {
+    "name": "Irish Openair",
+    "website": "https://www.irish-openair.ch/",
+    "place": "Toggenburg",
+    "canton": "SG",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-09-01",
+        "end": "2023-09-02"
+      }
+    ]
+  },
+  {
+    "name": "Jazz Night Zug",
+    "website": "https://www.jazznight.ch/",
+    "place": "Zug",
+    "canton": "ZG",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-24",
+        "end": "2023-08-25"
+      }
+    ]
+  },
+  {
+    "name": "Jazznojazz",
+    "website": "https://jazznojazz.ch/",
+    "place": "Zürich",
+    "canton": "ZH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-10-31",
+        "end": "2023-11-04"
+      }
+    ]
+  },
+  {
+    "name": "Kleinstadt Openair",
+    "website": "https://kleinstadt-openair.ch/",
+    "place": "Walenstadt",
+    "canton": "SG",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-07",
+        "end": "2023-07-08"
+      }
+    ]
+  },
+  {
+    "name": "Krach am Back",
+    "website": "https://www.krachambach.ch/",
+    "place": "Tägerwilen",
+    "canton": "TG",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-09",
+        "end": "2023-06-10"
+      }
+    ]
+  },
+  {
+    "name": "Lakelive",
+    "website": "https://www.lakelive.ch/",
+    "place": "Biel",
+    "canton": "BE",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-28",
+        "end": "2023-08-05"
+      }
+    ]
+  },
+  {
+    "name": "Lavaux Classic",
+    "website": "https://www.lavauxclassic.ch/",
+    "place": "Vevey",
+    "canton": "VD",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-13",
+        "end": "2023-06-25"
+      }
+    ]
+  },
+  {
+    "name": "Longlake Festival",
+    "website": "https://longlake.ch/",
+    "place": "Lugano",
+    "canton": "TI",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-07",
+        "end": "2023-07-23"
+      }
+    ]
+  },
+  {
+    "name": "Openair Lumnezia",
+    "website": "https://openair-lumnezia.ch/",
+    "place": "Degen",
+    "canton": "GR",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-20",
+        "end": "2023-07-22"
+      }
+    ]
+  },
+  {
+    "name": "Lucerne Festival",
+    "website": "https://www.lucernefestival.ch/",
+    "place": "Luzern",
+    "canton": "LU",
+    "musicTypes": [
+      "classical music"
+    ],
+    "dates": [
+      {
+        "start": "2023-03-31",
+        "end": "2023-04-02"
+      },
+      {
+        "start": "2023-08-08",
+        "end": "2023-09-10"
+      }
+    ]
+  },
+  {
+    "name": "Gstaad Menuhin Festival",
+    "website": "https://www.gstaadmenuhinfestival.ch/",
+    "place": "Gstaad",
+    "canton": "BE",
+    "musicTypes": [
+      "classical music"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-14",
+        "end": "2023-09-02"
+      }
+    ]
+  },
+  {
+    "name": "Monte Carasso Openair",
+    "website": "https://www.openairmontecarasso.ch/",
+    "place": "Monte Carasso",
+    "canton": "TI",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-15",
+        "end": "2023-06-17"
+      }
+    ]
+  },
+  {
+    "name": "Montreux Jazz Festival",
+    "website": "https://www.montreuxjazzfestival.com/",
+    "place": "Montreux",
+    "canton": "VD",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-30",
+        "end": "2023-07-15"
+      }
+    ]
+  },
+  {
+    "name": "Moon & Stars",
+    "website": "https://moonandstars.ch/",
+    "place": "Locarno",
+    "canton": "TI",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-13",
+        "end": "2023-07-23"
+      }
+    ]
+  },
+  {
+    "name": "Murten Classics",
+    "website": "https://murtenclassics.ch/",
+    "place": "Murten",
+    "canton": "FR",
+    "musicTypes": [
+      "classical music"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-13",
+        "end": "2023-09-03"
+      }
+    ]
+  },
+  {
+    "name": "Musikfestival Oerlikon",
+    "website": "https://www.musikfestival-oerlikon.ch/",
+    "place": "Zürich",
+    "canton": "ZH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-09-16",
+        "end": "2023-09-16"
+      }
+    ]
+  },
+  {
+    "name": "Openair Cavaglia",
+    "website": "https://openaircavaglia.ch/",
+    "place": "Cavaglia",
+    "canton": "GR",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-11",
+        "end": "2023-08-13"
+      }
+    ]
+  },
+  {
+    "name": "Openair Hallau",
+    "website": "https://www.openair-hallau.ch/",
+    "place": "Hallau",
+    "canton": "SH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-02",
+        "end": "2023-06-03"
+      }
+    ]
+  },
+  {
+    "name": "Paléo Festival",
+    "website": "https://yeah.paleo.ch/",
+    "place": "Nyon",
+    "canton": "VD",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-18",
+        "end": "2023-07-23"
+      }
+    ]
+  },
+  {
+    "name": "Postplatzfestival",
+    "website": "https://www.postplatzfestival.ch/",
+    "place": "Appenzell",
+    "canton": "AI",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-14",
+        "end": "2023-07-15"
+      }
+    ]
+  },
+  {
+    "name": "Rampe Openair",
+    "website": "https://www.rampeopenair.ch/",
+    "place": "Hausen am Albis",
+    "canton": "ZH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-25",
+        "end": "2023-08-26"
+      }
+    ]
+  },
+  {
+    "name": "Riverside",
+    "website": "https://www.riversideaarburg.com/",
+    "place": "Aarburg",
+    "canton": "AG",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-25",
+        "end": "2023-08-27"
+      }
+    ]
+  },
+  {
+    "name": "Reeds Festival",
+    "website": "https://www.reeds-festival.ch/",
+    "place": "Pfäffikon",
+    "canton": "ZH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-21",
+        "end": "2023-07-23"
+      }
+    ]
+  },
+  {
+    "name": "Rockfest",
+    "website": "https://www.rockfest.ch/",
+    "place": "Schmerikon",
+    "canton": "ZH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-28",
+        "end": "2023-07-30"
+      }
+    ]
+  },
+  {
+    "name": "Royal Arena",
+    "website": "https://www.royalarena.ch/",
+    "place": "Biel",
+    "canton": "BE",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-18",
+        "end": "2023-08-19"
+      }
+    ]
+  },
+  {
+    "name": "Saas Feestival",
+    "website": "https://www.saasfeestival.ch/",
+    "place": "Saas Fee",
+    "canton": "VS",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-08",
+        "end": "2023-08-11"
+      }
+    ]
+  },
+  {
+    "name": "Schupfart Festival",
+    "website": "https://www.schupfartfestival.ch/",
+    "place": "Schupfart",
+    "canton": "AG",
+    "musicTypes": [],
+    "dates": [
+      {
+        "start": "2023-09-22",
+        "end": "2023-09-24"
+      }
+    ]
+  },
+  {
+    "name": "Snowpenair",
+    "website": "https://www.snowpenair.ch/",
+    "place": "Grindelwald",
+    "canton": "BE",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-03-25",
+        "end": "2023-03-26"
+      },
+      {
+        "start": "23.03.2024",
+        "end": "24.03.2024"
+      }
+    ]
+  },
+  {
+    "name": "Sound of Glarus",
+    "website": "https://soundofglarus.ch/",
+    "place": "Glarus",
+    "canton": "GL",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-24",
+        "end": "2023-08-26"
+      }
+    ]
+  },
+  {
+    "name": "Stanser Musiktage",
+    "website": "https://www.stansermusiktage.ch/",
+    "place": "Stans",
+    "canton": "NW",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-04-19",
+        "end": "2023-04-23"
+      }
+    ]
+  },
+  {
+    "name": "Stars in Town",
+    "website": "https://starsintown.ch/",
+    "place": "Schaffhausen",
+    "canton": "SH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-02",
+        "end": "2023-08-12"
+      }
+    ]
+  },
+  {
+    "name": "Stars of Sounds Aarberg",
+    "website": "https://starsofsounds.ch/",
+    "place": "Aarberg",
+    "canton": "BE",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-09",
+        "end": "2023-06-10"
+      }
+    ]
+  },
+  {
+    "name": "Stars of Sounds Murten",
+    "website": "https://starsofsounds.ch/",
+    "place": "Murten",
+    "canton": "FR",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-06",
+        "end": "2023-07-08"
+      }
+    ]
+  },
+  {
+    "name": "Stimmen Festival",
+    "website": "https://stimmen.com/",
+    "place": "Basel",
+    "canton": "BS",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-23",
+        "end": "2023-07-30"
+      }
+    ]
+  },
+  {
+    "name": "Stolze Openair",
+    "website": "https://stolze-openair.ch/",
+    "place": "Zürich",
+    "canton": "ZH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-15",
+        "end": "2023-06-17"
+      }
+    ]
+  },
+  {
+    "name": "Street Parade",
+    "website": "https://www.streetparade.com/",
+    "place": "Zürich",
+    "canton": "ZH",
+    "musicTypes": [
+      "techno"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-12",
+        "end": "2023-08-12"
+      }
+    ]
+  },
+  {
+    "name": "OpenAir St. Gallen",
+    "website": "https://www.openairsg.ch/",
+    "place": "St. Gallen",
+    "canton": "SG",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-29",
+        "end": "2023-07-02"
+      }
+    ]
+  },
+  {
+    "name": "Summerblues",
+    "website": "https://summerblues.ch/",
+    "place": "Basel",
+    "canton": "BS",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-30",
+        "end": "2023-06-30"
+      }
+    ]
+  },
+  {
+    "name": "SummerDays Festival",
+    "website": "https://www.summerdays.ch/",
+    "place": "Arbon",
+    "canton": "TG",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-25",
+        "end": "2023-08-26"
+      }
+    ]
+  },
+  {
+    "name": "Summer Now",
+    "website": "https://www.summernow.ch/",
+    "place": "Nidau",
+    "canton": "BE",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-04-06",
+        "end": "2023-06-25"
+      }
+    ]
+  },
+  {
+    "name": "Summerside Festival",
+    "website": "https://www.summerside.ch/",
+    "place": "Grenchen",
+    "canton": "SO",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-23",
+        "end": "2023-06-24"
+      }
+    ]
+  },
+  {
+    "name": "Summerstage",
+    "website": "https://www.summerstage.ch/",
+    "place": "Basel",
+    "canton": "BS",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-29",
+        "end": "2023-07-01"
+      }
+    ]
+  },
+  {
+    "name": "Tension Festival",
+    "website": "https://www.tension-festival.ch/",
+    "place": "Münchenstein",
+    "canton": "BL",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-29",
+        "end": "2023-07-30"
+      }
+    ]
+  },
+  {
+    "name": "Trucker & Country Festival",
+    "website": "https://www.truckerfestival.ch/",
+    "place": "Interlaken",
+    "canton": "BE",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-06-23",
+        "end": "2023-06-25"
+      }
+    ]
+  },
+  {
+    "name": "VolksSchlager Openair",
+    "website": "https://www.galfri.ch/volksschlager/volksschlager-openair/",
+    "place": "Zofingen",
+    "canton": "AG",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-10",
+        "end": "2023-08-10"
+      }
+    ]
+  },
+  {
+    "name": "Weihern",
+    "website": "https://www.weihern.ch/",
+    "place": "St.Gallen",
+    "canton": "SG",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-09-13",
+        "end": "2023-09-16"
+      }
+    ]
+  },
+  {
+    "name": "Wildhaus Openair",
+    "website": "https://www.openairwildhaus.ch/",
+    "place": "Toggenburg",
+    "canton": "SG",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-07-07",
+        "end": "2023-07-08"
+      }
+    ]
+  },
+  {
+    "name": "Jazzfestival Willisau",
+    "website": "https://www.jazzfestivalwillisau.ch/",
+    "place": "Willisau",
+    "canton": "LU",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-30",
+        "end": "2023-09-03"
+      }
+    ]
+  },
+  {
+    "name": "Winterthurer Musikfestwochen",
+    "website": "https://musikfestwochen.ch/",
+    "place": "Winterthur",
+    "canton": "ZH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-09",
+        "end": "2023-08-20"
+      }
+    ]
+  },
+  {
+    "name": "Zermatt Unplugged",
+    "website": "https://zermatt-unplugged.ch/",
+    "place": "Zermatt",
+    "canton": "VS",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-04-11",
+        "end": "2023-04-15"
+      }
+    ]
+  },
+  {
+    "name": "Zürich Openair",
+    "website": "https://zurichopenair.ch/",
+    "place": "Zürich",
+    "canton": "ZH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-08-23",
+        "end": "2023-08-26"
+      }
+    ]
+  }
+]
