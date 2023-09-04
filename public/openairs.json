@@ -634,6 +634,21 @@
     ]
   },
   {
+    "name": "Musikwoche Braunwald",
+    "website": "https://musikwoche.ch/",
+    "place": "Braunwald",
+    "canton": "GL",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-09-02",
+        "end": "2023-09-08"
+      }
+    ]
+  },
+  {
     "name": "Openair Cavaglia",
     "website": "https://openaircavaglia.ch/",
     "place": "Cavaglia",
@@ -690,6 +705,25 @@
       {
         "start": "2023-07-18",
         "end": "2023-07-23"
+      }
+    ]
+  },
+  {
+    "name": "Polaris Festival",
+    "website": "https://polarisfestival.ch/",
+    "place": "Verbier",
+    "canton": "VS",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-11-17",
+        "end": "2023-11-18"
+      },
+      {
+        "start": "2023-11-24",
+        "end": "2023-11-25"
       }
     ]
   },
@@ -803,11 +837,28 @@
     "website": "https://www.schupfartfestival.ch/",
     "place": "Schupfart",
     "canton": "AG",
-    "musicTypes": [],
+    "musicTypes": [
+      "all"
+    ],
     "dates": [
       {
         "start": "2023-09-22",
         "end": "2023-09-24"
+      }
+    ]
+  },
+  {
+    "name": "Shapes Festival",
+    "website": "https://shapes-festival.com/leysin/",
+    "place": "Leysin",
+    "canton": "VD",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2024-03-18",
+        "end": "2024-03-24"
       }
     ]
   },
