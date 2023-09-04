@@ -649,6 +649,21 @@
     ]
   },
   {
+    "name": "Openair Enge",
+    "website": "https://www.openairenge.ch/",
+    "place": "Zürich",
+    "canton": "ZH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-09-02",
+        "end": "2023-09-02"
+      }
+    ]
+  },
+  {
     "name": "Openair Hallau",
     "website": "https://www.openair-hallau.ch/",
     "place": "Hallau",

@@ -444,7 +444,7 @@ export const answer = async ({
   try {
     console.log("🚲 Submitting question to OpenAI...");
     const completion = await api.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4",
       messages: [
         {
           role: "user",
@@ -519,7 +519,7 @@ export const jsonFromUnstructuredData = async ({
 
   try {
     const completion = await api.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4",
       messages: [{ role: "user", content: question }],
     });
 
