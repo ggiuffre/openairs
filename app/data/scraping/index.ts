@@ -1,5 +1,5 @@
 import path from "path";
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI from "openai";
 import { JSDOM } from "jsdom";
 import {
   getCachedAnswer,
@@ -311,21 +311,19 @@ const embeddingsFromText = async (
 ): Promise<WordEmbedding[]> => {
   console.log(`🚲 Start create embeddings from "${text.substring(0, 10)}..."`);
 
-  const api = new OpenAIApi(
-    new Configuration({
+  const api = new OpenAI({
       organization: process.env.OPENAI_ORG_ID,
       apiKey: process.env.OPENAI_API_KEY,
-    })
-  );
+  });
 
   const tokenChunks = getTokenChunks(text, { maxSize });
   const embeddings = [];
   let i = 1;
   for (const tokens of tokenChunks) {
     console.log(`🚲 Creating embedding ${i}/${tokenChunks.length}...`);
-    const vector = await api
-      .createEmbedding({ model: "text-embedding-ada-002", input: tokens })
-      .then((response) => response.data.data[0].embedding);
+    const vector = await api.embeddings
+      .create({ model: "text-embedding-ada-002", input: tokens })
+      .then((response) => response.data[0].embedding);
     embeddings.push({ vector, originalText: decode(tokens) });
     i++;
   }
@@ -418,18 +416,16 @@ export const answer = async ({
   const embeddings = await embeddingsFromPages({ baseUrl, cache });
 
   // query OpenAI API:
-  const api = new OpenAIApi(
-    new Configuration({
+  const api = new OpenAI({
       organization: process.env.OPENAI_ORG_ID,
       apiKey: process.env.OPENAI_API_KEY,
-    })
-  );
+  });
 
   console.log("🚲 Tokenizing question and creating embedding...");
   const questionTokens = encode(question);
-  const questionEmbedding = await api
-    .createEmbedding({ model: "text-embedding-ada-002", input: questionTokens })
-    .then((response) => response.data.data[0].embedding);
+  const questionEmbedding = await api.embeddings
+    .create({ model: "text-embedding-ada-002", input: questionTokens })
+    .then((response) => response.data[0].embedding);
   const distances = embeddings.map((embedding) =>
     cosineDistance(questionEmbedding, embedding.vector)
   );
@@ -443,7 +439,7 @@ export const answer = async ({
 
   try {
     console.log("🚲 Submitting question to OpenAI...");
-    const completion = await api.createChatCompletion({
+    const completion = await api.chat.completions.create({
       model: "gpt-4",
       messages: [
         {
@@ -453,7 +449,7 @@ export const answer = async ({
       ],
     });
 
-    const result = completion.data.choices[0].message?.content;
+    const result = completion.choices[0].message?.content;
     if (result) {
       await storeCachedAnswer(baseUrl, question, result);
       console.log(`✅ Returning answer "${result?.substring(0, 14)}..."`);
@@ -505,11 +501,11 @@ export const jsonFromUnstructuredData = async ({
 }): Promise<object> => {
   console.log("🚲 Asking OpenAI to convert unstructured data to JSON...");
 
-  const api = new OpenAIApi(
-    new Configuration({
+  const api = new OpenAI(
+    {
       organization: process.env.OPENAI_ORG_ID,
       apiKey: process.env.OPENAI_API_KEY,
-    })
+    }
   );
 
   const desiredFormat = content
@@ -518,12 +514,12 @@ export const jsonFromUnstructuredData = async ({
   const question = `Please convert the following unstructured data into ${desiredFormat}:\n\n\`\`\`\n${data}\n\`\`\``;
 
   try {
-    const completion = await api.createChatCompletion({
+    const completion = await api.chat.completions.create({
       model: "gpt-4",
       messages: [{ role: "user", content: question }],
     });
 
-    const result = completion.data.choices[0].message?.content;
+    const result = completion.choices[0].message?.content;
     console.log(`🚲 Result of JSON transformation request was: ${result}`);
     if (result) {
       console.log(`✅ Returning JSON data`);
