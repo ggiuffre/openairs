@@ -694,6 +694,21 @@
     ]
   },
   {
+    "name": "Orgel Festival",
+    "website": "https://www.ofsb.ch/",
+    "place": "Basel",
+    "canton": "BS",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2023-09-01",
+        "end": "2023-09-16"
+      }
+    ]
+  },
+  {
     "name": "Paléo Festival",
     "website": "https://yeah.paleo.ch/",
     "place": "Nyon",
