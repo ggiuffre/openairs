@@ -6,9 +6,9 @@ import type { Metadata } from "next";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "openair.wiki",
+  title: "lineup.quest",
   authors: [{ name: "Giorgio Giuffrè", url: "https://ggiuffre.github.io/" }],
-  description: "Festivals, concerts and everything music in Switzerland.",
+  description: "Openairs, festivals and music in Switzerland.",
 };
 
 interface Props {
