@@ -1,5 +1,7 @@
 import type { Openair, DateRange } from "./types";
 import { randomGradient } from "./colors";
+import { nextDateFromPast } from "./dates";
+import { isRecentOrUpcomingDateRange } from "./processing";
 
 interface SerializedDateRange {
   start: string;
@@ -18,18 +20,22 @@ export const getOpenairs = async () => {
   ).then((res) => res.json());
 
   // Deserialize data:
-  const openairs: Openair[] = serializedOpenairs.map((element) => ({
-    name: element.name,
-    website: element.website,
-    place: element.place,
-    canton: element.canton,
-    musicTypes: element.musicTypes,
-    dates: [
-      deserializeDateRange(element.dates[0]),
-      ...element.dates.slice(1).map(deserializeDateRange),
-    ],
-    gradient: randomGradient({ min: 50, alpha: 0.2 }),
-  }));
+  const openairs: Openair[] = serializedOpenairs.map((element) => {
+    const dates = element.dates.map(deserializeDateRange);
+    const openair: Openair = {
+      name: element.name,
+      website: element.website,
+      place: element.place,
+      canton: element.canton,
+      musicTypes: element.musicTypes,
+      dates: [dates[0], ...dates.slice(1)],
+      gradient: randomGradient({ min: 50, alpha: 0.2 }),
+    };
+    if (!isRecentOrUpcomingOpenair(openair)) {
+      openair.dates.push(nextDateFromPast(dates));
+    }
+    return openair;
+  });
 
   // return deserialized data:
   return openairs;
@@ -41,3 +47,6 @@ const deserializeDateRange = (dateRange: SerializedDateRange): DateRange => ({
   start: new Date(dateRange.start),
   end: new Date(dateRange.end),
 });
+
+const isRecentOrUpcomingOpenair = (openair: Openair): boolean =>
+  openair.dates.some(isRecentOrUpcomingDateRange);

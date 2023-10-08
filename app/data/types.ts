@@ -23,6 +23,7 @@ type NonEmptyArray<T> = [T, ...T[]];
 export interface DateRange {
   start: Date;
   end: Date;
+  estimated?: boolean;
 }
 
 export const musicTypes = ["classical music", "all", "techno"] as const;
