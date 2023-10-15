@@ -129,11 +129,11 @@ export const getSlug = (title: string): string => {
 };
 
 export const dateStringFromRange = (dateRange: DateRange): string =>
-  dateRange.start?.getDate() === dateRange.end?.getDate()
+  (dateRange.start?.getDate() === dateRange.end?.getDate()
     ? dateRange.start?.toLocaleDateString(["de-ch"])
     : `${dateRange.start?.toLocaleDateString([
         "de-ch",
-      ])} - ${dateRange.end?.toLocaleDateString(["de-ch"])}` +
+      ])} - ${dateRange.end?.toLocaleDateString(["de-ch"])}`) +
       (dateRange.estimated ? " (estimated)" : "");
 
 export const withTrailingSlash = (address: string) =>
