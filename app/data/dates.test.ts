@@ -37,4 +37,9 @@ describe("nextDateFromPast", () => {
         86400000
     ).toBeLessThan(14 + 365);
   });
+
+  test("Returns an estimated date range", () => {
+    const range = Factory.Range();
+    expect(nextDateFromPast([range]).estimated).toBe(true);
+  });
 });
