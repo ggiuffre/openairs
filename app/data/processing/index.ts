@@ -133,7 +133,8 @@ export const dateStringFromRange = (dateRange: DateRange): string =>
     ? dateRange.start?.toLocaleDateString(["de-ch"])
     : `${dateRange.start?.toLocaleDateString([
         "de-ch",
-      ])} - ${dateRange.end?.toLocaleDateString(["de-ch"])}`;
+      ])} - ${dateRange.end?.toLocaleDateString(["de-ch"])}` +
+      (dateRange.estimated ? " (estimated)" : "");
 
 export const withTrailingSlash = (address: string) =>
   address[address.length - 1] === "/" ? address : address + "/";

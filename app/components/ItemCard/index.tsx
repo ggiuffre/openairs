@@ -37,19 +37,11 @@ export const ItemCard: React.FC<Props> = ({ openair, expanded = false }) => (
   </Link>
 );
 
-const dateNodeFromRange = (dateRange: DateRange): React.ReactNode =>
-  dateRange.estimated ? (
-    <p
-      style={{ opacity: isPastDateRange(dateRange) ? 0.35 : 1 }}
-      key={dateStringFromRange(dateRange)}
-    >
-      {dateStringFromRange(dateRange)} (estimated)
-    </p>
-  ) : (
-    <p
-      style={{ opacity: isPastDateRange(dateRange) ? 0.35 : 1 }}
-      key={dateStringFromRange(dateRange)}
-    >
-      {dateStringFromRange(dateRange)}
-    </p>
-  );
+const dateNodeFromRange = (dateRange: DateRange): React.ReactNode => (
+  <p
+    style={{ opacity: isPastDateRange(dateRange) ? 0.35 : 1 }}
+    key={dateStringFromRange(dateRange)}
+  >
+    {dateStringFromRange(dateRange)}
+  </p>
+);
