@@ -1,6 +1,6 @@
 {
   "name": "openairs",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:0-20",
   "customizations": {
     "vscode": {
       "extensions": [
