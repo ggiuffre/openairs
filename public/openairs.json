@@ -39,7 +39,7 @@
   },
   {
     "name": "Alles Post- MusikFest",
-    "website": "https://www.dynamo.ch/event/alles-post-musik-fest",
+    "website": "https://www.allespost-musikfest.ch/",
     "place": "Zürich",
     "canton": "ZH",
     "musicTypes": [
@@ -49,6 +49,10 @@
       {
         "start": "2023-06-03",
         "end": "2023-06-03"
+      },
+      {
+        "start": "2024-06-01",
+        "end": "2024-06-01"
       }
     ]
   },
@@ -1382,6 +1386,21 @@
       {
         "start": "2024-07-26",
         "end": "2024-07-28"
+      }
+    ]
+  },
+  {
+    "name": "Tournez la Meule",
+    "website": "https://tournez-la-meule.ch/",
+    "place": "Neuchâtel",
+    "canton": "NE",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2024-04-26",
+        "end": "2023-04-28"
       }
     ]
   },
