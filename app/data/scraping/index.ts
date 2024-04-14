@@ -518,9 +518,10 @@ export const jsonFromUnstructuredData = async ({
     });
 
     const result = completion.choices[0].message?.content;
-    const jsonResult = result?.startsWith("```")
-      ? result.slice(result.indexOf("{"), result.indexOf("}```") + 1)
-      : result;
+    const jsonResult =
+      result?.startsWith("{") && result.endsWith("}")
+        ? result
+        : result?.slice(result.indexOf("{"), result?.lastIndexOf("}") + 1);
     console.log(`🚲 Result of JSON transformation request was: ${jsonResult}`);
     if (jsonResult) {
       console.log(`✅ Returning JSON data`);
