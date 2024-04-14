@@ -513,7 +513,7 @@ export const jsonFromUnstructuredData = async ({
 
   try {
     const completion = await api.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4-turbo",
       messages: [{ role: "user", content: question }],
     });
 
