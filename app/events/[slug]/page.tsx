@@ -4,6 +4,7 @@ import { getOpenairs } from "@/app/data/getOpenairs";
 import {
   dateStringFromRange,
   getSlug,
+  isRecentOrUpcomingDateRange,
   withoutTrailingSlash,
 } from "@/app/data/processing";
 import { getOpenairInfo } from "@/app/data/scraping/database";
@@ -35,7 +36,12 @@ const EventPage = async ({ params }: { params: { slug: string } }) => {
               {openair.place}, {openair.canton}
             </dd>
             <dt>when</dt>
-            <dd>{openair.dates.map(dateStringFromRange).join(", ")}</dd>
+            <dd>
+              {openair.dates
+                .filter(isRecentOrUpcomingDateRange)
+                .map(dateStringFromRange)
+                .join(", ")}
+            </dd>
             <dt>event website</dt>
             <dd>
               <a
