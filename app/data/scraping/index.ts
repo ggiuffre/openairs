@@ -312,8 +312,8 @@ const embeddingsFromText = async (
   console.log(`🚲 Start create embeddings from "${text.substring(0, 10)}..."`);
 
   const api = new OpenAI({
-      organization: process.env.OPENAI_ORG_ID,
-      apiKey: process.env.OPENAI_API_KEY,
+    organization: process.env.OPENAI_ORG_ID,
+    apiKey: process.env.OPENAI_API_KEY,
   });
 
   const tokenChunks = getTokenChunks(text, { maxSize });
@@ -417,8 +417,8 @@ export const answer = async ({
 
   // query OpenAI API:
   const api = new OpenAI({
-      organization: process.env.OPENAI_ORG_ID,
-      apiKey: process.env.OPENAI_API_KEY,
+    organization: process.env.OPENAI_ORG_ID,
+    apiKey: process.env.OPENAI_API_KEY,
   });
 
   console.log("🚲 Tokenizing question and creating embedding...");
@@ -501,12 +501,10 @@ export const jsonFromUnstructuredData = async ({
 }): Promise<object> => {
   console.log("🚲 Asking OpenAI to convert unstructured data to JSON...");
 
-  const api = new OpenAI(
-    {
-      organization: process.env.OPENAI_ORG_ID,
-      apiKey: process.env.OPENAI_API_KEY,
-    }
-  );
+  const api = new OpenAI({
+    organization: process.env.OPENAI_ORG_ID,
+    apiKey: process.env.OPENAI_API_KEY,
+  });
 
   const desiredFormat = content
     ? `RFC8259-compliant JSON format containing a field named ${content}`
@@ -520,10 +518,13 @@ export const jsonFromUnstructuredData = async ({
     });
 
     const result = completion.choices[0].message?.content;
-    console.log(`🚲 Result of JSON transformation request was: ${result}`);
-    if (result) {
+    const jsonResult = result?.startsWith("```")
+      ? result.slice(result.indexOf("{"), result.indexOf("}```") + 1)
+      : result;
+    console.log(`🚲 Result of JSON transformation request was: ${jsonResult}`);
+    if (jsonResult) {
       console.log(`✅ Returning JSON data`);
-      return await JSON.parse(result);
+      return await JSON.parse(jsonResult);
     } else {
       console.warn("⚠️ A problem occurred. Returning empty object.");
       return {};
