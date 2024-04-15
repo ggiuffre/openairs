@@ -57,6 +57,21 @@
     ]
   },
   {
+    "name": "ANTE",
+    "website": "https://winterthur.antekonzerte.ch/",
+    "place": "Winterthur",
+    "canton": "ZH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2024-05-28",
+        "end": "2024-06-01"
+      }
+    ]
+  },
+  {
     "name": "Argovia Fäscht",
     "website": "https://argoviafaescht.ch/",
     "place": "Wohlen",
@@ -486,6 +501,21 @@
     ]
   },
   {
+    "name": "Indoor Festival Disentis",
+    "website": "https://www.indoorfestival.ch/",
+    "place": "Disentis",
+    "canton": "GR",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2024-05-03",
+        "end": "2024-05-04"
+      }
+    ]
+  },
+  {
     "name": "Irish Openair",
     "website": "https://www.irish-openair.ch/",
     "place": "Toggenburg",
@@ -615,6 +645,21 @@
       {
         "start": "2024-06-20",
         "end": "2024-06-30"
+      }
+    ]
+  },
+  {
+    "name": "Lenzburgiade",
+    "website": "https://www.lenzburgiade.ch/",
+    "place": "Lenzburg",
+    "canton": "AG",
+    "musicTypes": [
+      "classical music"
+    ],
+    "dates": [
+      {
+        "start": "2024-06-18",
+        "end": "2024-06-23"
       }
     ]
   },
