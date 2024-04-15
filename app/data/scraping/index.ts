@@ -506,8 +506,12 @@ export const jsonFromUnstructuredData = async ({
     apiKey: process.env.OPENAI_API_KEY,
   });
 
+  const contentFormat =
+    content === "artists"
+      ? "list of strings (possibly empty)"
+      : "boolean or undefined";
   const desiredFormat = content
-    ? `RFC8259-compliant JSON format containing a field named ${content}`
+    ? `RFC8259-compliant JSON format containing a field named ${content} that is a ${contentFormat}`
     : "RFC8259-compliant JSON format";
   const question = `Please convert the following unstructured data into ${desiredFormat}:\n\n\`\`\`\n${data}\n\`\`\``;
 
