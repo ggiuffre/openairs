@@ -1,5 +1,20 @@
 [
   {
+    "name": "Abyss Festival",
+    "website": "https://www.abyssfestival.ch/",
+    "place": "Hauteville",
+    "canton": "FR",
+    "musicTypes": [
+      "metal"
+    ],
+    "dates": [
+      {
+        "start": "2024-06-27",
+        "end": "2024-06-29"
+      }
+    ]
+  },
+  {
     "name": "Afro-Pfingsten",
     "website": "https://www.afro-pfingsten.ch/",
     "place": "Winterthur",
@@ -83,6 +98,21 @@
       {
         "start": "2023-06-10",
         "end": "2023-06-10"
+      }
+    ]
+  },
+  {
+    "name": "Avenches Open Air",
+    "website": "https://www.avenchesopenair.ch/",
+    "place": "Avenches",
+    "canton": "VD",
+    "musicTypes": [
+      "metal"
+    ],
+    "dates": [
+      {
+        "start": "2024-05-31",
+        "end": "2024-06-01"
       }
     ]
   },
@@ -406,12 +436,27 @@
     ]
   },
   {
+    "name": "Open Air Gränichen",
+    "website": "https://www.openairgraenichen.ch/",
+    "place": "Gränichen",
+    "canton": "AG",
+    "musicTypes": [
+      "metal"
+    ],
+    "dates": [
+      {
+        "start": "2024-08-02",
+        "end": "2024-08-03"
+      }
+    ]
+  },
+  {
     "name": "Greenfield",
     "website": "https://www.greenfieldfestival.ch/",
     "place": "Interlaken",
     "canton": "BE",
     "musicTypes": [
-      "all"
+      "metal"
     ],
     "dates": [
       {
@@ -679,6 +724,21 @@
       {
         "start": "2024-07-11",
         "end": "2024-07-18"
+      }
+    ]
+  },
+  {
+    "name": "Meh Suff! Metal-Festival",
+    "website": "https://www.mehsuff-metalfestival.ch/",
+    "place": "Hüttikon",
+    "canton": "ZH",
+    "musicTypes": [
+      "metal"
+    ],
+    "dates": [
+      {
+        "start": "2024-09-06",
+        "end": "2024-09-07"
       }
     ]
   },
@@ -1015,7 +1075,7 @@
     "place": "Aarburg",
     "canton": "AG",
     "musicTypes": [
-      "all"
+      "metal"
     ],
     "dates": [
       {
@@ -1059,6 +1119,21 @@
       {
         "start": "2023-07-28",
         "end": "2023-07-30"
+      }
+    ]
+  },
+  {
+    "name": "Rock The Lakes",
+    "website": "https://www.rockthelakes.ch/",
+    "place": "Cudrefin",
+    "canton": "VD",
+    "musicTypes": [
+      "metal"
+    ],
+    "dates": [
+      {
+        "start": "2024-08-16",
+        "end": "2024-08-18"
       }
     ]
   },
@@ -1383,7 +1458,7 @@
     "place": "Grenchen",
     "canton": "SO",
     "musicTypes": [
-      "all"
+      "metal"
     ],
     "dates": [
       {

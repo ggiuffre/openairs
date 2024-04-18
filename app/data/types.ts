@@ -26,7 +26,12 @@ export interface DateRange {
   estimated?: boolean;
 }
 
-export const musicTypes = ["classical music", "all", "techno"] as const;
+export const musicTypes = [
+  "classical music",
+  "all",
+  "techno",
+  "metal",
+] as const;
 
 export type MusicType = (typeof musicTypes)[number];
 
