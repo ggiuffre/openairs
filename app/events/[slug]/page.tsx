@@ -61,7 +61,7 @@ const EventPage = async ({ params }: { params: { slug: string } }) => {
                 />
               </a>
             </dd>
-            <dt>focus</dt>
+            <dt>main music styles</dt>
             <dd>{openair.musicTypes.join(", ")}</dd>
             <dt>
               camping{" "}
