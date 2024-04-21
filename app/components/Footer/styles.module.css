@@ -1,0 +1,16 @@
+.footer {
+  margin-top: 10rem;
+  padding: 2rem;
+  width: 100%;
+  background-color: rgba(var(--card-rgba));
+  text-align: center;
+}
+
+.footer p {
+  max-width: var(--max-width);
+  margin: 0.8rem auto;
+}
+
+.footer a {
+  text-decoration: underline;
+}
