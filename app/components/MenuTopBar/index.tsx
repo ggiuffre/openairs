@@ -1,15 +1,8 @@
-"use client";
-
 import React from "react";
 import styles from "./styles.module.css";
-import dynamic from "next/dynamic";
 import { ChevronLeft, Home } from "react-feather";
 import Link from "next/link";
-
-const ThemeSwitch = dynamic(
-  () => import("../ThemeSwitch").then((mod) => mod.ThemeSwitch),
-  { ssr: false }
-);
+import { ThemeSwitch } from "../ThemeSwitch";
 
 interface Props {
   homeButton?: "home" | "back";
