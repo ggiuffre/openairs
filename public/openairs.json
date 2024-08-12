@@ -1235,6 +1235,21 @@
     ]
   },
   {
+    "name": "Seaside Festival",
+    "website": "https://www.seasidefestival.ch/",
+    "place": "Spiez",
+    "canton": "BE",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2024-08-30",
+        "end": "2024-08-31"
+      }
+    ]
+  },
+  {
     "name": "Shapes Festival",
     "website": "https://shapes-festival.com/leysin/",
     "place": "Leysin",
