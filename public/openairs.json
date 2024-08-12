@@ -231,6 +231,40 @@
     ]
   },
   {
+    "name": "Caprices Festival",
+    "website": "https://capricesfestival.com/",
+    "place": "Crans-Montana",
+    "canton": "VD",
+    "musicTypes": [
+      "techno"
+    ],
+    "dates": [
+      {
+        "start": "2024-03-29",
+        "end": "2024-03-31"
+      },
+      {
+        "start": "2024-04-05",
+        "end": "2024-04-07"
+      }
+    ]
+  },
+  {
+    "name": "Caprices Festival (Gstaad edition)",
+    "website": "https://capricesfestival.com/",
+    "place": "Gstaad",
+    "canton": "BE",
+    "musicTypes": [
+      "techno"
+    ],
+    "dates": [
+      {
+        "start": "2024-09-20",
+        "end": "2024-09-22"
+      }
+    ]
+  },
+  {
     "name": "Caribana",
     "website": "https://caribana.ch/",
     "place": "Crans",
