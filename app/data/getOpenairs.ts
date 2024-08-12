@@ -15,7 +15,7 @@ type SerializedOpenair = Omit<Openair, "dates" | "gradient"> & {
 export const getOpenairs = async () => {
   // Get data about openairs, revalidated every 6 hours:
   const serializedOpenairs: SerializedOpenair[] = await fetch(
-    `https://${websiteDomain}/openairs.json`,
+    `${websiteDomain}/openairs.json`,
     { next: { revalidate: 21600 } }
   ).then((res) => res.json());
 
@@ -41,7 +41,10 @@ export const getOpenairs = async () => {
   return openairs;
 };
 
-const websiteDomain = "lineup.quest";
+const websiteDomain =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : "https://lineup.quest";
 
 const deserializeDateRange = (dateRange: SerializedDateRange): DateRange => ({
   start: new Date(dateRange.start),
