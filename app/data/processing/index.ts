@@ -92,6 +92,14 @@ export const isRecentOrUpcomingDateRange = (dateRange: DateRange): boolean => {
 };
 
 /**
+ * Get whether a festival is recent (at least one of its editions did not
+ * happen more than 2 days ago) or upcoming (in the present or future).
+ * @param openair a festival
+ */
+export const isRecentOrUpcomingOpenair = (openair: Openair): boolean =>
+  openair.dates.some(isRecentOrUpcomingDateRange);
+
+/**
  * Get today's date at the start (midnight), optionally in night-owl mode.
  * In night-owl mode, today is yesterday if now is before 8 AM. This makes
  * sense to night owls: any time before going to sleep is in the same day as
@@ -134,7 +142,7 @@ export const dateStringFromRange = (dateRange: DateRange): string =>
     : `${dateRange.start?.toLocaleDateString([
         "de-ch",
       ])} - ${dateRange.end?.toLocaleDateString(["de-ch"])}`) +
-      (dateRange.estimated ? " (estimated)" : "");
+  (dateRange.estimated ? " (estimated)" : "");
 
 export const withTrailingSlash = (address: string) =>
   address[address.length - 1] === "/" ? address : address + "/";

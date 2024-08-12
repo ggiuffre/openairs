@@ -1,7 +1,7 @@
 import type { Openair, DateRange } from "./types";
 import { randomGradient } from "./colors";
 import { nextDateFromPast } from "./dates";
-import { isRecentOrUpcomingDateRange } from "./processing";
+import { isRecentOrUpcomingOpenair } from "./processing";
 
 interface SerializedDateRange {
   start: string;
@@ -47,6 +47,3 @@ const deserializeDateRange = (dateRange: SerializedDateRange): DateRange => ({
   start: new Date(dateRange.start),
   end: new Date(dateRange.end),
 });
-
-const isRecentOrUpcomingOpenair = (openair: Openair): boolean =>
-  openair.dates.some(isRecentOrUpcomingDateRange);

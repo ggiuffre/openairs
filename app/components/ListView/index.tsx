@@ -2,7 +2,12 @@ import React from "react";
 import styles from "./styles.module.css";
 import { ItemCard } from "../ItemCard";
 import type { Openair, SortMethod } from "@/app/data/types";
-import { binned, getInitialLetter, getMonth } from "@/app/data/processing";
+import {
+  binned,
+  getInitialLetter,
+  getMonth,
+  isRecentOrUpcomingOpenair,
+} from "@/app/data/processing";
 
 interface Props {
   openairs: Openair[];
@@ -10,6 +15,7 @@ interface Props {
 }
 
 export const ListView: React.FC<Props> = ({ openairs, sortMethod }) => {
+  openairs = openairs.filter(isRecentOrUpcomingOpenair);
   const getBin = sortMethod === "name" ? getInitialLetter : getMonth;
   const binnedOpenairs = Array.from(binned(openairs, { getBin })).filter(
     (bin) => bin.length > 0
