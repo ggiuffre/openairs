@@ -117,6 +117,21 @@
     ]
   },
   {
+    "name": "Balélec Festival",
+    "website": "https://balelec.ch/",
+    "place": "Lausanne",
+    "canton": "VD",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2024-05-03",
+        "end": "2024-05-03"
+      }
+    ]
+  },
+  {
     "name": "Baloise Session",
     "website": "https://www.baloisesession.ch/",
     "place": "Basel",
