@@ -24,6 +24,7 @@ export interface DateRange {
   start: Date;
   end: Date;
   estimated?: boolean;
+  last?: boolean;
 }
 
 export const musicTypes = [

@@ -1,11 +1,12 @@
 import type { Openair, DateRange } from "./types";
 import { randomGradient } from "./colors";
 import { nextDateFromPast } from "./dates";
-import { isRecentOrUpcomingOpenair } from "./processing";
+import { isNotDiscontinued, isRecentOrUpcomingOpenair } from "./processing";
 
 interface SerializedDateRange {
   start: string;
   end: string;
+  last?: boolean;
 }
 
 type SerializedOpenair = Omit<Openair, "dates" | "gradient"> & {
@@ -31,7 +32,7 @@ export const getOpenairs = async () => {
       dates: [dates[0], ...dates.slice(1)],
       gradient: randomGradient({ min: 50, alpha: 0.2 }),
     };
-    if (!isRecentOrUpcomingOpenair(openair)) {
+    if (!isRecentOrUpcomingOpenair(openair) && isNotDiscontinued(openair)) {
       openair.dates.push(nextDateFromPast(dates));
     }
     return openair;
@@ -49,4 +50,5 @@ const websiteDomain =
 const deserializeDateRange = (dateRange: SerializedDateRange): DateRange => ({
   start: new Date(dateRange.start),
   end: new Date(dateRange.end),
+  last: dateRange.last ?? false,
 });

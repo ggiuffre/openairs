@@ -100,6 +100,13 @@ export const isRecentOrUpcomingOpenair = (openair: Openair): boolean =>
   openair.dates.some(isRecentOrUpcomingDateRange);
 
 /**
+ * Get whether a festival is not discontinued, i.e. if it's still taking place.
+ * @param openair a festival
+ */
+export const isNotDiscontinued = (openair: Openair): boolean =>
+  !openair.dates[openair.dates.length - 1].last;
+
+/**
  * Get today's date at the start (midnight), optionally in night-owl mode.
  * In night-owl mode, today is yesterday if now is before 8 AM. This makes
  * sense to night owls: any time before going to sleep is in the same day as
