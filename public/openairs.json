@@ -151,6 +151,33 @@
     ]
   },
   {
+    "name": "Big Air Chur",
+    "website": "https://bigairfestival.com/",
+    "place": "Chur",
+    "canton": "GR",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2021-10-22",
+        "end": "2021-10-23"
+      },
+      {
+        "start": "2022-10-21",
+        "end": "2022-10-22"
+      },
+      {
+        "start": "2023-10-20",
+        "end": "2023-10-21"
+      },
+      {
+        "start": "2024-10-18",
+        "end": "2024-10-19"
+      }
+    ]
+  },
+  {
     "name": "blues'n'jazz",
     "website": "https://www.bluesnjazz.ch/",
     "place": "Rapperswil-Jona",
@@ -337,6 +364,21 @@
     ]
   },
   {
+    "name": "Echolot Festival",
+    "website": "https://www.echolotfestival.ch/",
+    "place": "Luzern",
+    "canton": "LU",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2024-10-31",
+        "end": "2024-11-02"
+      }
+    ]
+  },
+  {
     "name": "Em Bebbi sy Jazz",
     "website": "https://www.embebbisyjazz.ch/",
     "place": "Basel",
@@ -394,6 +436,21 @@
     ]
   },
   {
+    "name": "Festival Am Gleis Aarau",
+    "website": "https://festivalamgleisaarau.ch/",
+    "place": "Aarau",
+    "canton": "AG",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2024-08-16",
+        "end": "2024-08-17"
+      }
+    ]
+  },
+  {
     "name": "Festival Da Jazz",
     "website": "https://www.festivaldajazz.ch/",
     "place": "St. Moritz",
@@ -443,6 +500,21 @@
       {
         "start": "2024-06-13",
         "end": "2024-06-16"
+      }
+    ]
+  },
+  {
+    "name": "FLOSS",
+    "website": "https://floss.ch/",
+    "place": "Basel",
+    "canton": "BS",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2024-08-06",
+        "end": "2024-08-24"
       }
     ]
   },
@@ -971,6 +1043,60 @@
     ]
   },
   {
+    "name": "m4music",
+    "website": "https://www.m4music.ch/",
+    "place": "Zürich",
+    "canton": "ZH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2025-03-28",
+        "end": "2025-03-29"
+      }
+    ]
+  },
+  {
+    "name": "Niesen Sessions",
+    "website": "https://www.niesensessions.ch/",
+    "place": "Berghaus Niesen Kulm",
+    "canton": "BE",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2018-06-21",
+        "end": "2018-06-21"
+      },
+      {
+        "start": "2019-09-12",
+        "end": "2019-09-12"
+      },
+      {
+        "start": "2020-09-10",
+        "end": "2020-09-12"
+      },
+      {
+        "start": "2021-08-26",
+        "end": "2021-08-28"
+      },
+      {
+        "start": "2022-08-11",
+        "end": "2022-08-13"
+      },
+      {
+        "start": "2023-08-10",
+        "end": "2023-08-12"
+      },
+      {
+        "start": "2024-08-15",
+        "end": "2024-08-17"
+      }
+    ]
+  },
+  {
     "name": "Openair Cavaglia",
     "website": "https://openaircavaglia.ch/",
     "place": "Cavaglia",
@@ -1455,6 +1581,21 @@
     ]
   },
   {
+    "name": "St. Peter at Sunset",
+    "website": "https://sunsetevents.ch/",
+    "place": "Kastenholz",
+    "canton": "SO",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2025-07-02",
+        "end": "2025-07-06"
+      }
+    ]
+  },
+  {
     "name": "OpenAir St. Gallen",
     "website": "https://www.openairsg.ch/",
     "place": "St. Gallen",
@@ -1585,6 +1726,21 @@
     ]
   },
   {
+    "name": "There Are Worse Bands Festival",
+    "website": "https://tawb.ch/",
+    "place": "Luzern",
+    "canton": "LU",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2024-11-11",
+        "end": "2024-11-23"
+      }
+    ]
+  },
+  {
     "name": "Tournez la Meule",
     "website": "https://tournez-la-meule.ch/",
     "place": "Neuchâtel",
@@ -1615,6 +1771,21 @@
       {
         "start": "2024-06-28",
         "end": "2024-06-30"
+      }
+    ]
+  },
+  {
+    "name": "Venoge Festival",
+    "website": "https://venogefestival.ch/",
+    "place": "Penthaz",
+    "canton": "VD",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2024-08-14",
+        "end": "2024-08-17"
       }
     ]
   },
