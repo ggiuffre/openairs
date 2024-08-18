@@ -89,38 +89,32 @@ export const storeCachedEmbeddings = async (
     data: embeddings,
   });
 
-export const getCachedAnswer = (website: string, question: string) =>
-  getCached<string>({
-    collection: "answers",
-    identifier: `${website} | ${question}`,
-  });
-
-export const storeCachedAnswer = async (
-  website: string,
-  question: string,
-  answer: string
-) =>
-  cache<string>({
-    collection: "answers",
-    identifier: `${website} | ${question}`,
-    data: answer,
-  });
-
-export const updateOpenairInfo = async <T>({
+export const updateOpenairInfo = async ({
   identifier,
   data,
 }: {
   identifier: string;
-  data: T;
+  data: ScrapedOpenairInfo;
 }) => {
   const client = getClient();
+
+  const newInfo: Partial<ScrapedOpenairInfo> = {};
+  if (data.artists) {
+    newInfo["artists"] = data.artists;
+  }
+  if (data.isCampingPossible) {
+    newInfo["isCampingPossible"] = data.isCampingPossible;
+  }
+  if (data.isFree) {
+    newInfo["isFree"] = data.isFree;
+  }
 
   try {
     const database = client.db("scraping_cache");
     const collection = "openairs_info";
     const collectionRef = database.collection(collection);
     const filter = { identifier };
-    const update = { $set: { data } };
+    const update = { $set: { data: newInfo } };
     const options = { upsert: true };
     const result = await collectionRef.updateOne(filter, update, options);
     console.log(

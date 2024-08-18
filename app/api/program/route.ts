@@ -1,16 +1,6 @@
 import { getOpenairs } from "@/app/data/getOpenairs";
-import { getSlug } from "@/app/data/processing";
-import {
-  answer,
-  getArtistsFromUnstructuredData,
-  getCampingInfoFromUnstructuredData,
-  getPriceInfoFromUnstructuredData,
-} from "@/app/data/scraping";
-import {
-  getOpenairInfo,
-  updateOpenairInfo,
-} from "@/app/data/scraping/database";
-import type { ScrapedOpenairInfo } from "@/app/data/types";
+import { answer } from "@/app/data/scraping";
+import { ScrapedOpenairInfo } from "@/app/data/types";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -23,8 +13,21 @@ export async function GET(request: Request) {
   // parse query parameters:
   const { searchParams } = new URL(request.url);
   const name = searchParams.get("name"); // name of the festival
-  const question = searchParams.get("q"); // question to be asked to the model
+  const topic = searchParams.get("q") ?? undefined; // topic that we want to know more about (e.g. "artists")
   const cache = isTruthy(searchParams.get("cache") ?? true); // whether to use cached info or not
+
+  // check that topic is one of a set of enums, if present:
+  if (!isValidTopic(topic)) {
+    console.warn(`⚠️ Got invalid topic ${topic}`);
+    return NextResponse.json(
+      {
+        error: `Topic "${topic}" is not allowed. Allowed values are: ${validTopics.join(
+          ", "
+        )}`,
+      },
+      { status: 400 }
+    );
+  }
 
   // find festival providing context to question:
   const openairs = await getOpenairs();
@@ -33,86 +36,10 @@ export async function GET(request: Request) {
     (name ? openairs.find((o) => o.name.includes(name)) : undefined);
 
   // answer question:
-  if (openair && question) {
+  if (openair) {
     console.log(`🚲 Selected ${openair.name}`);
-    const baseUrl = openair.website;
-    const slug = getSlug(openair.name);
-    const ans = await answer({ question, baseUrl, cache });
-    let jsonAnswer = await getOpenairInfo(slug);
-
-    if (question.includes("artists") || question.includes("lineup")) {
-      if (cache !== false && jsonAnswer?.artists !== undefined) {
-        console.log(`✅ Found cached JSON answer`);
-      } else {
-        console.warn("🚲 Converting answer to JSON");
-        const artists = ans
-          ? await getArtistsFromUnstructuredData(ans)
-          : undefined;
-        if (artists !== undefined) {
-          const newData: ScrapedOpenairInfo = {
-            artists,
-            isCampingPossible: jsonAnswer?.isCampingPossible,
-            isFree: jsonAnswer?.isFree,
-          };
-          await updateOpenairInfo({ identifier: slug, data: newData });
-          jsonAnswer = newData;
-          console.log(`✅ JSON answer stored`);
-        } else {
-          console.warn("⚠️ Answer could not be converted to JSON");
-        }
-      }
-    } else if (question.includes("camp") || question.includes("tent")) {
-      if (
-        cache !== false &&
-        jsonAnswer?.isCampingPossible !== undefined &&
-        jsonAnswer?.isCampingPossible !== null
-      ) {
-        console.log(`✅ Found cached JSON answer`);
-      } else {
-        console.warn("🚲 Converting answer to JSON");
-        const isCampingPossible = ans
-          ? await getCampingInfoFromUnstructuredData(ans)
-          : undefined;
-        if (isCampingPossible !== undefined) {
-          const newData: ScrapedOpenairInfo = {
-            artists: jsonAnswer?.artists,
-            isCampingPossible,
-            isFree: jsonAnswer?.isFree,
-          };
-          await updateOpenairInfo({ identifier: slug, data: newData });
-          jsonAnswer = newData;
-          console.log(`✅ JSON answer stored`);
-        } else {
-          console.warn("⚠️ Answer could not be converted to JSON");
-        }
-      }
-    } else if (question.includes("price") || question.includes("free")) {
-      if (
-        cache !== false &&
-        jsonAnswer?.isFree !== undefined &&
-        jsonAnswer?.isFree !== null
-      ) {
-        console.log(`✅ Found cached JSON answer`);
-      } else {
-        console.warn("🚲 Converting answer to JSON");
-        const isFree = ans
-          ? await getPriceInfoFromUnstructuredData(ans)
-          : undefined;
-        if (isFree !== undefined) {
-          const newData: ScrapedOpenairInfo = {
-            artists: jsonAnswer?.artists,
-            isCampingPossible: jsonAnswer?.isCampingPossible,
-            isFree,
-          };
-          await updateOpenairInfo({ identifier: slug, data: newData });
-          jsonAnswer = newData;
-          console.log(`✅ JSON answer stored`);
-        } else {
-          console.warn("⚠️ Answer could not be converted to JSON");
-        }
-      }
-    }
-    return NextResponse.json({ question, ans, jsonAnswer });
+    const ans = await answer({ topic, openair, cache });
+    return NextResponse.json({ topic, ans });
   }
 
   return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -120,3 +47,10 @@ export async function GET(request: Request) {
 
 const isTruthy = (param: string | boolean): boolean =>
   ["true", "1", "on", "yes"].includes(param.toString().toLowerCase());
+
+const validTopics = ["artists", "isCampingPossible", "isFree"];
+
+const isValidTopic = (
+  value: string | undefined | keyof ScrapedOpenairInfo
+): value is undefined | keyof ScrapedOpenairInfo =>
+  value == undefined || validTopics.includes(value);

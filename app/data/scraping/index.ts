@@ -1,20 +1,21 @@
-import path from "path";
 import OpenAI from "openai";
 import { JSDOM } from "jsdom";
+import { zodResponseFormat } from "openai/helpers/zod";
 import {
-  getCachedAnswer,
   getCachedEmbeddings,
   getCachedTexts,
   getCachedUrls,
-  storeCachedAnswer,
+  getOpenairInfo,
   storeCachedEmbeddings,
   storeCachedTexts,
   storeCachedUrls,
+  updateOpenairInfo,
 } from "./database";
-import type { ScrapedOpenairInfo, WordEmbedding } from "../types";
+import type { Openair, ScrapedOpenairInfo, WordEmbedding } from "../types";
 import { decode, encode } from "gpt-tokenizer";
 import { longestCommonPrefix, withoutRepeatedPrefix } from "./text";
-import { withTrailingSlash } from "../processing";
+import { getSlug, withTrailingSlash } from "../processing";
+import { z } from "zod";
 
 /**
  * Get the text content of the pages of a website, either from a cache or
@@ -333,20 +334,6 @@ const embeddingsFromText = async (
 };
 
 /**
- * Get the name of a cache file from a website to scrape information from.
- * @param website the website to scrape
- * @param extension the extension of the cache file
- */
-export const getCacheFileName = (
-  website: string,
-  { extension }: { extension: "html" | "txt" | "json" }
-) => {
-  const jsonDirectory = path.join(process.cwd(), "app/data/scraping/.cache/");
-  const fileName = website.slice(8).replaceAll("/", "_");
-  return jsonDirectory + fileName + "." + extension;
-};
-
-/**
  * Get a string of maximally-relevant text chunks from an arbitrary amount of
  * text chunks that each have a distance between their embedding representation
  * and the embedding of a question string.
@@ -385,42 +372,65 @@ export const getContext = ({
   return mostRelevantEmbeddings.join("\n\n###\n\n");
 };
 
+const questionsByTopic: Record<keyof ScrapedOpenairInfo, string> = {
+  artists: "What is the lineup of artists playing at this festival?",
+  isCampingPossible: "Is it possible to camp at this festival with a tent?",
+  isFree: "Is this festival completely free?",
+};
+
 /**
  * Get the answer to a question, given some context in the form of text chunks
  * and their corresponding embedding representation.
  * @param question the question to ask
  * @param baseUrl a website that provides context to the question
+ * @param festival the festival which the question is about
  * @param cache whether to use cached answer or not
  */
 export const answer = async ({
-  question,
-  baseUrl,
+  openair,
+  topic,
   cache = true,
 }: {
-  question: string;
-  baseUrl: string;
+  openair: Openair;
+  topic?: keyof ScrapedOpenairInfo;
   cache?: boolean;
 }) => {
-  console.log(`🚲 Asking question with cache=${cache}: "${question}"`);
+  console.log(
+    `🚲 Asking question about ${openair.name} with cache=${cache} about topic "${topic}"`
+  );
 
   // return cached answer if present and if 'cache' argument is not false:
-  const cachedAnswer = cache
-    ? await getCachedAnswer(baseUrl, question)
-    : undefined;
-  if (cachedAnswer) {
-    console.log("✅ Found cached answer.");
-    return cachedAnswer;
+  const slug = getSlug(openair.name);
+  const cachedInfo = cache ? await getOpenairInfo(slug) : undefined;
+  if (cachedInfo && (topic == null || (topic && cachedInfo[topic] != null))) {
+    console.log("✅ Found cached festival info.");
+    return cachedInfo;
   }
 
   // scrape information from website and create embeddings out of it:
+  const baseUrl = openair.website;
   const embeddings = await embeddingsFromPages({ baseUrl, cache });
 
-  // query OpenAI API:
+  // Get client for OpenAI API:
   const api = new OpenAI({
     organization: process.env.OPENAI_ORG_ID,
     apiKey: process.env.OPENAI_API_KEY,
   });
 
+  // craft question to ask:
+  console.log("🚲 Crafting question to ask...");
+  const generalQuestion = `I'm going to a festival and I have the following questions:\n${Object.values(
+    questionsByTopic
+  )
+    .map((q) => `* ${q}`)
+    .join("\n")}\n\n`;
+  const question = topic ? questionsByTopic[topic] : generalQuestion;
+  console.log("🚲 Will ask following question:");
+  console.log("=====================================");
+  console.log(question);
+  console.log("=====================================");
+
+  // create embeddings from question:
   console.log("🚲 Tokenizing question and creating embedding...");
   const questionTokens = encode(question);
   const questionEmbedding = await api.embeddings
@@ -430,36 +440,57 @@ export const answer = async ({
     cosineDistance(questionEmbedding, embedding.vector)
   );
 
+  // get context that GPT will use to answer question:
   const context = getContext({ embeddings, distances });
-
   if (context.length === 0) {
     console.warn("⚠️ Got context of size 0. Returning undefined.");
     return undefined;
   }
 
+  // declare JSON schema that GPT will use to answer question:
+  const FestivalResponse = z.object({
+    artists: z.array(z.string()).optional(),
+    isCampingPossible: z.boolean().optional(),
+    isFree: z.boolean().optional(),
+  });
+
+  // submit question:
   try {
     console.log("🚲 Submitting question to OpenAI...");
-    const completion = await api.chat.completions.create({
-      model: "gpt-4",
+    const completion = await api.beta.chat.completions.parse({
+      model: "gpt-4o-2024-08-06",
       messages: [
+        {
+          role: "system",
+          content:
+            "You are a helpful assistant who answers questions about music festivals.",
+        },
         {
           role: "user",
           content: `${question} Here is some context.\n\n###\n\n${context}`,
         },
       ],
+      response_format: zodResponseFormat(FestivalResponse, "festivalResponse"),
     });
 
-    const result = completion.choices[0].message?.content;
-    if (result) {
-      await storeCachedAnswer(baseUrl, question, result);
-      console.log(`✅ Returning answer "${result?.substring(0, 14)}..."`);
-      return result;
+    // cache and return answer:
+    const message = completion.choices[0]?.message;
+    if (message.parsed) {
+      await updateOpenairInfo({
+        identifier: slug,
+        data: message.parsed,
+      });
+      console.log(`✅ Returning JSON object: ${message.parsed}`);
+      return message.parsed;
     } else {
-      console.warn("⚠️ A problem occurred. Returning undefined.");
+      console.warn(
+        `⚠️ A problem occurred; returning undefined: ${message.refusal}`
+      );
       return undefined;
     }
-  } catch {
+  } catch (e) {
     console.warn("⚠️ Exception was thrown. Returning undefined.");
+    console.warn(e);
     return undefined;
   }
 };
@@ -484,110 +515,4 @@ export const cosineDistance = (a: number[], b: number[]) => {
   // return their distance, i.e. 1 minus their similarity:
   const distance = 1 - similarity;
   return distance;
-};
-
-/**
- * Get a JSON object from unstructured data containing information that can be
- * represented as JSON. This function calls the OpenAI API.
- * @param data a string containing the unstructured data
- * @param content type of content that the output should be made of
- */
-export const jsonFromUnstructuredData = async ({
-  data,
-  content,
-}: {
-  data: string;
-  content?: keyof ScrapedOpenairInfo;
-}): Promise<object> => {
-  console.log("🚲 Asking OpenAI to convert unstructured data to JSON...");
-
-  const api = new OpenAI({
-    organization: process.env.OPENAI_ORG_ID,
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-
-  const contentFormat =
-    content === "artists"
-      ? "list of strings (possibly empty)"
-      : "boolean or undefined";
-  const desiredFormat = content
-    ? `RFC8259-compliant JSON format containing a field named ${content} that is a ${contentFormat}`
-    : "RFC8259-compliant JSON format";
-  const question = `Please convert the following unstructured data into ${desiredFormat}:\n\n\`\`\`\n${data}\n\`\`\``;
-
-  try {
-    const completion = await api.chat.completions.create({
-      model: "gpt-4-turbo",
-      messages: [{ role: "user", content: question }],
-    });
-
-    const result = completion.choices[0].message?.content;
-    const jsonResult =
-      result?.startsWith("{") && result.endsWith("}")
-        ? result
-        : result?.slice(result.indexOf("{"), result?.lastIndexOf("}") + 1);
-    console.log(`🚲 Result of JSON transformation request was: ${jsonResult}`);
-    if (jsonResult) {
-      console.log(`✅ Returning JSON data`);
-      return await JSON.parse(jsonResult);
-    } else {
-      console.warn("⚠️ A problem occurred. Returning empty object.");
-      return {};
-    }
-  } catch {
-    console.warn("⚠️ Exception was thrown. Returning empty object.");
-    return {};
-  }
-};
-
-/**
- * Get a list of artists as strings from unstructured data via the OpenAI API.
- * @param data a string containing the unstructured data
- */
-export const getArtistsFromUnstructuredData = async (
-  data: string
-): Promise<string[] | undefined> => {
-  const unsafeJson = data
-    ? await jsonFromUnstructuredData({ data, content: "artists" })
-    : {};
-  return "artists" in unsafeJson && Array.isArray(unsafeJson["artists"])
-    ? unsafeJson["artists"]
-    : Array.isArray(unsafeJson)
-    ? unsafeJson
-    : undefined;
-};
-
-/**
- * Get whether camping is available from unstructured data via the OpenAI API.
- * @param data a string containing the unstructured data
- */
-export const getCampingInfoFromUnstructuredData = async (
-  data: string
-): Promise<boolean | undefined> => {
-  const unsafeJson = data
-    ? await jsonFromUnstructuredData({ data, content: "isCampingPossible" })
-    : {};
-  return "isCampingPossible" in unsafeJson &&
-    typeof unsafeJson["isCampingPossible"] === "boolean"
-    ? unsafeJson["isCampingPossible"]
-    : typeof unsafeJson === "boolean"
-    ? unsafeJson
-    : undefined;
-};
-
-/**
- * Get whether a festival is free from unstructured data via the OpenAI API.
- * @param data a string containing the unstructured data
- */
-export const getPriceInfoFromUnstructuredData = async (
-  data: string
-): Promise<boolean | undefined> => {
-  const unsafeJson = data
-    ? await jsonFromUnstructuredData({ data, content: "isFree" })
-    : {};
-  return "isFree" in unsafeJson && typeof unsafeJson["isFree"] === "boolean"
-    ? unsafeJson["isFree"]
-    : typeof unsafeJson === "boolean"
-    ? unsafeJson
-    : undefined;
 };
