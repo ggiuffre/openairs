@@ -381,12 +381,11 @@ const questionsByTopic: Record<keyof ScrapedOpenairInfo, string> = {
 /**
  * Get the answer to a question, given some context in the form of text chunks
  * and their corresponding embedding representation.
- * @param question the question to ask
- * @param baseUrl a website that provides context to the question
- * @param festival the festival which the question is about
+ * @param openair the festival which the question is about
+ * @param topic topic that we want to know more about (e.g. "artists")
  * @param cache whether to use cached answer or not
  */
-export const answer = async ({
+export const ask = async ({
   openair,
   topic,
   cache = true,

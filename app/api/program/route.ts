@@ -1,6 +1,6 @@
 import { getOpenairs } from "@/app/data/getOpenairs";
-import { answer } from "@/app/data/scraping";
-import { ScrapedOpenairInfo } from "@/app/data/types";
+import { ask } from "@/app/data/scraping";
+import type { ScrapedOpenairInfo } from "@/app/data/types";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -19,14 +19,9 @@ export async function GET(request: Request) {
   // check that topic is one of a set of enums, if present:
   if (!isValidTopic(topic)) {
     console.warn(`⚠️ Got invalid topic ${topic}`);
-    return NextResponse.json(
-      {
-        error: `Topic "${topic}" is not allowed. Allowed values are: ${validTopics.join(
-          ", "
-        )}`,
-      },
-      { status: 400 }
-    );
+    const allowedValuesString = validTopics.join(", ");
+    const error = `Unknown topic "${topic}". Allowed values: ${allowedValuesString}`;
+    return NextResponse.json({ error }, { status: 400 });
   }
 
   // find festival providing context to question:
@@ -35,14 +30,15 @@ export async function GET(request: Request) {
     openairs.find((o) => o.name === name) ??
     (name ? openairs.find((o) => o.name.includes(name)) : undefined);
 
-  // answer question:
-  if (openair) {
-    console.log(`🚲 Selected ${openair.name}`);
-    const ans = await answer({ topic, openair, cache });
-    return NextResponse.json({ topic, ans });
+  // check that festival is known:
+  if (!openair) {
+    console.warn(`⚠️ Couldn't find festival from name ${name}`);
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  return NextResponse.json({ error: "Not found" }, { status: 404 });
+  // answer question:
+  const answer = await ask({ openair, topic, cache });
+  return NextResponse.json({ answer });
 }
 
 const isTruthy = (param: string | boolean): boolean =>
