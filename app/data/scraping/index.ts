@@ -17,6 +17,12 @@ import { longestCommonPrefix, withoutRepeatedPrefix } from "./text";
 import { getSlug, withTrailingSlash } from "../processing";
 import { z } from "zod";
 
+export const cacheStrategies = ["none", "text", "embeddings", "all"] as const;
+export type CacheStrategy = (typeof cacheStrategies)[number];
+export const isValidCacheStrategy = (
+  value: string | CacheStrategy
+): value is CacheStrategy => cacheStrategies.includes(value as CacheStrategy);
+
 /**
  * Get the text content of the pages of a website, either from a cache or
  * directly by crawling all the web pages from a base URL
@@ -26,17 +32,18 @@ import { z } from "zod";
  */
 export const scrapeWebsite = async ({
   baseUrl,
-  cache = true,
+  cache = "none",
   removePrefix = false,
 }: {
   baseUrl: string;
-  cache?: boolean;
+  cache?: CacheStrategy;
   removePrefix?: boolean;
 }): Promise<string[]> => {
   console.log(`🚲 Scraping ${baseUrl}`);
 
   // returned cached text is present and if 'cache' argument is not false:
-  const cachedTexts = cache ? await getCachedTexts(baseUrl) : undefined;
+  const cachedTexts =
+    cache !== "none" ? await getCachedTexts(baseUrl) : undefined;
   if (cachedTexts) {
     console.log("✅ Found cached scraped texts.");
     return cachedTexts;
@@ -256,16 +263,16 @@ export const getTokenChunks = (
 export const embeddingsFromPages = async ({
   baseUrl,
   maxSize = 500,
-  cache = true,
+  cache = "none",
 }: {
   baseUrl: string;
   maxSize?: number;
-  cache?: boolean;
+  cache?: CacheStrategy;
 }) => {
   console.log(`🚲 Starting to generate embeddings for ${baseUrl}`);
 
   // return cached embeddings if present and if 'cache' argument is not false:
-  const cachedEmbeddings = cache
+  const cachedEmbeddings = ["all", "embeddings"].includes(cache)
     ? await getCachedEmbeddings(baseUrl)
     : undefined;
   if (cachedEmbeddings) {
@@ -372,12 +379,6 @@ export const getContext = ({
   return mostRelevantEmbeddings.join("\n\n###\n\n");
 };
 
-const questionsByTopic: Record<keyof ScrapedOpenairInfo, string> = {
-  artists: "What is the lineup of artists playing at this festival?",
-  isCampingPossible: "Is it possible to camp at this festival with a tent?",
-  isFree: "Is this festival completely free?",
-};
-
 /**
  * Get the answer to a question, given some context in the form of text chunks
  * and their corresponding embedding representation.
@@ -388,11 +389,11 @@ const questionsByTopic: Record<keyof ScrapedOpenairInfo, string> = {
 export const ask = async ({
   openair,
   topic,
-  cache = true,
+  cache = "none",
 }: {
   openair: Openair;
   topic?: keyof ScrapedOpenairInfo;
-  cache?: boolean;
+  cache?: CacheStrategy;
 }) => {
   console.log(
     `🚲 Asking question about ${openair.name} with cache=${cache} about topic "${topic}"`
@@ -400,7 +401,7 @@ export const ask = async ({
 
   // return cached answer if present and if 'cache' argument is not false:
   const slug = getSlug(openair.name);
-  const cachedInfo = cache ? await getOpenairInfo(slug) : undefined;
+  const cachedInfo = cache === "all" ? await getOpenairInfo(slug) : undefined;
   if (cachedInfo && (topic == null || (topic && cachedInfo[topic] != null))) {
     console.log("✅ Found cached festival info.");
     return cachedInfo;
@@ -418,6 +419,14 @@ export const ask = async ({
 
   // craft question to ask:
   console.log("🚲 Crafting question to ask...");
+  const year = openair.dates.at(-1)?.start.getFullYear();
+  const questionsByTopic: Record<keyof ScrapedOpenairInfo, string> = {
+    artists: year
+      ? `What is the full lineup of artists playing at this festival in ${year}?`
+      : "What is the full lineup of artists playing at this festival?",
+    isCampingPossible: "Is it possible to camp at this festival with a tent?",
+    isFree: "Is this festival completely free?",
+  };
   const generalQuestion = `I'm going to a festival and I have the following questions:\n${Object.values(
     questionsByTopic
   )

@@ -1,5 +1,9 @@
 import { getOpenairs } from "@/app/data/getOpenairs";
-import { ask } from "@/app/data/scraping";
+import {
+  ask,
+  cacheStrategies,
+  isValidCacheStrategy,
+} from "@/app/data/scraping";
 import type { ScrapedOpenairInfo } from "@/app/data/types";
 import { NextResponse } from "next/server";
 
@@ -14,7 +18,15 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const name = searchParams.get("name"); // name of the festival
   const topic = searchParams.get("q") ?? undefined; // topic that we want to know more about (e.g. "artists")
-  const cache = isTruthy(searchParams.get("cache") ?? true); // whether to use cached info or not
+  const cache = searchParams.get("cache") ?? "embeddings"; // what cache to use
+
+  // check that cache strategy is one of a set of enums, if present:
+  if (!isValidCacheStrategy(cache)) {
+    console.warn(`⚠️ Got invalid cache strategy ${cache}`);
+    const allowedValuesString = cacheStrategies.join(", ");
+    const error = `Unknown cache strategy "${cache}". Allowed values: ${allowedValuesString}`;
+    return NextResponse.json({ error }, { status: 400 });
+  }
 
   // check that topic is one of a set of enums, if present:
   if (!isValidTopic(topic)) {
@@ -40,9 +52,6 @@ export async function GET(request: Request) {
   const answer = await ask({ openair, topic, cache });
   return NextResponse.json({ answer });
 }
-
-const isTruthy = (param: string | boolean): boolean =>
-  ["true", "1", "on", "yes"].includes(param.toString().toLowerCase());
 
 const validTopics = ["artists", "isCampingPossible", "isFree"];
 
