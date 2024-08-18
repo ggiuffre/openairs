@@ -11,9 +11,9 @@ export const longestCommonPrefix = (strings: string[]): string => {
 
   let output = [];
   const firstString = sortedStrings[0];
-  const lastString = sortedStrings[sortedStrings.length - 1];
+  const lastString = sortedStrings.at(-1);
   for (let i = 0; i < firstString.length; i++) {
-    if (firstString[i] === lastString[i]) {
+    if (firstString[i] === lastString?.at(i)) {
       output.push(firstString[i]);
     } else {
       break;

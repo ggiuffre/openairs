@@ -43,7 +43,7 @@ describe("getTokenChunks", () => {
     const tokenChunks = getTokenChunks(text, { maxSize });
     const tokens = tokenChunks.flat();
     expect(tokens[0]).toBe(encodedText[0]);
-    expect(tokens[tokens.length - 1]).toBe(encodedText[encodedText.length - 1]);
+    expect(tokens.at(-1)).toBe(encodedText.at(-1));
   });
 });
 

@@ -104,7 +104,7 @@ export const isRecentOrUpcomingOpenair = (openair: Openair): boolean =>
  * @param openair a festival
  */
 export const isNotDiscontinued = (openair: Openair): boolean =>
-  !openair.dates[openair.dates.length - 1].last;
+  !openair.dates.at(-1)?.last;
 
 /**
  * Get today's date at the start (midnight), optionally in night-owl mode.
@@ -152,9 +152,7 @@ export const dateStringFromRange = (dateRange: DateRange): string =>
   (dateRange.estimated ? " (estimated)" : "");
 
 export const withTrailingSlash = (address: string) =>
-  address[address.length - 1] === "/" ? address : address + "/";
+  address.at(-1) === "/" ? address : address + "/";
 
 export const withoutTrailingSlash = (address: string) =>
-  address[address.length - 1] === "/"
-    ? address.substring(0, address.length - 1)
-    : address;
+  address.at(-1) === "/" ? address.substring(0, address.length - 1) : address;
