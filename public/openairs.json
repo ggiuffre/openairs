@@ -986,6 +986,21 @@
     ]
   },
   {
+    "name": "Moving Mountain Laax",
+    "website": "https://moving-mountain.ch/",
+    "place": "Laax",
+    "canton": "GR",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2024-08-31",
+        "end": "2024-09-01"
+      }
+    ]
+  },
+  {
     "name": "Murten Classics",
     "website": "https://murtenclassics.ch/",
     "place": "Murten",
@@ -1228,6 +1243,41 @@
       {
         "start": "2024-07-19",
         "end": "2024-07-20"
+      }
+    ]
+  },
+  {
+    "name": "Radar Festival",
+    "website": "https://radarfestival.ch/",
+    "place": "Zürich",
+    "canton": "ZH",
+    "musicTypes": [
+      "all"
+    ],
+    "dates": [
+      {
+        "start": "2018-03-03",
+        "end": "2018-03-03"
+      },
+      {
+        "start": "2019-03-02",
+        "end": "2019-03-02"
+      },
+      {
+        "start": "2020-03-07",
+        "end": "2020-03-07"
+      },
+      {
+        "start": "2022-09-17",
+        "end": "2022-09-17"
+      },
+      {
+        "start": "2023-09-16",
+        "end": "2023-09-16"
+      },
+      {
+        "start": "2024-09-13",
+        "end": "2024-09-14"
       }
     ]
   },
