@@ -29,6 +29,7 @@ export const getOpenairs = async () => {
       place: element.place,
       canton: element.canton,
       musicTypes: element.musicTypes,
+      since: element.since,
       dates: [dates[0], ...dates.slice(1)],
       gradient: randomGradient({ min: 50, alpha: 0.2 }),
     };

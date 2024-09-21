@@ -8,7 +8,7 @@ import {
   withoutTrailingSlash,
 } from "@/app/data/processing";
 import { getOpenairInfo } from "@/app/data/scraping/database";
-import { ExternalLink } from "react-feather";
+import { ExternalLink, Info } from "react-feather";
 
 const EventPage = async ({ params }: { params: { slug: string } }) => {
   const openairs = await getOpenairs();
@@ -106,6 +106,25 @@ const EventPage = async ({ params }: { params: { slug: string } }) => {
                       {artist}
                     </span>
                   ))}
+                </dd>
+              </>
+            )}
+            {openair.since && (
+              <>
+                <dt>history</dt>
+                <dd>
+                  happens since {openair.since.year}
+                  {/* {openair.since.source && (
+                    <sup
+                      title={`source: ${
+                        openair.since.source === "website"
+                          ? "festival website"
+                          : openair.since.source
+                      }`}
+                    >
+                      <Info size={12} />
+                    </sup>
+                  )} */}
                 </dd>
               </>
             )}
