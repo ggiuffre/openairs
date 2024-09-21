@@ -8,6 +8,10 @@ export interface Openair {
   canton: Canton;
   musicTypes: MusicType[];
   dates: NonEmptyArray<DateRange>;
+  since?: {
+    year: number;
+    source?: "website" | "wikipedia";
+  };
   gradient: Gradient;
 }
 

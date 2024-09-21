@@ -7,6 +7,10 @@
     "musicTypes": [
       "metal"
     ],
+    "since": {
+      "year": 2017,
+      "source": "website"
+    },
     "dates": [
       {
         "start": "2017-09-01",
@@ -42,6 +46,10 @@
     "musicTypes": [
       "all"
     ],
+    "since": {
+      "year": 1990,
+      "source": "wikipedia"
+    },
     "dates": [
       {
         "start": "1990-06-02",
@@ -313,6 +321,10 @@
     "musicTypes": [
       "metal"
     ],
+    "since": {
+      "year": 2014,
+      "source": "website"
+    },
     "dates": [
       {
         "start": "2021-08-20",
@@ -344,6 +356,10 @@
     "musicTypes": [
       "all"
     ],
+    "since": {
+      "year": 1981,
+      "source": "wikipedia"
+    },
     "dates": [
       {
         "start": "2024-05-03",
@@ -359,6 +375,10 @@
     "musicTypes": [
       "classical music"
     ],
+    "since": {
+      "year": 1986,
+      "source": "wikipedia"
+    },
     "dates": [
       {
         "start": "2023-10-19",
@@ -378,6 +398,10 @@
     "musicTypes": [
       "all"
     ],
+    "since": {
+      "year": 2021,
+      "source": "website"
+    },
     "dates": [
       {
         "start": "2021-10-22",
@@ -405,6 +429,10 @@
     "musicTypes": [
       "all"
     ],
+    "since": {
+      "year": 1999,
+      "source": "wikipedia"
+    },
     "dates": [
       {
         "start": "2023-06-16",
@@ -413,6 +441,10 @@
       {
         "start": "2024-06-14",
         "end": "2024-06-16"
+      },
+      {
+        "start": "2025-06-13",
+        "end": "2025-06-15"
       }
     ]
   },
@@ -424,6 +456,10 @@
     "musicTypes": [
       "all"
     ],
+    "since": {
+      "year": 2005,
+      "source": "website"
+    },
     "dates": [
       {
         "start": "2023-06-09",
@@ -443,6 +479,10 @@
     "musicTypes": [
       "all"
     ],
+    "since": {
+      "year": 2006,
+      "source": "website"
+    },
     "dates": [
       {
         "start": "2023-06-15",
@@ -451,6 +491,10 @@
       {
         "start": "2024-06-13",
         "end": "2024-06-15"
+      },
+      {
+        "start": "2025-06-19",
+        "end": "2025-06-21"
       }
     ]
   },
@@ -462,6 +506,10 @@
     "musicTypes": [
       "all"
     ],
+    "since": {
+      "year": 2004,
+      "source": "website"
+    },
     "dates": [
       {
         "start": "2023-08-10",
@@ -470,6 +518,10 @@
       {
         "start": "2024-08-08",
         "end": "2024-08-10"
+      },
+      {
+        "start": "2025-08-07",
+        "end": "2025-08-09"
       }
     ]
   },
@@ -481,6 +533,10 @@
     "musicTypes": [
       "all"
     ],
+    "since": {
+      "year": 1995,
+      "source": "wikipedia"
+    },
     "dates": [
       {
         "start": "2023-06-30",
@@ -500,6 +556,10 @@
     "musicTypes": [
       "techno"
     ],
+    "since": {
+      "year": 2003,
+      "source": "website"
+    },
     "dates": [
       {
         "start": "2024-03-29",
@@ -519,6 +579,10 @@
     "musicTypes": [
       "techno"
     ],
+    "since": {
+      "year": 2003,
+      "source": "website"
+    },
     "dates": [
       {
         "start": "2024-09-20",
@@ -534,6 +598,10 @@
     "musicTypes": [
       "all"
     ],
+    "since": {
+      "year": 1989,
+      "source": "website"
+    },
     "dates": [
       {
         "start": "2023-06-15",
@@ -542,6 +610,10 @@
       {
         "start": "2024-06-05",
         "end": "2024-06-08"
+      },
+      {
+        "start": "2025-06-04",
+        "end": "2025-06-07"
       }
     ]
   },
