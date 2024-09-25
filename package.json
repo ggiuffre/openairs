@@ -16,7 +16,7 @@
     "@types/react-dom": "^18.3.0",
     "eslint": "^8.53.0",
     "eslint-config-next": "^14.2.5",
-    "gpt-tokenizer": "^2.2.1",
+    "gpt-tokenizer": "^2.4.0",
     "jsdom": "^24.1.1",
     "mongodb": "^6.8.0",
     "next": "^14.2.5",
