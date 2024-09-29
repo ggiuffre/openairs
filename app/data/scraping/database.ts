@@ -99,6 +99,9 @@ export const updateOpenairInfo = async ({
   const client = getClient();
 
   const newInfo: Partial<ScrapedOpenairInfo> = {};
+  if (data.scrapingDate) {
+    newInfo["scrapingDate"] = data.scrapingDate;
+  }
   if (data.artists) {
     newInfo["artists"] = data.artists;
   }

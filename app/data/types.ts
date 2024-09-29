@@ -16,6 +16,7 @@ export interface Openair {
 }
 
 export interface ScrapedOpenairInfo {
+  scrapingDate?: Date;
   artists?: string[];
   isCampingPossible?: boolean;
   isFree?: boolean;

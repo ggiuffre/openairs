@@ -392,7 +392,7 @@ export const ask = async ({
   cache = "none",
 }: {
   openair: Openair;
-  topic?: keyof ScrapedOpenairInfo;
+  topic?: keyof Omit<ScrapedOpenairInfo, "scrapingDate">;
   cache?: CacheStrategy;
 }) => {
   console.log(
@@ -420,7 +420,10 @@ export const ask = async ({
   // craft question to ask:
   console.log("🚲 Crafting question to ask...");
   const year = openair.dates.at(-1)?.start.getFullYear();
-  const questionsByTopic: Record<keyof ScrapedOpenairInfo, string> = {
+  const questionsByTopic: Record<
+    keyof Omit<ScrapedOpenairInfo, "scrapingDate">,
+    string
+  > = {
     artists: year
       ? `What is the full lineup of artists playing at this festival in ${year}?`
       : "What is the full lineup of artists playing at this festival?",
@@ -484,9 +487,10 @@ export const ask = async ({
     // cache and return answer:
     const message = completion.choices[0]?.message;
     if (message.parsed) {
+      const scrapingDate = new Date();
       await updateOpenairInfo({
         identifier: slug,
-        data: message.parsed,
+        data: { ...message.parsed, scrapingDate },
       });
       console.log(`✅ Returning JSON object: ${message.parsed}`);
       return message.parsed;
