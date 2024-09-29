@@ -116,7 +116,7 @@ const EventPage = async ({ params }: { params: { slug: string } }) => {
               <>
                 <dt>history</dt>
                 <dd>
-                  happens since {openair.since.year}
+                  takes place since {openair.since.year}
                   {/* {openair.since.source && (
                     <sup
                       title={`source: ${
