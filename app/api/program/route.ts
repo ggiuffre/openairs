@@ -56,6 +56,6 @@ export async function GET(request: Request) {
 const validTopics = ["artists", "isCampingPossible", "isFree"];
 
 const isValidTopic = (
-  value: string | undefined | keyof ScrapedOpenairInfo
-): value is undefined | keyof ScrapedOpenairInfo =>
+  value: string | undefined | keyof Omit<ScrapedOpenairInfo, "scrapingDate">
+): value is undefined | keyof Omit<ScrapedOpenairInfo, "scrapingDate"> =>
   value == undefined || validTopics.includes(value);
