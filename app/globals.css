@@ -1,7 +1,7 @@
 :root {
   --color-scheme: light;
   --max-width: 36rem;
-  --border-radius: 3px;
+  --border-radius: 4px;
 
   --foreground-rgb: 0, 0, 0;
   --background-rgb: 244, 249, 250;
