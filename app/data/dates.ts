@@ -51,3 +51,13 @@ export const getWeek = (date: Date) => {
   const dayOfYear = (difference + ONE_DAY) / ONE_DAY; // number of days since Jan. 1st
   return Math.ceil(dayOfYear / 7);
 };
+
+export const lastDateRange = (ranges: DateRange[]): DateRange =>
+  ranges.reduce((previous, current) =>
+    previous && previous.end > current.end ? previous : current
+  );
+
+export const monthsDifference = (first: Date, last: Date): number => {
+  const yearDifference = last.getFullYear() - first.getFullYear();
+  return last.getMonth() - first.getMonth() + 12 * yearDifference;
+};

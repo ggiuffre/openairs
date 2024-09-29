@@ -1,3 +1,4 @@
+import { lastDateRange, monthsDifference } from "@/app/data/dates";
 import styles from "./styles.module.css";
 import { MenuTopBar } from "@/app/components/MenuTopBar";
 import { getOpenairs } from "@/app/data/getOpenairs";
@@ -8,24 +9,31 @@ import {
   withoutTrailingSlash,
 } from "@/app/data/processing";
 import { getOpenairInfo } from "@/app/data/scraping/database";
-import { ExternalLink, Info } from "react-feather";
+import { ExternalLink } from "react-feather";
 
 const EventPage = async ({ params }: { params: { slug: string } }) => {
   const openairs = await getOpenairs();
   const { slug } = params;
   const openair = openairs.find((o) => getSlug(o.name) === slug);
+  const recentDates = openair?.dates.filter(isRecentOrUpcomingDateRange);
   const { artists, isCampingPossible } = await getOpenairInfo(slug)
-    .then((info) => ({
-      artists: [...new Set(info?.artists)].filter(
-        (artist) => typeof artist === "string"
-      ),
-      isCampingPossible: info?.isCampingPossible,
-    }))
+    .then((info) =>
+      recentDates &&
+      info?.scrapingDate &&
+      monthsDifference(info.scrapingDate, lastDateRange(recentDates).end) < 11
+        ? {
+            artists: [...new Set(info?.artists)].filter(
+              (artist) => typeof artist === "string"
+            ),
+            isCampingPossible: info?.isCampingPossible,
+          }
+        : {}
+    )
     .catch(() => ({ artists: undefined, isCampingPossible: undefined }));
   return (
     <>
       <MenuTopBar homeButton="back" />
-      {openair ? (
+      {openair && recentDates ? (
         <main className={styles.main}>
           <header className={styles.header}>
             <h1>{openair.name}</h1>
@@ -36,12 +44,7 @@ const EventPage = async ({ params }: { params: { slug: string } }) => {
               {openair.place}, {openair.canton}
             </dd>
             <dt>when</dt>
-            <dd>
-              {openair.dates
-                .filter(isRecentOrUpcomingDateRange)
-                .map(dateStringFromRange)
-                .join(", ")}
-            </dd>
+            <dd>{recentDates.map(dateStringFromRange).join(", ")}</dd>
             <dt>event website</dt>
             <dd>
               <a
