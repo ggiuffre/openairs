@@ -11,9 +11,9 @@ import {
 import { getOpenairInfo } from "@/app/data/scraping/database";
 import { ExternalLink } from "react-feather";
 
-const EventPage = async ({ params }: { params: { slug: string } }) => {
+const EventPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const openairs = await getOpenairs();
-  const { slug } = params;
+  const { slug } = await params;
   const openair = openairs.find((o) => getSlug(o.name) === slug);
   const recentDates = openair?.dates.filter(isRecentOrUpcomingDateRange);
   const { artists, isCampingPossible } = await getOpenairInfo(slug)
