@@ -1,6 +1,7 @@
 .main {
   padding: 1rem;
   max-width: var(--max-width);
+  min-height: 100vh;
   margin: auto;
 }
 
