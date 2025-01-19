@@ -6,16 +6,22 @@ const average = (array: number[]) =>
   array.reduce((a, b) => a + b) / array.length;
 
 export const nextDateFromPast = (pastDates: DateRange[]): DateRange => {
+  // if festival changed time of the year in the past, only consider most recent dates:
+  const latest = pastDates[pastDates.length - 1];
+  const selectedPastDates = pastDates.filter(
+    (pastDate) => Math.abs(getWeek(pastDate.end) - getWeek(latest.end)) < 4
+  );
+
   const averageDuration = Math.round(
     average(
-      pastDates.map(
+      selectedPastDates.map(
         (range) => (range.end.getTime() - range.start.getTime()) / ONE_DAY
       )
     )
   );
 
   const averageWeek = Math.round(
-    average(pastDates.map((range) => getWeek(range.start)))
+    average(selectedPastDates.map((range) => getWeek(range.start)))
   );
   const mostRecentYear = Math.max(
     ...pastDates.map((range) => range.start.getFullYear())
