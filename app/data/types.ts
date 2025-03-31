@@ -80,8 +80,3 @@ export type SortMethod = (typeof sortMethods)[number];
 
 /// Function to compare two items with each other
 export type CompareFunction<T> = (a: T, b: T) => number;
-
-export interface WordEmbedding {
-  originalText: string;
-  vector: number[];
-}

@@ -1,5 +1,5 @@
 import { MongoClient } from "mongodb";
-import type { ScrapedOpenairInfo, WordEmbedding } from "../types";
+import type { ScrapedOpenairInfo } from "../types";
 
 const getClient = () => {
   const username = process.env.MONGODB_USERNAME;
@@ -38,56 +38,6 @@ const getCached = async <T>({
     return undefined;
   }
 };
-
-const cache = async <T>({
-  collection,
-  identifier,
-  data,
-}: {
-  collection: string;
-  identifier: string;
-  data: T;
-}) => {
-  const client = getClient();
-
-  try {
-    const database = client.db("scraping_cache");
-    const collectionRef = database.collection(collection);
-    const document = { identifier, data };
-    const result = await collectionRef.insertOne(document);
-    console.log(
-      `⚙️ Inserted document ${result.insertedId} into collection ${collection}`
-    );
-  } finally {
-    // ensure that the client closes when the "try" block finishes/errors:
-    await client.close();
-  }
-};
-
-export const getCachedUrls = (website: string) =>
-  getCached<string[]>({ collection: "urls", identifier: website });
-
-export const storeCachedUrls = (website: string, urls: string[]) =>
-  cache<string[]>({ collection: "urls", identifier: website, data: urls });
-
-export const getCachedTexts = (website: string) =>
-  getCached<string[]>({ collection: "texts", identifier: website });
-
-export const storeCachedTexts = async (website: string, texts: string[]) =>
-  cache<string[]>({ collection: "texts", identifier: website, data: texts });
-
-export const getCachedEmbeddings = (website: string) =>
-  getCached<WordEmbedding[]>({ collection: "embeddings", identifier: website });
-
-export const storeCachedEmbeddings = async (
-  website: string,
-  embeddings: WordEmbedding[]
-) =>
-  cache<WordEmbedding[]>({
-    collection: "embeddings",
-    identifier: website,
-    data: embeddings,
-  });
 
 export const updateOpenairInfo = async ({
   identifier,
@@ -131,8 +81,21 @@ export const updateOpenairInfo = async ({
   }
 };
 
-export const getOpenairInfo = async (slug: string) =>
-  getCached<ScrapedOpenairInfo>({
+export const getOpenairInfo = async (slug: string) => {
+  const cached = await getCached<ScrapedOpenairInfo>({
     collection: "openairs_info",
     identifier: slug,
   });
+
+  if (cached?.scrapingDate) {
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+    if (cached.scrapingDate < sixMonthsAgo) {
+      console.log(`⚙️ Cached data is stale. Returning undefined.`);
+      return undefined;
+    } else {
+      return cached;
+    }
+  }
+  return undefined;
+};
