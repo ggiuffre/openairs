@@ -1,5 +1,3 @@
-import type { Gradient } from "./colors";
-
 /// Data about an openair festival
 export interface Openair {
   name: string;
@@ -13,6 +11,21 @@ export interface Openair {
     source?: "website" | "wikipedia";
   };
   gradient: Gradient;
+}
+
+export type RgbaColor = `rgba(${number}, ${number}, ${number}, ${number})`;
+
+export type Gradient =
+  `linear-gradient(${number}deg, ${RgbaColor}, ${RgbaColor})`;
+
+export type SerializedOpenair = Omit<Openair, "dates" | "gradient"> & {
+  dates: SerializedDateRange[];
+};
+
+export interface SerializedDateRange {
+  start: string;
+  end: string;
+  last?: boolean;
 }
 
 export interface ScrapedOpenairInfo {

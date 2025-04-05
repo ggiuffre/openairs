@@ -3,6 +3,15 @@ import { getOpenairInfo, updateOpenairInfo } from "./database";
 import type { Openair, ScrapedOpenairInfo } from "../types";
 import { getSlug } from "../processing";
 
+export type Topic = keyof Omit<ScrapedOpenairInfo, "scrapingDate">;
+
+export const validTopics = ["artists", "isCampingPossible", "isFree"];
+
+export const isValidTopic = (
+  value: string | undefined | Topic
+): value is undefined | Topic =>
+  value == undefined || validTopics.includes(value);
+
 /**
  * Get the answer to a question about a festival
  * @param openair the festival which the question is about
@@ -11,11 +20,11 @@ import { getSlug } from "../processing";
  */
 export const ask = async ({
   openair,
-  topic,
+  topic = "artists",
   cache = true,
 }: {
   openair: Openair;
-  topic?: keyof Omit<ScrapedOpenairInfo, "scrapingDate">;
+  topic?: Topic;
   cache?: boolean;
 }) => {
   console.log(
@@ -25,25 +34,15 @@ export const ask = async ({
   // return cached answer if present and if 'cache' argument is not false:
   const slug = getSlug(openair.name);
   const cachedInfo = cache ? await getOpenairInfo(slug) : undefined;
-  if (cachedInfo && (topic == null || (topic && cachedInfo[topic] != null))) {
+  if (cachedInfo && cachedInfo[topic] != null) {
     console.log("✅ Found cached festival info.");
     return cachedInfo;
   }
 
-  // Get client for OpenAI API:
-  const api = new OpenAI({
-    organization: process.env.OPENAI_ORG_ID,
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-
   // craft question to ask:
-  console.log("🚲 Crafting question to ask...");
   const year = openair.dates.at(-1)?.start.getFullYear();
   const location = `${openair.place}, Switzerland`;
-  const questionsByTopic: Record<
-    keyof Omit<ScrapedOpenairInfo, "scrapingDate">,
-    { text: string; schema: Object }
-  > = {
+  const questionsByTopic: Record<Topic, { text: string; schema: Object }> = {
     artists: {
       text: year
         ? `What is the lineup of artists playing at ${openair.name} in ${location} in ${year}?`
@@ -59,15 +58,15 @@ export const ask = async ({
       schema: { type: "boolean" },
     },
   };
-  const question = questionsByTopic[topic ?? "artists"];
-  console.log("🚲 Will ask following question:");
-  console.log("=====================================");
-  console.log(question);
-  console.log("=====================================");
+  const question = questionsByTopic[topic];
 
   // submit question:
+  console.log(`🚲 Submitting following to OpenAI: ${question}`);
+  const api = new OpenAI({
+    organization: process.env.OPENAI_ORG_ID,
+    apiKey: process.env.OPENAI_API_KEY,
+  });
   try {
-    console.log("🚲 Submitting question to OpenAI...");
     const response = await api.responses.create({
       model: "gpt-4o",
       tools: [{ type: "web_search_preview" }],
@@ -76,33 +75,23 @@ export const ask = async ({
         format: {
           type: "json_schema",
           name: "research_paper_extraction",
+          strict: true,
           schema: {
             type: "object",
-            properties: { [topic ?? "artists"]: question.schema },
-            required: [topic ?? "artists"],
+            properties: { [topic]: question.schema },
+            required: [topic],
             additionalProperties: false,
           },
-          strict: true,
         },
       },
     });
 
     // cache and return answer:
-    try {
-      const message = JSON.parse(response.output_text);
-      const scrapingDate = new Date();
-      await updateOpenairInfo({
-        identifier: slug,
-        data: { ...message, scrapingDate },
-      });
-      console.log(`✅ Returning JSON object: ${message}`);
-      return message;
-    } catch (e) {
-      console.warn(`⚠️ A problem occurred; returning undefined: ${e}`);
-      return undefined;
-    }
+    const message = JSON.parse(response.output_text);
+    await updateOpenairInfo({ identifier: slug, data: message });
+    console.log(`✅ Returning JSON object: ${message}`);
+    return message;
   } catch (e) {
-    console.warn("⚠️ Exception was thrown. Returning undefined.");
     console.warn(e);
     return undefined;
   }

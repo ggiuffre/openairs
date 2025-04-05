@@ -1,6 +1,5 @@
 import { getOpenairs } from "@/app/data/getOpenairs";
-import { ask } from "@/app/data/scraping";
-import type { ScrapedOpenairInfo } from "@/app/data/types";
+import { ask, isValidTopic, validTopics } from "@/app/data/scraping";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -40,10 +39,3 @@ export async function GET(request: Request) {
   const answer = await ask({ openair, topic, cache });
   return NextResponse.json({ answer });
 }
-
-const validTopics = ["artists", "isCampingPossible", "isFree"];
-
-const isValidTopic = (
-  value: string | undefined | keyof Omit<ScrapedOpenairInfo, "scrapingDate">
-): value is undefined | keyof Omit<ScrapedOpenairInfo, "scrapingDate"> =>
-  value == undefined || validTopics.includes(value);

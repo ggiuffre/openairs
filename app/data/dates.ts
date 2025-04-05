@@ -1,4 +1,4 @@
-import type { DateRange } from "./types";
+import type { DateRange, SerializedDateRange } from "./types";
 
 const ONE_DAY = 86400000; // number of milliseconds in one day
 
@@ -67,3 +67,11 @@ export const monthsDifference = (first: Date, last: Date): number => {
   const yearDifference = last.getFullYear() - first.getFullYear();
   return last.getMonth() - first.getMonth() + 12 * yearDifference;
 };
+
+export const deserializeDateRange = (
+  dateRange: SerializedDateRange
+): DateRange => ({
+  start: new Date(dateRange.start),
+  end: new Date(dateRange.end),
+  last: dateRange.last ?? false,
+});
